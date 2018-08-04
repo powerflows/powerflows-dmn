@@ -1,0 +1,21 @@
+language: java
+sudo: required
+dist: xenial
+jdk:
+  - openjdk10
+install: true
+
+before_install:
+ - chmod +x ./travis/script/build.sh
+
+env:
+  global:
+    - SONAR_RUNNER_OPTS="-Xmx2048m -XX:MaxPermSize=1024m -XX:ReservedCodeCacheSize=512m"
+    - secure: "t8R19O/RoxWrMXPsxTf4BSrMEE/iuO/QGHi2IROHtuQYG0dPRlMF87/5Bn5YxeDdnpquCyMRXBuJkMg+vBjxxsOHRdegqIFLtJOFg1WAFNkbEHcvC8qjZI2x19j0VVDRz0+W1r8i1vXdeLWhbEYEHRQFwl2XtUmyz6LiWrSre0wajo/eO0ngcK1EJrGEiLrXPHlhIYPQEeXYb+H8tpEoQS3XKcmODuTVZtaZelbti+eN+YB/VQ79AUhxd5NjlJ0wIR8kOXbHtZnNzyiYNn5pldEuuPiMHs7H/uNLDZ/O7xmp6qBXuPbTL9Nnm25xL1aEcxByqZPBnR4yrzFg4cmg22MvfRDX5YRoIh6oNvUq7Jl0yJBbJeXnumm4xsybH1/z3sL6mW42ccryAQOdj8L+1lHLiW5I0l2V7wt464yDRAaEh9Z7aXtL5HXWR8tXYqcPtSFtNOLEi0hiMLH5iQ+8khRWFtEbjAp7CmLoKWAgb/6/je8S6dK/fdLNRmEOJtac5dGZyd6iBtHyJ/HaW4Nr+Qpq/9+1hiUXgmTOI/wOakOri4XMeHhQLt54sMH+TsXobSqwu03gJKPAXlEPD7BLqJzrWXOgL6jSvI4QPB9XOLwAnxjtzdaX9cP3tSZZoEWAlEiBHbb/o12xbasq6I/Od+p65q/iobsT8vh1mDe1V+w="
+
+branches:
+  only:
+  - master
+
+script:
+  - ./travis/script/build.sh
