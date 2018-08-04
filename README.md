@@ -1,6 +1,65 @@
 # About Power Flows DMN Model
 Power Flows DMN Model
 
+# DMN model
+Power Flows model has been designed as a YAML file. The file contains information about input and output data. The additional division is sections with fields and decisions.
+
+```yaml
+id: sample_decision_id
+name: Sample Decision Name
+hit-policy: UNIQUE
+expression-type: groovy
+fields:
+  in:
+    age:
+      expression-type: feel
+      expression: toYear(now()) - toYear(birthDate)
+      type: integer
+      description: This is something about age
+    colour:
+      type: string
+      description: This is something about colour
+  out:
+    allow:
+      type: boolean
+      description: We expect a decision, if we have access to do it
+decisions:
+  - description: 3 allows always
+    in:
+      age: 3
+    out:
+      allow: true
+  - in:
+      age: 8
+      colour: red
+    out:
+      allow: true
+  - description: Green allows always
+    in:
+      colour: green
+    out:
+      allow: true
+ - description: Expression usage
+    in:
+      colour:
+        expression-type: feel
+        expresion: not("blue", "purple")
+      age: 10
+    out:
+      allow: true
+ - description: Formatted expression usage
+    in:
+      colour:
+        expression-type: feel
+        expresion: '''not(
+          "red",
+          "pink"
+        )'''
+      age: 20
+    out:
+      allow: true
+```
+
 # How to contribute to the repository
 Contributors wishing to join Power Flows project have to comply with a few rules: 
 
