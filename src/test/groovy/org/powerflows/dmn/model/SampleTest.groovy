@@ -14,12 +14,22 @@
  * limitations under the License.
  */
 
-package org.powerflows.dmn.model;
+package org.powerflows.dmn.model
 
+import spock.lang.Specification
 
-public class Sample {
+class SampleTest extends Specification {
 
-    public String getAsString(int x) {
-        return Integer.toString(x);
+    final private Sample sample = new Sample()
+
+    void 'should get number as string'() {
+        given:
+        final int number = 5
+
+        when:
+        String numberAsString = sample.getAsString(number)
+
+        then:
+        numberAsString == '5'
     }
 }
