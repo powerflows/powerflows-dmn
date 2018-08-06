@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/powerflows/powerflows-dmn-model.svg?branch=master)](https://travis-ci.org/powerflows/powerflows-dmn-model)
+
 # About Power Flows DMN Model
 Power Flows DMN Model
 
