@@ -24,7 +24,7 @@ fields:
   out:
     allow:
       type: boolean
-      description: We expect a decision, if we have access to do it
+      description: rule
 decisions:
   - description: 3 allows always
     in:
