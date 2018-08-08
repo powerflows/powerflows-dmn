@@ -14,12 +14,24 @@
  * limitations under the License.
  */
 
-package org.powerflows.dmn.model;
+package org.powerflows.dmn.domain.model.builder;
 
+public abstract class AbstractBuilder<T> {
 
-public class Sample {
+    protected T product;
 
-    public String getAsString(int x) {
-        return Integer.toString(x);
+    {
+        initProduct();
     }
+
+    public T build() {
+        return assembleProduct();
+    }
+
+    protected abstract void initProduct();
+
+    protected T assembleProduct() {
+        return this.product;
+    }
+
 }
