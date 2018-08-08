@@ -14,22 +14,12 @@
  * limitations under the License.
  */
 
-package org.powerflows.dmn.model
+package org.powerflows.dmn.domain.model;
 
-import spock.lang.Specification
-
-class SampleTest extends Specification {
-
-    final private Sample sample = new Sample()
-
-    void 'should get number as string'() {
-        given:
-        final int number = 5
-
-        when:
-        String numberAsString = sample.getAsString(number)
-
-        then:
-        numberAsString == '5'
-    }
+public enum HitPolicy {
+    UNIQUE,
+    FIRST,
+    ANY,
+    PRIORITY,
+    COLLECT;
 }
