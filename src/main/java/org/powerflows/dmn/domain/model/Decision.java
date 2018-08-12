@@ -64,13 +64,13 @@ public class Decision implements Serializable {
         return rules;
     }
 
-    public static Builder builder() {
-        return new Builder();
+    public static DecisionBuilder builder() {
+        return new DecisionBuilder();
     }
 
-    public static final class Builder extends AbstractBuilder<Decision> {
+    public static final class DecisionBuilder extends AbstractBuilder<Decision> implements Builder<Decision> {
 
-        private Builder() {
+        private DecisionBuilder() {
         }
 
         @Override
@@ -78,38 +78,38 @@ public class Decision implements Serializable {
             this.product = new Decision();
         }
 
-        public Builder id(String id) {
+        public DecisionBuilder id(String id) {
             this.product.id = id;
 
             return this;
         }
 
-        public Builder name(String name) {
+        public DecisionBuilder name(String name) {
             this.product.name = name;
 
             return this;
         }
 
-        public Builder hitPolicy(HitPolicy hitPolicy) {
+        public DecisionBuilder hitPolicy(HitPolicy hitPolicy) {
             this.product.hitPolicy = hitPolicy;
 
             return this;
         }
 
-        public Input.Builder withInputs() {
-            final Consumer<Input> inputConsumer = input -> this.product.inputs.add(input);
+        public Input.InputBuilder<Decision, DecisionBuilder> withInputs() {
+            final Consumer<Input> inputConsumer = this.product.inputs::add;
 
             return Input.builder(this, inputConsumer);
         }
 
-        public Output.Builder withOutputs() {
-            final Consumer<Output> outputConsumer = output -> this.product.outputs.add(output);
+        public Output.OutputBuilder<Decision, DecisionBuilder> withOutputs() {
+            final Consumer<Output> outputConsumer = this.product.outputs::add;
 
             return Output.builder(this, outputConsumer);
         }
 
-        public Rule.Builder withRules() {
-            final Consumer<Rule> ruleConsumer = rule -> this.product.rules.add(rule);
+        public Rule.RuleBuilder<Decision, DecisionBuilder> withRules() {
+            final Consumer<Rule> ruleConsumer = this.product.rules::add;
 
             return Rule.builder(this, ruleConsumer);
         }

@@ -16,7 +16,7 @@
 
 package org.powerflows.dmn.domain.model;
 
-public abstract class AbstractBuilder<T> {
+public abstract class AbstractBuilder<T> implements Builder<T> {
 
     protected T product;
 
@@ -24,6 +24,7 @@ public abstract class AbstractBuilder<T> {
         initProduct();
     }
 
+    @Override
     public T build() {
         T product = assembleProduct();
         T temp = product;

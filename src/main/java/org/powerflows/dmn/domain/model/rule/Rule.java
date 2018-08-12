@@ -17,7 +17,8 @@
 package org.powerflows.dmn.domain.model.rule;
 
 import org.powerflows.dmn.domain.model.AbstractBuilder;
-import org.powerflows.dmn.domain.model.Decision;
+import org.powerflows.dmn.domain.model.Builder;
+import org.powerflows.dmn.domain.model.ElementBuilder;
 import org.powerflows.dmn.domain.model.rule.entry.InputEntry;
 import org.powerflows.dmn.domain.model.rule.entry.OutputEntry;
 
@@ -51,16 +52,16 @@ public class Rule implements Serializable {
         return outputEntries;
     }
 
-    public static Rule.Builder builder(Decision.Builder builder, Consumer<Rule> ruleConsumer) {
-        return new Rule.Builder(builder, ruleConsumer);
+    public static <T, B extends Builder<T>> RuleBuilder<T, B> builder(B builder, Consumer<Rule> ruleConsumer) {
+        return new RuleBuilder<>(builder, ruleConsumer);
     }
 
-    public static final class Builder extends AbstractBuilder<Rule> {
+    public static final class RuleBuilder<T, B extends Builder<T>> extends AbstractBuilder<Rule> implements ElementBuilder<Rule, RuleBuilder<T, B>, B> {
 
-        private Decision.Builder parentBuilder;
+        private B parentBuilder;
         private Consumer<Rule> callback;
 
-        private Builder(Decision.Builder builder, Consumer<Rule> ruleConsumer) {
+        private RuleBuilder(B builder, Consumer<Rule> ruleConsumer) {
             this.parentBuilder = builder;
             this.callback = ruleConsumer;
         }
@@ -70,31 +71,31 @@ public class Rule implements Serializable {
             this.product = new Rule();
         }
 
-        public Builder description(String description) {
+        public RuleBuilder<T, B> description(String description) {
             this.product.description = description;
 
             return this;
         }
 
-        public InputEntry.Builder withInputEntries() {
-            final Consumer<InputEntry> inputEntryConsumer = inputEntry -> this.product.inputEntries.add(inputEntry);
+        public InputEntry.InputEntryBuilder<Rule, RuleBuilder<T, B>> withInputEntries() {
+            final Consumer<InputEntry> inputEntryConsumer = this.product.inputEntries::add;
 
             return InputEntry.builder(this, inputEntryConsumer);
         }
 
-        public OutputEntry.Builder withOutputEntries() {
-            final Consumer<OutputEntry> outputEntryConsumer = outputEntry -> this.product.outputEntries.add(outputEntry);
+        public OutputEntry.OutputEntryBuilder<Rule, RuleBuilder<T, B>> withOutputEntries() {
+            final Consumer<OutputEntry> outputEntryConsumer = this.product.outputEntries::add;
 
             return OutputEntry.builder(this, outputEntryConsumer);
         }
 
-        public Builder next() {
+        public RuleBuilder<T, B> next() {
             accept();
 
             return this;
         }
 
-        public Decision.Builder end() {
+        public B done() {
             accept();
 
             return parentBuilder;

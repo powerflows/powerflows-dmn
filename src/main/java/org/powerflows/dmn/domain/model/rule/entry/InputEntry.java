@@ -17,7 +17,8 @@
 package org.powerflows.dmn.domain.model.rule.entry;
 
 import org.powerflows.dmn.domain.model.AbstractBuilder;
-import org.powerflows.dmn.domain.model.rule.Rule;
+import org.powerflows.dmn.domain.model.Builder;
+import org.powerflows.dmn.domain.model.ElementBuilder;
 
 import java.io.Serializable;
 import java.util.function.Consumer;
@@ -35,16 +36,16 @@ public class InputEntry implements Serializable {
         return name;
     }
 
-    public static Builder builder(Rule.Builder builder, Consumer<InputEntry> inputEntryConsumer) {
-        return new Builder(builder, inputEntryConsumer);
+    public static <T, B extends Builder<T>> InputEntryBuilder<T, B> builder(B builder, Consumer<InputEntry> inputEntryConsumer) {
+        return new InputEntryBuilder<>(builder, inputEntryConsumer);
     }
 
-    public static final class Builder extends AbstractBuilder<InputEntry> {
+    public static final class InputEntryBuilder<T, B extends Builder<T>> extends AbstractBuilder<InputEntry> implements ElementBuilder<InputEntry, InputEntryBuilder<T, B>, B> {
 
-        private Rule.Builder parentBuilder;
+        private B parentBuilder;
         private Consumer<InputEntry> callback;
 
-        private Builder(Rule.Builder builder, Consumer<InputEntry> inputEntryConsumer) {
+        private InputEntryBuilder(B builder, Consumer<InputEntry> inputEntryConsumer) {
             this.parentBuilder = builder;
             this.callback = inputEntryConsumer;
         }
@@ -54,19 +55,19 @@ public class InputEntry implements Serializable {
             this.product = new InputEntry();
         }
 
-        public Builder name(String name) {
+        public InputEntryBuilder<T, B> name(String name) {
             this.product.name = name;
 
             return this;
         }
 
-        public Builder next() {
+        public InputEntryBuilder<T, B> next() {
             callback.accept(build());
 
             return this;
         }
 
-        public Rule.Builder end() {
+        public B done() {
             callback.accept(build());
 
             return parentBuilder;

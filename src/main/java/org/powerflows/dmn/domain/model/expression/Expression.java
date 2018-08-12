@@ -17,7 +17,8 @@
 package org.powerflows.dmn.domain.model.expression;
 
 import org.powerflows.dmn.domain.model.AbstractBuilder;
-import org.powerflows.dmn.domain.model.Decision;
+import org.powerflows.dmn.domain.model.Builder;
+import org.powerflows.dmn.domain.model.ElementBuilder;
 
 import java.io.Serializable;
 import java.util.function.Consumer;
@@ -40,16 +41,17 @@ public class Expression implements Serializable {
         return type;
     }
 
-    public static <T extends AbstractBuilder> Builder builder(T builder, Consumer<Expression> outputConsumer) {
-        return new Builder(builder, outputConsumer);
+    public static <T, P extends Builder<T>> ExpressionBuilder<T, P> builder(P parentBuilder, Consumer<Expression> outputConsumer) {
+        return new ExpressionBuilder<>(parentBuilder, outputConsumer);
     }
 
-    public static final class Builder<T> extends AbstractBuilder<Expression> {
+    public static class ExpressionBuilder<T, P extends Builder<T>> extends AbstractBuilder<Expression>
+            implements ElementBuilder<Expression, ExpressionBuilder<T, P>, P> {
 
-        private T parentBuilder;
+        private P parentBuilder;
         private Consumer<Expression> callback;
 
-        private Builder(T builder, Consumer<Expression> outputConsumer) {
+        public ExpressionBuilder(P builder, Consumer<Expression> outputConsumer) {
             this.parentBuilder = builder;
             this.callback = outputConsumer;
         }
@@ -59,19 +61,25 @@ public class Expression implements Serializable {
             this.product = new Expression();
         }
 
-        public Builder value(Object value) {
+        public ExpressionBuilder<T, P> value(Object value) {
             this.product.value = value;
 
             return this;
         }
 
-        public Builder type(ExpressionType type) {
+        public ExpressionBuilder<T, P> type(ExpressionType type) {
             this.product.type = type;
 
             return this;
         }
 
-        public T and() {
+        @Override
+        public ExpressionBuilder<T, P> next() {
+            return null;
+        }
+
+        @Override
+        public P done() {
             callback.accept(build());
 
             return parentBuilder;

@@ -16,6 +16,8 @@
 
 package org.powerflows.dmn.domain.model;
 
+import org.powerflows.dmn.domain.model.expression.Expression;
+
 import java.io.Serializable;
 import java.util.function.Consumer;
 
@@ -25,6 +27,7 @@ public class Output implements Serializable {
 
     private String name;
     private String description;
+    private Expression expression;
 
     private Output() {
     }
@@ -37,16 +40,20 @@ public class Output implements Serializable {
         return description;
     }
 
-    public static Builder builder(Decision.Builder builder, Consumer<Output> outputConsumer) {
-        return new Builder(builder, outputConsumer);
+    public Expression getExpression() {
+        return expression;
     }
 
-    public static final class Builder extends AbstractBuilder<Output> {
+    public static <T, B extends Builder<T>> OutputBuilder<T, B> builder(B builder, Consumer<Output> outputConsumer) {
+        return new OutputBuilder<>(builder, outputConsumer);
+    }
 
-        private Decision.Builder parentBuilder;
+    public static final class OutputBuilder<T, B extends Builder<T>> extends AbstractBuilder<Output> implements ElementBuilder<Output, OutputBuilder<T, B>, B> {
+
+        private B parentBuilder;
         private Consumer<Output> callback;
 
-        private Builder(Decision.Builder builder, Consumer<Output> outputConsumer) {
+        private OutputBuilder(B builder, Consumer<Output> outputConsumer) {
             this.parentBuilder = builder;
             this.callback = outputConsumer;
         }
@@ -56,25 +63,31 @@ public class Output implements Serializable {
             this.product = new Output();
         }
 
-        public Builder name(String name) {
+        public OutputBuilder<T, B> name(String name) {
             this.product.name = name;
 
             return this;
         }
 
-        public Builder description(String description) {
+        public OutputBuilder<T, B> description(String description) {
             this.product.description = description;
 
             return this;
         }
 
-        public Builder next() {
-            callback.accept(build());
+        public Expression.ExpressionBuilder<Output, OutputBuilder<T, B>> withExpression() {
+            final Consumer<Expression> expressionConsumer = expression -> this.product.expression = expression;
 
-            return new Builder(parentBuilder, callback);
+            return Expression.builder(this, expressionConsumer);
         }
 
-        public Decision.Builder end() {
+        public OutputBuilder<T, B> next() {
+            callback.accept(build());
+
+            return new OutputBuilder<>(parentBuilder, callback);
+        }
+
+        public B done() {
             callback.accept(build());
 
             return parentBuilder;

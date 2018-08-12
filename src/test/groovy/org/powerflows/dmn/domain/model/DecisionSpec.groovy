@@ -20,7 +20,7 @@ import org.powerflows.dmn.domain.model.expression.ExpressionType
 import org.powerflows.dmn.domain.model.input.InputType
 import spock.lang.Specification
 
-class DecisionTest extends Specification {
+class DecisionSpec extends Specification {
 
     void 'should build table'() {
         given:
@@ -48,11 +48,11 @@ class DecisionTest extends Specification {
                     .withExpression()
                         .type(ExpressionType.LITERAL)
                         .value(5)
-                        .and()
-                    .next()
+                        .done()
+
                     .name(someInputName2)
                     .description(someInputDescription2)
-                    .end()
+                    .done()
                 .withOutputs()
                     .name(someOutputName1)
                     .description(someOutputDescription1)
@@ -85,20 +85,11 @@ class DecisionTest extends Specification {
                 .build()
 
         then:
-        /*table != null
-        table.getId() == someTableId
-        table.getName() == someTableName
-        table.getHitPolicy() == someHitPolicy
-        table.getFields().getInputs().size() == 2
-        table.getFields().getInputs().get(0).getName() == someInputName1
-        table.getFields().getInputs().get(0).getDescription() == someInputDescription1
-        table.getFields().getInputs().get(1).getName() == someInputName2
-        table.getFields().getInputs().get(1).getDescription() == someInputDescription2
-        table.getFields().getOutputs().size() == 2
-        table.getFields().getOutputs().get(0).getName() == someOutputName1
-        table.getFields().getOutputs().get(0).getDescription() == someOutputDescription1
-        table.getFields().getOutputs().get(1).getName() == someOutputName2
-        table.getFields().getOutputs().get(1).getDescription() == someOutputDescription2
-        table.getRules() == null*/
+        true
+        decision != null
+        decision.getId() == someTableId
+        decision.getName() == someTableName
+        decision.getHitPolicy() == someHitPolicy
+        decision.getInputs().size() == 2
     }
 }
