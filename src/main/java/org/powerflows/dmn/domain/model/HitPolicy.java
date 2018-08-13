@@ -10,26 +10,16 @@
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
+ * See the License for the specific language governing permissions end
  * limitations under the License.
  */
 
-package org.powerflows.dmn.model
+package org.powerflows.dmn.domain.model;
 
-import spock.lang.Specification
-
-class SampleTest extends Specification {
-
-    final private Sample sample = new Sample()
-
-    void 'should get number as string'() {
-        given:
-        final int number = 5
-
-        when:
-        String numberAsString = sample.getAsString(number)
-
-        then:
-        numberAsString == '5'
-    }
+public enum HitPolicy {
+    UNIQUE,
+    FIRST,
+    ANY,
+    PRIORITY,
+    COLLECT;
 }
