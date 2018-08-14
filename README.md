@@ -25,7 +25,7 @@ fields:
     allow:
       type: boolean
       description: We expect a decision, if we have access to do it
-decisions:
+rules:
   - description: 3 allows always
     in:
       age: 3
