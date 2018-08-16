@@ -4,7 +4,13 @@
 Power Flows DMN Model
 
 # DMN model
-Power Flows model has been designed as a YAML file. The file contains information about input and output data. The additional division is sections with fields and decisions.
+Power Flows model has been designed as an easy to describe and maintain file. The file contains information about input and output data. The additional division is sections with fields and rules.
+
+Power Flows supports the model in the following formats:
+* YAML file;
+* Java / Groovy file.
+
+## YAML file
 
 ```yaml
 id: sample_decision_id
@@ -60,6 +66,135 @@ rules:
       age: 20
     out:
       allow: true
+```
+
+## Java / Groovy file
+```groovy
+
+Decision decision = Decision.builder()
+                .id("sample_decision_id")
+                .name("Sample Decision Name")
+                .hitPolicy(HitPolicy.UNIQUE)
+                .withInputs()
+                    .name("age")
+                    .description("This is something about age")
+                    .type(InputType.STRING)
+                    .withExpression()
+                        .type(ExpressionType.FEEL)
+                        .value("toYear(now()) - toYear(birthDate)")
+                        .and()
+                    .next()
+                    .name("colour")
+                    .description("This is something about colour")
+                    .type(InputType.STRING)
+                    .end()
+                .withOutputs()
+                    .name("allow")
+                    .description("We expect a decision, if we have access to do it")
+                    .type(InputType.BOOLEAN)
+                    .end()
+                .withRules()
+                    .description("3 allows always")
+                    .withInputEntries()
+                        .name("age")
+                        .withExpression()
+                            .type(ExpressionType.LITERAL)
+                            .value(3)
+                            .and()
+                        .end()
+                    .withOutputEntries()
+                        .name("allow")
+                        .withExpression()
+                            .type(ExpressionType.LITERAL)
+                            .value(true)
+                            .and()
+                        .end()
+                    .next()
+                    .withInputEntries()
+                        .name("age")
+                        .withExpression()
+                            .type(ExpressionType.LITERAL)
+                            .value(8)
+                            .and()
+                        .next()
+                        .name("colour")
+                        .withExpression()
+                            .type(ExpressionType.LITERAL)
+                            .value("red")
+                            .and()
+                        .end()
+                    .withOutputEntries()
+                        .name("allow")
+                        .withExpression()
+                            .type(ExpressionType.LITERAL)
+                            .value(true)
+                            .and()
+                        .end()
+                    .next()
+                    .description("Green allows always")
+                    .withInputEntries()
+                        .name("colour")
+                        .withExpression()
+                            .type(ExpressionType.LITERAL)
+                            .value("green")
+                            .and()
+                        .end()
+                    .withOutputEntries()
+                        .name("allow")
+                        .withExpression()
+                            .type(ExpressionType.LITERAL)
+                            .value(true)
+                            .and()
+                        .end()
+                    .next()
+                    .description("Expression usage")
+                    .withInputEntries()
+                        .name("colour")
+                        .withExpression()
+                            .type(ExpressionType.FEEL)
+                            .value("not('blue', 'purple')")
+                            .and()
+                        .next()
+                       .name("age")
+                        .withExpression()
+                            .type(ExpressionType.LITERAL)
+                            .value(10)
+                            .and()
+                        .end()
+                    .withOutputEntries()
+                        .name("allow")
+                        .withExpression()
+                            .type(ExpressionType.LITERAL)
+                            .value(true)
+                            .and()
+                        .end()
+                    .next()
+                    .description("Formatted expression usage")
+                    .withInputEntries()
+                        .name("colour")
+                        .withExpression()
+                            .type(ExpressionType.FEEL)
+                            .value("not("+
+                                "'red',"+
+                                "'pink'"+
+                                ")")
+                            .and()
+                        .next()
+                       .name("age")
+                        .withExpression()
+                            .type(ExpressionType.LITERAL)
+                            .value(20)
+                            .and()
+                        .end()
+                    .withOutputEntries()
+                        .name("allow")
+                        .withExpression()
+                            .type(ExpressionType.LITERAL)
+                            .value(true)
+                            .and()
+                        .end()
+                    .end()
+                .build();
 ```
 
 # How to contribute to the repository
