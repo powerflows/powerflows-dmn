@@ -151,7 +151,7 @@
                     <argLine>${jacoco.agent.ut.arg}</argLine>
                     <skipTests>${skipUTs}</skipTests>
                     <includes>
-                        <include>**/*Test.*</include>
+                        <include>**/*Spec.*</include>
                     </includes>
                     <excludes>
                         <exclude>**/*IT.*</exclude>
@@ -169,7 +169,7 @@
                         <include>**/*IT.*</include>
                     </includes>
                     <excludes>
-                        <exclude>**/*Test.*</exclude>
+                        <exclude>**/*Spec.*</exclude>
                     </excludes>
                     <classesDirectory>${project.build.outputDirectory}</classesDirectory>
                 </configuration>
