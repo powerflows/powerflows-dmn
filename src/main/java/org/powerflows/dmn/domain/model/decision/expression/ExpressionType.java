@@ -14,12 +14,10 @@
  * limitations under the License.
  */
 
-package org.powerflows.dmn.domain.model;
+package org.powerflows.dmn.domain.model.decision.expression;
 
-public enum HitPolicy {
-    UNIQUE,
-    FIRST,
-    ANY,
-    PRIORITY,
-    COLLECT;
+public enum ExpressionType {
+    LITERAL,
+    FEEL,
+    GROOVY
 }
