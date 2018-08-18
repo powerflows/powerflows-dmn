@@ -14,16 +14,16 @@
  * limitations under the License.
  */
 
-package org.powerflows.dmn.domain.model
+package org.powerflows.dmn.domain.model.decision
 
-import org.powerflows.dmn.domain.model.expression.Expression
-import org.powerflows.dmn.domain.model.expression.ExpressionType
-import org.powerflows.dmn.domain.model.field.Input
-import org.powerflows.dmn.domain.model.field.Output
-import org.powerflows.dmn.domain.model.field.ValueType
-import org.powerflows.dmn.domain.model.rule.Rule
-import org.powerflows.dmn.domain.model.rule.entry.InputEntry
-import org.powerflows.dmn.domain.model.rule.entry.OutputEntry
+import org.powerflows.dmn.domain.model.decision.expression.Expression
+import org.powerflows.dmn.domain.model.decision.expression.ExpressionType
+import org.powerflows.dmn.domain.model.decision.field.Input
+import org.powerflows.dmn.domain.model.decision.field.Output
+import org.powerflows.dmn.domain.model.decision.field.ValueType
+import org.powerflows.dmn.domain.model.decision.rule.Rule
+import org.powerflows.dmn.domain.model.decision.rule.entry.InputEntry
+import org.powerflows.dmn.domain.model.decision.rule.entry.OutputEntry
 import spock.lang.Specification
 
 class DecisionSpec extends Specification {
