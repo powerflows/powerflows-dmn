@@ -14,11 +14,13 @@
  * limitations under the License.
  */
 
-package org.powerflows.dmn.domain.model.field;
+package org.powerflows.dmn.domain.model.evaluation.exception;
 
-public enum ValueType {
-    STRING,
-    INTEGER,
-    BOOLEAN,
-    COLLECTION;
+
+public class EvaluationResultException extends RuntimeException {
+
+    public EvaluationResultException(String message) {
+        super(message);
+    }
+
 }
