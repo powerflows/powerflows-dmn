@@ -1,7 +1,7 @@
-[![Build Status](https://travis-ci.org/powerflows/powerflows-dmn-model.svg?branch=master)](https://travis-ci.org/powerflows/powerflows-dmn-model)
+[![Build Status](https://travis-ci.org/powerflows/powerflows-dmn.svg?branch=master)](https://travis-ci.org/powerflows/powerflows-dmn)
 
-# About Power Flows DMN Model
-Power Flows DMN Model
+# About Power Flows DMN
+Power Flows DMN - a powerful decision engine.
 
 # DMN model
 Power Flows model has been designed as an easy to describe and maintain file. The file contains information about input and output data. The additional division is sections with fields and rules.
