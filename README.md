@@ -1,7 +1,7 @@
-[![Build Status](https://travis-ci.org/powerflows/powerflows-dmn-model.svg?branch=master)](https://travis-ci.org/powerflows/powerflows-dmn-model)
+[![Build Status](https://travis-ci.org/powerflows/powerflows-dmn.svg?branch=master)](https://travis-ci.org/powerflows/powerflows-dmn)
 
-# About Power Flows DMN Model
-Power Flows DMN Model
+# About Power Flows DMN
+Power Flows DMN - a powerful decision engine.
 
 # DMN model
 Power Flows model has been designed as an easy to describe and maintain file. The file contains information about input and output data. The additional division is sections with fields and rules.
@@ -79,7 +79,7 @@ Decision decision = Decision.builder()
                 .withInputs()
                     .name("age")
                     .description("This is something about age")
-                    .type(InputType.STRING)
+                    .type(ValueType.STRING)
                     .withExpression()
                         .type(ExpressionType.FEEL)
                         .value("toYear(now()) - toYear(birthDate)")
@@ -87,12 +87,12 @@ Decision decision = Decision.builder()
                     .next()
                     .name("colour")
                     .description("This is something about colour")
-                    .type(InputType.STRING)
+                    .type(ValueType.STRING)
                     .end()
                 .withOutputs()
                     .name("allow")
                     .description("We expect a decision, if we have access to do it")
-                    .type(InputType.BOOLEAN)
+                    .type(ValueType.BOOLEAN)
                     .end()
                 .withRules()
                     .description("3 allows always")

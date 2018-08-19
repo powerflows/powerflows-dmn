@@ -14,15 +14,15 @@
  * limitations under the License.
  */
 
-package org.powerflows.dmn.domain.model.field;
+package org.powerflows.dmn.domain.model.decision.field;
 
 import org.powerflows.dmn.domain.model.builder.AbstractBuilder;
-import org.powerflows.dmn.domain.model.expression.Expression;
+import org.powerflows.dmn.domain.model.decision.expression.Expression;
 
 import java.io.Serializable;
 import java.util.function.Consumer;
 
-public class Output implements Serializable {
+public class Input implements Serializable {
 
     private static final long serialVersionUID = 1;
 
@@ -31,7 +31,7 @@ public class Output implements Serializable {
     private ValueType type;
     private Expression expression;
 
-    private Output() {
+    private Input() {
     }
 
     public String getName() {
@@ -50,23 +50,23 @@ public class Output implements Serializable {
         return expression;
     }
 
-    public static <P extends AbstractBuilder> Builder<P> builder(P parentBuilder, Consumer<Output> outputConsumer) {
-        return new Builder<>(parentBuilder, outputConsumer);
+    public static <P extends AbstractBuilder> Builder<P> builder(P parentBuilder, Consumer<Input> inputConsumer) {
+        return new Builder<>(parentBuilder, inputConsumer);
     }
 
-    public static final class Builder<P extends AbstractBuilder> extends AbstractBuilder<Output> {
+    public static final class Builder<P extends AbstractBuilder> extends AbstractBuilder<Input> {
 
         private P parentBuilder;
-        private Consumer<Output> callback;
+        private Consumer<Input> callback;
 
-        private Builder(P parentBuilder, Consumer<Output> outputConsumer) {
+        private Builder(P parentBuilder, Consumer<Input> inputConsumer) {
             this.parentBuilder = parentBuilder;
-            this.callback = outputConsumer;
+            this.callback = inputConsumer;
         }
 
         @Override
         protected void initProduct() {
-            this.product = new Output();
+            this.product = new Input();
         }
 
         public Builder<P> name(String name) {

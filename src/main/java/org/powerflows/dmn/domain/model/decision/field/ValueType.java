@@ -14,10 +14,11 @@
  * limitations under the License.
  */
 
-package org.powerflows.dmn.domain.model.expression;
+package org.powerflows.dmn.domain.model.decision.field;
 
-public enum ExpressionType {
-    LITERAL,
-    FEEL,
-    GROOVY;
+public enum ValueType {
+    STRING,
+    INTEGER,
+    BOOLEAN,
+    COLLECTION
 }

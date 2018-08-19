@@ -14,13 +14,13 @@
  * limitations under the License.
  */
 
-package org.powerflows.dmn.domain.model;
+package org.powerflows.dmn.domain.model.decision;
 
 import org.powerflows.dmn.domain.model.builder.AbstractBuilder;
-import org.powerflows.dmn.domain.model.expression.ExpressionType;
-import org.powerflows.dmn.domain.model.field.Input;
-import org.powerflows.dmn.domain.model.field.Output;
-import org.powerflows.dmn.domain.model.rule.Rule;
+import org.powerflows.dmn.domain.model.decision.expression.ExpressionType;
+import org.powerflows.dmn.domain.model.decision.field.Input;
+import org.powerflows.dmn.domain.model.decision.field.Output;
+import org.powerflows.dmn.domain.model.decision.rule.Rule;
 
 import java.io.Serializable;
 import java.util.ArrayList;

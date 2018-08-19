@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.powerflows.dmn.domain.model.expression;
+package org.powerflows.dmn.domain.model.decision.expression;
 
 import org.powerflows.dmn.domain.model.builder.AbstractBuilder;
 
