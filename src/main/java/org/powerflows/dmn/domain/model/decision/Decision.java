@@ -17,6 +17,7 @@
 package org.powerflows.dmn.domain.model.decision;
 
 import org.powerflows.dmn.domain.model.builder.AbstractBuilder;
+import org.powerflows.dmn.domain.model.decision.expression.ExpressionType;
 import org.powerflows.dmn.domain.model.decision.field.Input;
 import org.powerflows.dmn.domain.model.decision.field.Output;
 import org.powerflows.dmn.domain.model.decision.rule.Rule;
@@ -35,6 +36,7 @@ public class Decision implements Serializable {
     private String id;
     private String name;
     private HitPolicy hitPolicy;
+    private ExpressionType expressionType;
     private List<Input> inputs = new ArrayList<>();
     private List<Output> outputs = new ArrayList<>();
     private List<Rule> rules = new ArrayList<>();
@@ -52,6 +54,10 @@ public class Decision implements Serializable {
 
     public HitPolicy getHitPolicy() {
         return hitPolicy;
+    }
+
+    public ExpressionType getExpressionType() {
+        return expressionType;
     }
 
     public List<Input> getInputs() {
@@ -94,6 +100,12 @@ public class Decision implements Serializable {
 
         public Builder<P> hitPolicy(HitPolicy hitPolicy) {
             this.product.hitPolicy = hitPolicy;
+
+            return this;
+        }
+
+        public Builder<P> expressionType(ExpressionType expressionType) {
+            this.product.expressionType = expressionType;
 
             return this;
         }
