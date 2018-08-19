@@ -14,13 +14,25 @@
  * limitations under the License.
  */
 
-package org.powerflows.dmn.domain.model.evaluation.exception;
+package org.powerflows.dmn.domain.model.evaluation.context;
 
 
-public class EvaluationResultException extends RuntimeException {
+import java.io.Serializable;
+import java.util.Map;
 
-    public EvaluationResultException(String message) {
-        super(message);
+import static java.util.Collections.unmodifiableMap;
+
+public class ContextVariables implements Serializable {
+
+    private static final long serialVersionUID = 1;
+
+    private final Map<String, Object> variables;
+
+    public ContextVariables(Map<String, Object> variables) {
+        this.variables = unmodifiableMap(variables);
     }
 
+    public Map<String, Object> getVariables() {
+        return variables;
+    }
 }

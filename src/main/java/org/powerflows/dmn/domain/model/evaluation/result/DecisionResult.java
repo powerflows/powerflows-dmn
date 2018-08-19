@@ -14,11 +14,11 @@
  * limitations under the License.
  */
 
-package org.powerflows.dmn.domain.model.evaluation;
+package org.powerflows.dmn.domain.model.evaluation.result;
 
 
 import org.powerflows.dmn.domain.model.builder.AbstractBuilder;
-import org.powerflows.dmn.domain.model.evaluation.exception.EvaluationResultException;
+import org.powerflows.dmn.domain.model.evaluation.result.exception.EvaluationResultException;
 
 import java.io.Serializable;
 import java.util.ArrayList;
