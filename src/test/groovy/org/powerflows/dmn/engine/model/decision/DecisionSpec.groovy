@@ -28,11 +28,12 @@ import spock.lang.Specification
 
 class DecisionSpec extends Specification {
 
-    void 'should build table'() {
+    void 'should build decision'() {
         given:
         final String someTableId = 'some_table_id'
         final String someTableName = 'Some Table Name'
         final HitPolicy someHitPolicy = HitPolicy.UNIQUE
+        final ExpressionType someExpressionType = ExpressionType.GROOVY
         final ValueType someInput1Type = ValueType.INTEGER
         final String someInput1Name = 'Some Input 1 Name'
         final String someInput1Description = 'Some Input 1 Description'
@@ -71,6 +72,7 @@ class DecisionSpec extends Specification {
                 .id(someTableId)
                 .name(someTableName)
                 .hitPolicy(someHitPolicy)
+                .expressionType(someExpressionType)
                 .withInputs()
                     .name(someInput1Name)
                     .description(someInput1Description)
@@ -143,6 +145,7 @@ class DecisionSpec extends Specification {
             getId() == someTableId
             getName() == someTableName
             getHitPolicy() == someHitPolicy
+            getExpressionType() == someExpressionType
             getInputs().size() == 2
             getOutputs().size() == 2
             getRules().size() == 2
