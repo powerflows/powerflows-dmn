@@ -39,35 +39,44 @@ public class Expression implements Serializable {
         return type;
     }
 
-    public static <P extends AbstractBuilder> Builder<P> builder(P parentBuilder, Consumer<Expression> expressionConsumer) {
-        return new Builder<>(parentBuilder, expressionConsumer);
+    public static <P extends AbstractBuilder> FluentBuilder<P> fluentBuilder(P parentBuilder, Consumer<Expression> expressionConsumer) {
+        return new FluentBuilder<>(parentBuilder, expressionConsumer);
     }
 
-    public static class Builder<P extends AbstractBuilder> extends AbstractBuilder<Expression> {
+    public static Builder builder() {
+        return new Builder();
+    }
 
-        private P parentBuilder;
-        private Consumer<Expression> callback;
-
-        private Builder(P parentBuilder, Consumer<Expression> expressionConsumer) {
-            this.parentBuilder = parentBuilder;
-            this.callback = expressionConsumer;
-        }
+    private static abstract class ExpressionBuilder<B extends Expression.ExpressionBuilder<B>> extends AbstractBuilder<Expression> {
 
         @Override
         protected void initProduct() {
             this.product = new Expression();
         }
 
-        public Builder<P> value(Object value) {
+        public B value(Object value) {
             this.product.value = value;
 
-            return this;
+            return (B) this;
         }
 
-        public Builder<P> type(ExpressionType type) {
+        public B type(ExpressionType type) {
             this.product.type = type;
 
-            return this;
+            return (B) this;
+        }
+    }
+
+    public static class Builder extends ExpressionBuilder<Builder> {
+    }
+
+    public static class FluentBuilder<P extends AbstractBuilder> extends Expression.ExpressionBuilder<Expression.FluentBuilder<P>> {
+        private final P parentBuilder;
+        private final Consumer<Expression> callback;
+
+        private FluentBuilder(P parentBuilder, Consumer<Expression> callback) {
+            this.parentBuilder = parentBuilder;
+            this.callback = callback;
         }
 
         public P and() {
@@ -76,5 +85,4 @@ public class Expression implements Serializable {
             return parentBuilder;
         }
     }
-
 }
