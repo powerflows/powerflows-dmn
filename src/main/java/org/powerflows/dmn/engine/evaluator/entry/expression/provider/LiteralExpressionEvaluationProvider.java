@@ -17,6 +17,7 @@
 package org.powerflows.dmn.engine.evaluator.entry.expression.provider;
 
 import org.powerflows.dmn.engine.evaluator.context.ModifiableContextVariables;
+import org.powerflows.dmn.engine.evaluator.exception.EvaluationException;
 import org.powerflows.dmn.engine.model.decision.field.Input;
 import org.powerflows.dmn.engine.model.decision.rule.entry.InputEntry;
 import org.powerflows.dmn.engine.model.decision.rule.entry.OutputEntry;
@@ -46,7 +47,7 @@ class LiteralExpressionEvaluationProvider extends AbstractExpressionEvaluationPr
 
     @Override
     public Object evaluateInput(final Input input, final ModifiableContextVariables contextVariables) {
-        return contextVariables.get(input.getName());
+        throw new EvaluationException("Input evaluation is not possible for literal expression.");
     }
 
     @Override
