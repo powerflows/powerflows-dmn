@@ -195,7 +195,8 @@ Decision decision = Decision.builder()
                             .and()
                         .end()
                     .end()
-                .build();
+                .build()
+
 ```
 
 # How to contribute to the repository

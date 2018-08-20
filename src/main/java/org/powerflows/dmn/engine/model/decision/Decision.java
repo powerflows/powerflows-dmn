@@ -26,6 +26,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
+import java.util.function.Function;
 
 import static java.util.Collections.unmodifiableList;
 
@@ -72,70 +73,97 @@ public class Decision implements Serializable {
         return rules;
     }
 
-    public static <P extends AbstractBuilder> Builder<P> builder() {
-        return new Builder<>();
+    public static FluentBuilder fluentBuilder() {
+        return new FluentBuilder();
     }
 
-    public static final class Builder<P extends AbstractBuilder> extends AbstractBuilder<Decision> {
+    public static Builder builder() {
+        return new Builder();
+    }
 
-        private Builder() {
-        }
-
+    private static abstract class DecisionBuilder<B extends DecisionBuilder<B>> extends AbstractBuilder<Decision> {
         @Override
         protected void initProduct() {
             this.product = new Decision();
         }
 
-        public Builder<P> id(String id) {
+        public B id(String id) {
             this.product.id = id;
 
-            return this;
+            return (B) this;
         }
 
-        public Builder<P> name(String name) {
+        public B name(String name) {
             this.product.name = name;
 
-            return this;
+            return (B) this;
         }
 
-        public Builder<P> hitPolicy(HitPolicy hitPolicy) {
+        public B hitPolicy(HitPolicy hitPolicy) {
             this.product.hitPolicy = hitPolicy;
 
-            return this;
+            return (B) this;
         }
 
-        public Builder<P> expressionType(ExpressionType expressionType) {
+        public B expressionType(ExpressionType expressionType) {
             this.product.expressionType = expressionType;
 
-            return this;
-        }
-
-        public Input.Builder<Builder<P>> withInputs() {
-            final Consumer<Input> inputConsumer = input -> this.product.inputs.add(input);
-
-            return Input.builder(this, inputConsumer);
-        }
-
-        public Output.Builder<Builder<P>> withOutputs() {
-            final Consumer<Output> outputConsumer = output -> this.product.outputs.add(output);
-
-            return Output.builder(this, outputConsumer);
-        }
-
-        public Rule.Builder<Builder<P>> withRules() {
-            final Consumer<Rule> ruleConsumer = rule -> this.product.rules.add(rule);
-
-            return Rule.builder(this, ruleConsumer);
+            return (B) this;
         }
 
         @Override
-        public Decision build() {
+        protected Decision assembleProduct() {
             this.product.inputs = unmodifiableList(this.product.inputs);
             this.product.outputs = unmodifiableList(this.product.outputs);
             this.product.rules = unmodifiableList(this.product.rules);
 
-            return super.build();
+            return this.product;
         }
     }
 
+    public static final class Builder extends DecisionBuilder<Builder> {
+        public Builder withInput(final Function<Input.Builder, Input> inputsBuilderConsumer) {
+            this.product.inputs.add(inputsBuilderConsumer
+                    .apply(Input.builder()));
+
+            return this;
+        }
+
+        public Builder withOutput(final Function<Output.Builder, Output> outputsBuilderConsumer) {
+            this.product.outputs.add(outputsBuilderConsumer
+                    .apply(Output.builder()));
+
+            return this;
+        }
+
+        public Builder withRule(final Function<Rule.Builder, Rule> ruleBuilderConsumer) {
+            this.product.rules.add(ruleBuilderConsumer.apply(Rule.builder()));
+
+            return this;
+        }
+    }
+
+    public static final class FluentBuilder extends DecisionBuilder<FluentBuilder> {
+
+        private FluentBuilder() {
+        }
+
+        public Input.FluentBuilder<FluentBuilder> withInputs() {
+            final Consumer<Input> inputConsumer = this.product.inputs::add;
+
+            return Input.fluentBuilder(this, inputConsumer);
+        }
+
+        public Output.FluentBuilder<FluentBuilder> withOutputs() {
+            final Consumer<Output> outputConsumer = this.product.outputs::add;
+
+            return Output.fluentBuilder(this, outputConsumer);
+        }
+
+        public Rule.FluentBuilder<FluentBuilder> withRules() {
+            final Consumer<Rule> ruleConsumer = this.product.rules::add;
+
+            return Rule.fluentBuilder(this, ruleConsumer);
+        }
+    }
 }
