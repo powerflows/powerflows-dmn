@@ -35,24 +35,34 @@ class DecisionResultSpec extends Specification {
 
         when:
         // @formatter:off
+        final EntryResult someRule1Entry1 = EntryResult.builder()
+                .name(someRule1Entry1Name)
+                .value(someRule1Entry1Value)
+                .build()
+        final EntryResult someRule1Entry2 = EntryResult.builder()
+                .name(someRule1Entry2Name)
+                .value(someRule1Entry2Value)
+                .build()
+
+        final RuleResult someRule1Result = RuleResult.builder()
+                .entryResults([someRule1Entry1, someRule1Entry2])
+                .build()
+
+        final EntryResult someRule2Entry1 = EntryResult.builder()
+                .name(someRule2Entry1Name)
+                .value(someRule2Entry1Value)
+                .build()
+        final EntryResult someRule2Entry2 = EntryResult.builder()
+                .name(someRule2Entry2Name)
+                .value(someRule2Entry2Value)
+                .build()
+
+        final RuleResult someRule2Result = RuleResult.builder()
+                .entryResults([someRule2Entry1, someRule2Entry2])
+                .build()
+
         final DecisionResult decisionResult = DecisionResult.builder()
-                .withRuleResults()
-                    .withEntryResults()
-                        .name(someRule1Entry1Name)
-                        .value(someRule1Entry1Value)
-                        .next()
-                        .name(someRule1Entry2Name)
-                        .value(someRule1Entry2Value)
-                        .end()
-                    .next()
-                    .withEntryResults()
-                        .name(someRule2Entry1Name)
-                        .value(someRule2Entry1Value)
-                        .next()
-                        .name(someRule2Entry2Name)
-                        .value(someRule2Entry2Value)
-                        .end()
-                    .end()
+                .ruleResults([someRule1Result, someRule2Result])
                 .build()
         // @formatter:on
 
@@ -107,13 +117,17 @@ class DecisionResultSpec extends Specification {
 
         when:
         // @formatter:off
+        final EntryResult someRuleEntry = EntryResult.builder()
+                .name(someRuleEntryName)
+                .value(someRuleEntryValue)
+                .build()
+
+        final RuleResult someRuleResult = RuleResult.builder()
+                .entryResults([someRuleEntry])
+                .build()
+
         final DecisionResult decisionResult = DecisionResult.builder()
-                .withRuleResults()
-                    .withEntryResults()
-                        .name(someRuleEntryName)
-                        .value(someRuleEntryValue)
-                        .end()
-                    .end()
+                .ruleResults([someRuleResult])
                 .build()
         // @formatter:on
 
@@ -147,16 +161,21 @@ class DecisionResultSpec extends Specification {
 
         when:
         // @formatter:off
+        final EntryResult someRuleEntry1 = EntryResult.builder()
+                .name(someRuleEntry1Name)
+                .value(someRuleEntry1Value)
+                .build()
+        final EntryResult someRuleEntry2 = EntryResult.builder()
+                .name(someRuleEntry2Name)
+                .value(someRuleEntry2Value)
+                .build()
+
+        final RuleResult someRuleResult = RuleResult.builder()
+                .entryResults([someRuleEntry1, someRuleEntry2])
+                .build()
+
         final DecisionResult decisionResult = DecisionResult.builder()
-                .withRuleResults()
-                    .withEntryResults()
-                        .name(someRuleEntry1Name)
-                        .value(someRuleEntry1Value)
-                        .next()
-                        .name(someRuleEntry2Name)
-                        .value(someRuleEntry2Value)
-                        .end()
-                    .end()
+                .ruleResults([someRuleResult])
                 .build()
         // @formatter:on
 

@@ -14,22 +14,23 @@
  * limitations under the License.
  */
 
-package org.powerflows.dmn.engine.reader;
+package org.powerflows.dmn.engine.evaluator.context;
 
 
-import org.powerflows.dmn.engine.model.decision.Decision;
+import org.powerflows.dmn.engine.model.evaluation.context.AbstractContextVariables;
+import org.powerflows.dmn.engine.model.evaluation.context.ContextVariables;
 
-import java.io.InputStream;
-import java.util.List;
+import java.io.Serializable;
 
-public interface DecisionReader {
+public class ModifiableContextVariables extends AbstractContextVariables implements Serializable {
 
-    Decision read(String decisionId);
+    private static final long serialVersionUID = 1;
 
-    List<Decision> readAll(List<String> decisionIds);
+    public ModifiableContextVariables(ContextVariables contextVariables) {
+        this.variables = contextVariables.getAll();
+    }
 
-    Decision read(InputStream inputStream);
-
-    List<Decision> readAll(InputStream inputStream);
-
+    synchronized public void addVariable(final String key, Object value) {
+        variables.put(key, value);
+    }
 }

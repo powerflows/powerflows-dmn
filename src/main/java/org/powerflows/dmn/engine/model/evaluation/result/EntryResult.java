@@ -20,7 +20,6 @@ package org.powerflows.dmn.engine.model.evaluation.result;
 import org.powerflows.dmn.engine.model.builder.AbstractBuilder;
 
 import java.io.Serializable;
-import java.util.function.Consumer;
 
 public class EntryResult implements Serializable {
 
@@ -40,18 +39,13 @@ public class EntryResult implements Serializable {
         return value;
     }
 
-    public static <P extends AbstractBuilder> Builder<P> builder(P parentBuilder, Consumer<EntryResult> entryResultConsumer) {
-        return new Builder<>(parentBuilder, entryResultConsumer);
+    public static Builder builder() {
+        return new Builder();
     }
 
-    public static class Builder<P extends AbstractBuilder> extends AbstractBuilder<EntryResult> {
+    public static class Builder extends AbstractBuilder<EntryResult> {
 
-        private P parentBuilder;
-        private Consumer<EntryResult> callback;
-
-        private Builder(P parentBuilder, Consumer<EntryResult> entryResultConsumer) {
-            this.parentBuilder = parentBuilder;
-            this.callback = entryResultConsumer;
+        private Builder() {
         }
 
         @Override
@@ -59,28 +53,16 @@ public class EntryResult implements Serializable {
             this.product = new EntryResult();
         }
 
-        public Builder<P> name(String name) {
+        public Builder name(String name) {
             this.product.name = name;
 
             return this;
         }
 
-        public Builder<P> value(Object value) {
+        public Builder value(Object value) {
             this.product.value = value;
 
             return this;
-        }
-
-        public Builder<P> next() {
-            callback.accept(build());
-
-            return builder(parentBuilder, callback);
-        }
-
-        public P end() {
-            callback.accept(build());
-
-            return parentBuilder;
         }
     }
 }

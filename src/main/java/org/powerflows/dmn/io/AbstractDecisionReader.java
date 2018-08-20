@@ -16,8 +16,22 @@
 
 package org.powerflows.dmn.io;
 
+import org.powerflows.dmn.engine.model.decision.Decision;
 import org.powerflows.dmn.engine.reader.DecisionReader;
 
+import java.util.List;
+
+
 public abstract class AbstractDecisionReader implements DecisionReader {
+
+    @Override
+    public Decision read(final String decisionId) {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public List<Decision> readAll(final List<String> decisionIds) {
+        throw new UnsupportedOperationException();
+    }
 
 }
