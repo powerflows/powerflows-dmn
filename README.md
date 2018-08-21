@@ -9,6 +9,8 @@ Power Flows model has been designed as an easy to describe and maintain file. Th
 Power Flows supports the model in the following formats:
 * YAML file;
 * Java / Groovy file.
+    * Fluent
+    * Functional
 
 ## YAML file
 
@@ -47,7 +49,7 @@ rules:
       colour: green
     out:
       allow: true
- - description: Expression usage
+  - description: Expression usage
     in:
       colour:
         expression-type: feel
@@ -55,7 +57,7 @@ rules:
       age: 10
     out:
       allow: true
- - description: Formatted expression usage
+  - description: Formatted expression usage
     in:
       colour:
         expression-type: feel
@@ -69,6 +71,7 @@ rules:
 ```
 
 ## Java / Groovy file
+#### Using fluent style
 ```groovy
 
 Decision decision = Decision.builder()
@@ -195,9 +198,147 @@ Decision decision = Decision.builder()
                             .and()
                         .end()
                     .end()
+                .build()
+```
+#### Using functional style
+```java
+Decision decision = Decision.builder()
+                .id("sample_decision_id")
+                .name("Sample Decision Name")
+                .hitPolicy(HitPolicy.UNIQUE)
+                .expressionType(ExpressionType.GROOVY)
+                .withInput(in -> in
+                        .name("age")
+                        .description("This is something about age")
+                        .type(ValueType.STRING)
+                        .withExpression(ex -> ex
+                                .type(ExpressionType.FEEL)
+                                .value("toYear(now()) - toYear(birthDate)")
+                                .build())
+                        .build())
+                .withInput(in -> in
+                        .name("colour")
+                        .description("This is something about colour")
+                        .type(ValueType.STRING)
+                        .build())
+                .withOutput(out -> out
+                        .name("allow")
+                        .description("We expect a decision, if we have access to do it")
+                        .type(ValueType.BOOLEAN)
+                        .build())
+                .withRule(rule -> rule
+                        .description("3 allows always")
+                        .withInputEntry(in -> in
+                                .name("age")
+                                .withExpression(ex -> ex
+                                        .type(ExpressionType.LITERAL)
+                                        .value(3)
+                                        .build())
+                                .build())
+                        .withOutputEntry(out -> out
+                                .name("allow")
+                                .withExpression(ex -> ex
+                                        .type(ExpressionType.LITERAL)
+                                        .value(true)
+                                        .build())
+                                .build())
+
+                        .build())
+                .withRule(rule -> rule
+                        .withInputEntry(out -> out
+                                .name("age")
+                                .withExpression(ex -> ex
+                                        .type(ExpressionType.LITERAL)
+                                        .value(8)
+                                        .build())
+                                .build())
+                        .withInputEntry(in -> in
+
+                                .name("colour")
+                                .withExpression(ex -> ex
+                                        .type(ExpressionType.LITERAL)
+                                        .value("red")
+                                        .build())
+                                .build()).withOutputEntry(out -> out
+
+
+                                .name("allow")
+                                .withExpression(ex -> ex
+                                        .type(ExpressionType.LITERAL)
+                                        .value(true)
+                                        .build())
+                                .build())
+                        .build())
+                .withRule(rule -> rule
+                        .description("Green allows always")
+                        .withInputEntry(in -> in
+                                .name("colour")
+                                .withExpression(ex -> ex
+                                        .type(ExpressionType.LITERAL)
+                                        .value("green")
+                                        .build())
+                                .build())
+                        .withOutputEntry(out -> out
+                                .name("allow")
+                                .withExpression(ex -> ex
+                                        .type(ExpressionType.LITERAL)
+                                        .value(true)
+                                        .build())
+                                .build())
+                        .build())
+                .withRule(rule -> rule
+                        .description("Expression usage")
+                        .withInputEntry(in -> in
+                                .name("colour")
+                                .withExpression(ex -> ex
+                                        .type(ExpressionType.FEEL)
+                                        .value("not('blue', 'purple')")
+                                        .build())
+                                .build())
+                        .withInputEntry(in -> in
+                                .name("age")
+                                .withExpression(ex -> ex
+                                        .type(ExpressionType.LITERAL)
+                                        .value(10)
+                                        .build())
+                                .build())
+                        .withOutputEntry(out -> out
+                                .name("allow")
+                                .withExpression(ex -> ex
+                                        .type(ExpressionType.LITERAL)
+                                        .value(true)
+                                        .build())
+                                .build())
+                        .build())
+                .withRule(rule -> rule
+                        .description("Formatted expression usage")
+                        .withInputEntry(in -> in
+                                .name("colour")
+                                .withExpression(ex -> ex
+                                        .type(ExpressionType.FEEL)
+                                        .value("not(" +
+                                                "'red'," +
+                                                "'pink'" +
+                                                ")")
+                                        .build())
+                                .build())
+                        .withInputEntry(in -> in
+                                .name("age")
+                                .withExpression(ex -> ex
+                                        .type(ExpressionType.LITERAL)
+                                        .value(20)
+                                        .build())
+                                .build())
+                        .withOutputEntry(out -> out
+                                .name("allow")
+                                .withExpression(ex -> ex
+                                        .type(ExpressionType.LITERAL)
+                                        .value(true)
+                                        .build())
+                                .build())
+                        .build())
                 .build();
 ```
-
 # How to contribute to the repository
 Contributors wishing to join Power Flows project have to comply with a few rules: 
 
