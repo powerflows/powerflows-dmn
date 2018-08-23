@@ -86,16 +86,16 @@ public class DecisionResult implements Serializable {
         }
 
         public RuleResult.Builder<Builder<P>> withRuleResults() {
-            final Consumer<RuleResult> ruleResultConsumer = ruleResult -> this.product.ruleResults.add(ruleResult);
+            final Consumer<RuleResult> ruleResultConsumer = this.product.ruleResults::add;
 
             return RuleResult.builder(this, ruleResultConsumer);
         }
 
         @Override
-        public DecisionResult build() {
+        protected DecisionResult assembleProduct() {
             this.product.ruleResults = unmodifiableList(this.product.ruleResults);
 
-            return super.build();
+            return this.product;
         }
     }
 }

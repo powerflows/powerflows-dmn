@@ -21,6 +21,7 @@ import org.powerflows.dmn.engine.model.decision.expression.Expression;
 
 import java.io.Serializable;
 import java.util.function.Consumer;
+import java.util.function.Function;
 
 public class Output implements Serializable {
 
@@ -50,53 +51,67 @@ public class Output implements Serializable {
         return expression;
     }
 
-    public static <P extends AbstractBuilder> Builder<P> builder(P parentBuilder, Consumer<Output> outputConsumer) {
-        return new Builder<>(parentBuilder, outputConsumer);
+    public static <P extends AbstractBuilder> FluentBuilder<P> fluentBuilder(P parentBuilder, Consumer<Output> outputConsumer) {
+        return new FluentBuilder<>(parentBuilder, outputConsumer);
     }
 
-    public static final class Builder<P extends AbstractBuilder> extends AbstractBuilder<Output> {
+    public static Builder builder() {
+        return new Builder();
+    }
 
-        private P parentBuilder;
-        private Consumer<Output> callback;
-
-        private Builder(P parentBuilder, Consumer<Output> outputConsumer) {
-            this.parentBuilder = parentBuilder;
-            this.callback = outputConsumer;
-        }
-
+    private static abstract class OutputBuilder<B extends Output.OutputBuilder<B>> extends AbstractBuilder<Output> {
         @Override
         protected void initProduct() {
             this.product = new Output();
         }
 
-        public Builder<P> name(String name) {
+        public B name(String name) {
             this.product.name = name;
 
-            return this;
+            return (B) this;
         }
 
-        public Builder<P> description(String description) {
+        public B description(String description) {
             this.product.description = description;
 
-            return this;
+            return (B) this;
         }
 
-        public Builder<P> type(ValueType type) {
+        public B type(ValueType type) {
             this.product.type = type;
 
+            return (B) this;
+        }
+    }
+
+    public static final class Builder extends OutputBuilder<Builder> {
+
+        public Builder withExpression(final Function<Expression.Builder, Expression> expressionBuilderConsumer) {
+            this.product.expression = expressionBuilderConsumer.apply(Expression.builder());
+
             return this;
         }
+    }
 
-        public Expression.Builder<Builder<P>> withExpression() {
-            final Consumer<Expression> expressionConsumer = expression -> this.product.expression = expression;
+    public static final class FluentBuilder<P extends AbstractBuilder> extends Output.OutputBuilder<Output.FluentBuilder<P>> {
+        private final P parentBuilder;
+        private final Consumer<Output> callback;
 
-            return Expression.builder(this, expressionConsumer);
+        private FluentBuilder(final P parentBuilder, final Consumer<Output> callback) {
+            this.parentBuilder = parentBuilder;
+            this.callback = callback;
         }
 
-        public Builder<P> next() {
+        public Expression.FluentBuilder<FluentBuilder<P>> withExpression() {
+            final Consumer<Expression> expressionConsumer = expression -> this.product.expression = expression;
+
+            return Expression.fluentBuilder(this, expressionConsumer);
+        }
+
+        public FluentBuilder<P> next() {
             callback.accept(build());
 
-            return builder(parentBuilder, callback);
+            return fluentBuilder(parentBuilder, callback);
         }
 
         public P end() {
@@ -105,5 +120,4 @@ public class Output implements Serializable {
             return parentBuilder;
         }
     }
-
 }

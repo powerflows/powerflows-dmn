@@ -24,6 +24,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
+import java.util.function.Function;
 
 import static java.util.Collections.unmodifiableList;
 
@@ -50,59 +51,85 @@ public class Rule implements Serializable {
         return outputEntries;
     }
 
-    public static <P extends AbstractBuilder> Builder<P> builder(P parentBuilder, Consumer<Rule> ruleConsumer) {
-        return new Builder<>(parentBuilder, ruleConsumer);
+    public static <P extends AbstractBuilder> FluentBuilder<P> fluentBuilder(P parentBuilder, Consumer<Rule> ruleConsumer) {
+        return new FluentBuilder<>(parentBuilder, ruleConsumer);
     }
 
-    public static final class Builder<P extends AbstractBuilder> extends AbstractBuilder<Rule> {
+    public static Builder builder() {
+        return new Builder();
+    }
 
-        private P parentBuilder;
-        private Consumer<Rule> callback;
-
-        private Builder(P parentBuilder, Consumer<Rule> ruleConsumer) {
-            this.parentBuilder = parentBuilder;
-            this.callback = ruleConsumer;
-        }
+    private static abstract class RuleBuilder<B extends Rule.RuleBuilder<B>> extends AbstractBuilder<Rule> {
 
         @Override
         protected void initProduct() {
             this.product = new Rule();
         }
 
-        public Builder<P> description(String description) {
+        public B description(String description) {
             this.product.description = description;
+
+            return (B) this;
+        }
+
+        protected Rule assembleProduct() {
+            this.product.inputEntries = unmodifiableList(this.product.inputEntries);
+            this.product.outputEntries = unmodifiableList(this.product.outputEntries);
+
+            return product;
+        }
+    }
+
+    public static final class Builder extends RuleBuilder<Builder> {
+
+        public Builder withInputEntry(final Function<InputEntry.Builder,InputEntry> inputEntryBuilderConsumer) {
+            this.product.inputEntries.add(inputEntryBuilderConsumer.apply(InputEntry.builder()));
 
             return this;
         }
 
-        public InputEntry.Builder<Builder<P>> withInputEntries() {
-            final Consumer<InputEntry> inputEntryConsumer = inputEntry -> this.product.inputEntries.add(inputEntry);
+        public Builder withOutputEntry(final Function<OutputEntry.Builder, OutputEntry> outputEntryBuilderConsumer) {
+            this.product.outputEntries.add(outputEntryBuilderConsumer.apply(OutputEntry.builder()));
 
-            return InputEntry.builder(this, inputEntryConsumer);
+            return this;
+        }
+    }
+
+    public static final class FluentBuilder<P extends AbstractBuilder> extends RuleBuilder<FluentBuilder<P>> {
+        private final P parentBuilder;
+        private final Consumer<Rule> callback;
+
+        private FluentBuilder(final P parentBuilder, final Consumer<Rule> callback) {
+            this.parentBuilder = parentBuilder;
+            this.callback = callback;
         }
 
-        public OutputEntry.Builder<Builder<P>> withOutputEntries() {
-            final Consumer<OutputEntry> outputEntryConsumer = outputEntry -> this.product.outputEntries.add(outputEntry);
+        public InputEntry.FluentBuilder<FluentBuilder<P>> withInputEntries() {
+            final Consumer<InputEntry> inputEntryConsumer = this.product.inputEntries::add;
 
-            return OutputEntry.builder(this, outputEntryConsumer);
+            return InputEntry.fluentBuilder(this, inputEntryConsumer);
         }
 
-        public Builder<P> next() {
+        public OutputEntry.FluentBuilder<FluentBuilder<P>> withOutputEntries() {
+            final Consumer<OutputEntry> outputEntryConsumer = this.product.outputEntries::add;
+
+            return OutputEntry.fluentBuilder(this, outputEntryConsumer);
+        }
+
+        private void accept() {
+            callback.accept(build());
+        }
+
+        public FluentBuilder<P> next() {
             accept();
 
-            return builder(parentBuilder, callback);
+            return fluentBuilder(parentBuilder, callback);
         }
 
         public P end() {
             accept();
 
             return parentBuilder;
-        }
-
-        private void accept() {
-            this.product.inputEntries = unmodifiableList(this.product.inputEntries);
-            this.product.outputEntries = unmodifiableList(this.product.outputEntries);
-            callback.accept(build());
         }
     }
 }

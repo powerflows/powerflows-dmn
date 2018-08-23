@@ -16,16 +16,11 @@
 
 package org.powerflows.dmn.engine.model.builder;
 
-public abstract class AbstractBuilder<T> {
-
+public abstract class AbstractBuilder<T> implements Buildable<T> {
     protected T product;
 
-    {
+    public AbstractBuilder() {
         initProduct();
-    }
-
-    public T build() {
-        return assembleProduct();
     }
 
     protected abstract void initProduct();
@@ -34,4 +29,14 @@ public abstract class AbstractBuilder<T> {
         return this.product;
     }
 
+    @Override
+    public final T build() {
+        final T temp = assembleProduct();
+        if (temp == null) {
+            throw new IllegalStateException("Only single build() call is allowed.");
+        }
+        this.product = null;
+
+        return temp;
+    }
 }
