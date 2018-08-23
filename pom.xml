@@ -31,9 +31,25 @@
         <spock.version>1.1-groovy-2.4</spock.version>
         <cglib.version>3.2.5</cglib.version>
         <groovy.version>2.4.15</groovy.version>
+        <snakeyaml.version>1.21</snakeyaml.version>
+        <lombok.version>1.18.2</lombok.version>
     </properties>
 
     <dependencies>
+        <!-- YAML Reading -->
+        <dependency>
+            <groupId>org.yaml</groupId>
+            <artifactId>snakeyaml</artifactId>
+            <version>${snakeyaml.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <version>${lombok.version}</version>
+            <scope>provided</scope>
+        </dependency>
+
         <!-- Tests -->
         <dependency>
             <groupId>org.spockframework</groupId>
@@ -41,12 +57,14 @@
             <version>${spock.version}</version>
             <scope>test</scope>
         </dependency>
+
         <dependency>
             <groupId>cglib</groupId>
             <artifactId>cglib-nodep</artifactId>
             <version>${cglib.version}</version>
             <scope>test</scope>
         </dependency>
+
         <dependency>
             <groupId>org.codehaus.groovy</groupId>
             <artifactId>groovy-all</artifactId>

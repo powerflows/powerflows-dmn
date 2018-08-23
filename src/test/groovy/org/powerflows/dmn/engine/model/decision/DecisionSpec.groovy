@@ -66,7 +66,6 @@ class DecisionSpec extends Specification {
 
     void 'should build decision with fluent API'() {
         given:
-        //nothing
 
         when:
         // @formatter:off
@@ -92,10 +91,6 @@ class DecisionSpec extends Specification {
                     .name(someOutput1Name)
                     .description(someOutput1Description)
                     .type(someOutput1Type)
-                    .withExpression()
-                        .type(someOutput1Expression1Type)
-                        .value(someOutput1Expression1Value)
-                        .and()
                     .next()
                     .name(someOutput2Name)
                     .description(someOutput2Description)
@@ -178,12 +173,6 @@ class DecisionSpec extends Specification {
             getName() == someOutput1Name
             getDescription() == someOutput1Description
             getType() == someOutput1Type
-        }
-
-        final Expression output1Expression1 = output1.getExpression()
-        with(output1Expression1) {
-            getType() == someOutput1Expression1Type
-            getValue() == someOutput1Expression1Value
         }
 
         final Output output2 = decision.getOutputs().get(1)
@@ -285,13 +274,6 @@ class DecisionSpec extends Specification {
                             .name(someOutput1Name)
                             .description(someOutput1Description)
                             .type(someOutput1Type)
-                            .withExpression(
-                            { expressionBuilder ->
-                                expressionBuilder
-                                        .type(someOutput1Expression1Type)
-                                        .value(someOutput1Expression1Value)
-                                        .build()
-                            })
                             .build()
                 }).withOutput(
                 { outputsBuilder ->
@@ -416,12 +398,6 @@ class DecisionSpec extends Specification {
             getName() == someOutput1Name
             getDescription() == someOutput1Description
             getType() == someOutput1Type
-        }
-
-        final Expression output1Expression1 = output1.getExpression()
-        with(output1Expression1) {
-            getType() == someOutput1Expression1Type
-            getValue() == someOutput1Expression1Value
         }
 
         final Output output2 = decision.getOutputs().get(1)

@@ -18,20 +18,20 @@ Power Flows supports the model in the following formats:
 id: sample_decision_id
 name: Sample Decision Name
 hit-policy: UNIQUE
-expression-type: groovy
+expression-type: GROOVY
 fields:
   in:
     age:
-      expression-type: feel
+      expression-type: FEEL
       expression: toYear(now()) - toYear(birthDate)
-      type: integer
+      type: INTEGER
       description: This is something about age
     colour:
-      type: string
+      type: STRING
       description: This is something about colour
   out:
     allow:
-      type: boolean
+      type: BOOLEAN
       description: We expect a decision, if we have access to do it
 rules:
   - description: 3 allows always
@@ -52,19 +52,19 @@ rules:
   - description: Expression usage
     in:
       colour:
-        expression-type: feel
-        expresion: not("blue", "purple")
+        expression-type: FEEL
+        expression: not("blue", "purple")
       age: 10
     out:
       allow: true
   - description: Formatted expression usage
     in:
       colour:
-        expression-type: feel
-        expresion: '''not(
-          "red",
-          "pink"
-        )'''
+        expression-type: FEEL
+        expression: not(
+            "red",
+            "pink"
+          )
       age: 20
     out:
       allow: true

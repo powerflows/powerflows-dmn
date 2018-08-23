@@ -14,26 +14,16 @@
  * limitations under the License.
  */
 
-package org.powerflows.dmn.engine.model.decision.field;
+package org.powerflows.dmn.io;
 
-import java.util.Arrays;
-import java.util.Optional;
+import org.powerflows.dmn.engine.model.decision.Decision;
 
-public enum ValueType {
-    STRING,
-    INTEGER,
-    BOOLEAN,
-    COLLECTION;
+import java.io.InputStream;
+import java.util.List;
 
-    public static Optional<ValueType> safeValueOf(final String name) {
-        if (name == null) {
-            return Optional.empty();
-        }
+public interface DecisionReader {
 
-        return Arrays.stream(values())
-                .filter(v -> v.name()
-                        .equalsIgnoreCase(name))
-                .findFirst();
+    List<Decision> readAll(InputStream inputStream);
 
-    }
+    Decision read(InputStream inputStream);
 }

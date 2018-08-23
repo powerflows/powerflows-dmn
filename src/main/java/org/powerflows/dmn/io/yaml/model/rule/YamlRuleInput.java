@@ -14,26 +14,20 @@
  * limitations under the License.
  */
 
-package org.powerflows.dmn.engine.model.decision.field;
+package org.powerflows.dmn.io.yaml.model.rule;
 
-import java.util.Arrays;
-import java.util.Optional;
+import lombok.Data;
+import org.powerflows.dmn.engine.model.decision.expression.ExpressionType;
 
-public enum ValueType {
-    STRING,
-    INTEGER,
-    BOOLEAN,
-    COLLECTION;
-
-    public static Optional<ValueType> safeValueOf(final String name) {
-        if (name == null) {
-            return Optional.empty();
-        }
-
-        return Arrays.stream(values())
-                .filter(v -> v.name()
-                        .equalsIgnoreCase(name))
-                .findFirst();
-
+@Data
+public final class YamlRuleInput {
+    public YamlRuleInput(final Object value) {
+        this.expression = value;
     }
+
+    public YamlRuleInput() {
+    }
+
+    private ExpressionType expressionType = ExpressionType.LITERAL;
+    private Object expression;
 }

@@ -14,26 +14,14 @@
  * limitations under the License.
  */
 
-package org.powerflows.dmn.engine.model.decision.field;
+package org.powerflows.dmn.io.yaml;
 
-import java.util.Arrays;
-import java.util.Optional;
+import org.powerflows.dmn.io.yaml.model.YamlDecision;
+import org.yaml.snakeyaml.constructor.Constructor;
 
-public enum ValueType {
-    STRING,
-    INTEGER,
-    BOOLEAN,
-    COLLECTION;
-
-    public static Optional<ValueType> safeValueOf(final String name) {
-        if (name == null) {
-            return Optional.empty();
-        }
-
-        return Arrays.stream(values())
-                .filter(v -> v.name()
-                        .equalsIgnoreCase(name))
-                .findFirst();
-
+public class YamlDecisionConstructor extends Constructor {
+    public YamlDecisionConstructor() {
+        super(YamlDecision.class);
+        this.setPropertyUtils(new CustomPropertyUtils());
     }
 }

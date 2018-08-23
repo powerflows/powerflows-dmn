@@ -17,11 +17,9 @@
 package org.powerflows.dmn.engine.model.decision.field;
 
 import org.powerflows.dmn.engine.model.builder.AbstractBuilder;
-import org.powerflows.dmn.engine.model.decision.expression.Expression;
 
 import java.io.Serializable;
 import java.util.function.Consumer;
-import java.util.function.Function;
 
 public class Output implements Serializable {
 
@@ -30,7 +28,6 @@ public class Output implements Serializable {
     private String name;
     private String description;
     private ValueType type;
-    private Expression expression;
 
     private Output() {
     }
@@ -45,10 +42,6 @@ public class Output implements Serializable {
 
     public ValueType getType() {
         return type;
-    }
-
-    public Expression getExpression() {
-        return expression;
     }
 
     public static <P extends AbstractBuilder> FluentBuilder<P> fluentBuilder(P parentBuilder, Consumer<Output> outputConsumer) {
@@ -86,11 +79,6 @@ public class Output implements Serializable {
 
     public static final class Builder extends OutputBuilder<Builder> {
 
-        public Builder withExpression(final Function<Expression.Builder, Expression> expressionBuilderConsumer) {
-            this.product.expression = expressionBuilderConsumer.apply(Expression.builder());
-
-            return this;
-        }
     }
 
     public static final class FluentBuilder<P extends AbstractBuilder> extends Output.OutputBuilder<Output.FluentBuilder<P>> {
@@ -100,12 +88,6 @@ public class Output implements Serializable {
         private FluentBuilder(final P parentBuilder, final Consumer<Output> callback) {
             this.parentBuilder = parentBuilder;
             this.callback = callback;
-        }
-
-        public Expression.FluentBuilder<FluentBuilder<P>> withExpression() {
-            final Consumer<Expression> expressionConsumer = expression -> this.product.expression = expression;
-
-            return Expression.fluentBuilder(this, expressionConsumer);
         }
 
         public FluentBuilder<P> next() {

@@ -14,26 +14,12 @@
  * limitations under the License.
  */
 
-package org.powerflows.dmn.engine.model.decision.field;
+package org.powerflows.dmn.io;
 
-import java.util.Arrays;
-import java.util.Optional;
+import org.powerflows.dmn.engine.model.decision.Decision;
 
-public enum ValueType {
-    STRING,
-    INTEGER,
-    BOOLEAN,
-    COLLECTION;
+public interface DecisionToExternalModelConverter<T> {
+    T to(Decision decision);
 
-    public static Optional<ValueType> safeValueOf(final String name) {
-        if (name == null) {
-            return Optional.empty();
-        }
-
-        return Arrays.stream(values())
-                .filter(v -> v.name()
-                        .equalsIgnoreCase(name))
-                .findFirst();
-
-    }
+    Decision from(T externalModel);
 }
