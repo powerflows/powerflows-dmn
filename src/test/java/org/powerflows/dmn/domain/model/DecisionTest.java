@@ -96,10 +96,6 @@ public class DecisionTest {
                     .name(someOutput1Name)
                     .description(someOutput1Description)
                     .type(someOutput1Type)
-                    .withExpression()
-                        .type(someOutput1Expression1Type)
-                        .value(someOutput1Expression1Value)
-                        .and()
                     .next()
                     .name(someOutput2Name)
                     .description(someOutput2Description)
@@ -175,11 +171,6 @@ public class DecisionTest {
                                 .name(someOutput1Name)
                                 .description(someOutput1Description)
                                 .type(someOutput1Type)
-                                .withExpression(expressionBuilder ->
-                                        expressionBuilder
-                                                .type(someOutput1Expression1Type)
-                                                .value(someOutput1Expression1Value)
-                                                .build())
                                 .build())
                 .withOutput(outputsBuilder ->
                         outputsBuilder
@@ -267,10 +258,6 @@ public class DecisionTest {
         assertEquals(output1.getName(), someOutput1Name);
         assertEquals(output1.getDescription(), someOutput1Description);
         assertEquals(output1.getType(), someOutput1Type);
-
-        final Expression output1Expression1 = output1.getExpression();
-        assertEquals(output1Expression1.getType(), someOutput1Expression1Type);
-        assertEquals(output1Expression1.getValue(), someOutput1Expression1Value);
 
         final Output output2 = decision.getOutputs().get(1);
         assertEquals(output2.getName(), someOutput2Name);

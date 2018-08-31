@@ -1,0 +1,107 @@
+id: sample_decision_1
+name: Sample Decision One
+hit-policy: UNIQUE
+expression-type: GROOVY
+fields:
+  in:
+    age:
+      expression-type: FEEL
+      expression: toYear(now()) - toYear(birthDate)
+      type: INTEGER
+      description: This is something about age
+    colour:
+      type: STRING
+      description: This is something about colour
+  out:
+    allow:
+      type: BOOLEAN
+      description: We expect a decision, if we have access to do it
+rules:
+  - description: 3 allows always
+    in:
+      age: 3
+    out:
+      allow: true
+  - in:
+      age: 8
+      colour: red
+    out:
+      allow: true
+  - description: Green allows always
+    in:
+      colour: green
+    out:
+      allow: true
+  - description: Expression usage
+    in:
+      colour:
+        expression-type: FEEL
+        expression: not("blue", "purple")
+      age: 10
+    out:
+      allow: true
+  - description: Formatted expression usage
+    in:
+      colour:
+        expression-type: FEEL
+        expression: not(
+            "red",
+            "pink"
+          )
+      age: 20
+    out:
+      allow: true
+---
+id: sample_decision_2
+name: Sample Decision One
+hit-policy: UNIQUE
+expression-type: GROOVY
+fields:
+  in:
+    age:
+      expression-type: FEEL
+      expression: toYear(now()) - toYear(birthDate)
+      type: INTEGER
+      description: This is something about age
+    colour:
+      type: STRING
+      description: This is something about colour
+  out:
+    allow:
+      type: BOOLEAN
+      description: We expect a decision, if we have access to do it
+rules:
+  - description: 3 allows always
+    in:
+      age: 3
+    out:
+      allow: true
+  - in:
+      age: 8
+      colour: red
+    out:
+      allow: true
+  - description: Green allows always
+    in:
+      colour: green
+    out:
+      allow: true
+  - description: Expression usage
+    in:
+      colour:
+        expression-type: FEEL
+        expression: not("blue", "purple")
+      age: 10
+    out:
+      allow: true
+  - description: Formatted expression usage
+    in:
+      colour:
+        expression-type: FEEL
+        expression: not(
+            "red",
+            "pink"
+          )
+      age: 20
+    out:
+      allow: true

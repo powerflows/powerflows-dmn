@@ -14,26 +14,23 @@
  * limitations under the License.
  */
 
-package org.powerflows.dmn.engine.model.decision.field;
+package org.powerflows.dmn.io.yaml.model;
 
-import java.util.Arrays;
-import java.util.Optional;
+import lombok.Data;
+import lombok.ToString;
+import org.powerflows.dmn.engine.model.decision.HitPolicy;
+import org.powerflows.dmn.engine.model.decision.expression.ExpressionType;
+import org.powerflows.dmn.io.yaml.model.field.YamlFields;
+import org.powerflows.dmn.io.yaml.model.rule.YamlRule;
 
-public enum ValueType {
-    STRING,
-    INTEGER,
-    BOOLEAN,
-    COLLECTION;
+import java.util.List;
 
-    public static Optional<ValueType> safeValueOf(final String name) {
-        if (name == null) {
-            return Optional.empty();
-        }
-
-        return Arrays.stream(values())
-                .filter(v -> v.name()
-                        .equalsIgnoreCase(name))
-                .findFirst();
-
-    }
+@Data
+public final class YamlDecision {
+    private String id;
+    private String name;
+    private HitPolicy hitPolicy;
+    private ExpressionType expressionType;
+    private YamlFields fields;
+    private List<YamlRule> rules;
 }
