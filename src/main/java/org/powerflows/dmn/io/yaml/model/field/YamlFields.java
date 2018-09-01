@@ -18,10 +18,10 @@ package org.powerflows.dmn.io.yaml.model.field;
 
 import lombok.Data;
 
-import java.util.Map;
+import java.util.LinkedHashMap;
 
 @Data
 public final class YamlFields {
-    private Map<String, YamlInput> in;
-    private Map<String, YamlOutput> out;
+    private LinkedHashMap<String, YamlInput> in;
+    private LinkedHashMap<String, YamlOutput> out;
 }

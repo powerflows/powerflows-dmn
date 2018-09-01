@@ -16,55 +16,61 @@
 
 package org.powerflows.dmn.io.yaml;
 
-import org.yaml.snakeyaml.error.YAMLException;
 import org.yaml.snakeyaml.introspector.BeanAccess;
-import org.yaml.snakeyaml.introspector.MissingProperty;
 import org.yaml.snakeyaml.introspector.Property;
+import org.yaml.snakeyaml.introspector.PropertySubstitute;
 import org.yaml.snakeyaml.introspector.PropertyUtils;
 
+import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
 import java.util.Map;
+import java.util.Set;
 
 public class CustomPropertyUtils extends PropertyUtils {
-    @Override
-    public Property getProperty(final Class<?> type, final String name, final BeanAccess beanAccess) {
-        final Map<String, Property> properties = getPropertiesMap(type, beanAccess);
 
-        if (!properties.containsKey(name) && name.contains("-")) {
-            properties.computeIfPresent(toCamelCase(name), (key, property) -> properties.put(name, property));
+    private Map<Class<?>, Map<String, Property>> propertiesCache = new HashMap<>();
+
+    private static final Map<String, String> PROPERTY_NAME_MAP = new HashMap<String, String>() {{
+        put("hitPolicy", "hit-policy");
+        put("expressionType", "expression-type");
+    }};
+
+    CustomPropertyUtils() {
+        this.setBeanAccess(BeanAccess.FIELD);
+    }
+
+    @Override
+    protected Set<Property> createPropertySet(final Class<?> type, final BeanAccess beanAccess) {
+        final Set<Property> properties = new LinkedHashSet<>();
+        for (Property property : getPropertiesMap(type, beanAccess).values()) {
+            if (property.isReadable() && (isAllowReadOnlyProperties() || property.isWritable())) {
+                properties.add(property);
+            }
         }
 
-        properties.computeIfAbsent(name, key -> {
-            if (!isSkipMissingProperties()) {
-                throw new YAMLException("Unable to find property '" + name + "' on class: " + type.getName());
-            }
+        return properties;
+    }
 
-            return new MissingProperty(key);
+    @Override
+    protected Map<String, Property> getPropertiesMap(final Class<?> type, final BeanAccess beanAccess) {
+        if (propertiesCache.containsKey(type)) {
+            return propertiesCache.get(type);
+        }
+        final Map<String, Property> properties = new LinkedHashMap<String, Property>();
+        super.getPropertiesMap(type, beanAccess).forEach((name, property) -> {
+            if (PROPERTY_NAME_MAP.containsKey(name)) {
+                final String newName = PROPERTY_NAME_MAP.get(name);
+                final PropertySubstitute substitute = new PropertySubstitute(newName, property.getType());
+                substitute.setDelegate(property);
+                properties.put(newName, substitute);
+            } else {
+                properties.put(name, property);
+            }
         });
 
-        return properties.get(name);
-    }
+        propertiesCache.put(type, properties);
 
-    private String toCamelCase(final String name) {
-        final String[] parts = name.split("-");
-        final String result;
-        if (parts.length > 1) {
-            final StringBuilder sb = new StringBuilder(parts[0]);
-            for (int i = 1; i < parts.length; i++) {
-                sb.append(capitalize(parts[i]));
-            }
-
-            result = sb.toString();
-        } else {
-            result = name;
-        }
-
-        return result;
-    }
-
-    private char[] capitalize(final String part) {
-        final char[] chars = part.toCharArray();
-        chars[0] = String.valueOf(chars[0]).toUpperCase().toCharArray()[0];
-
-        return chars;
+        return properties;
     }
 }

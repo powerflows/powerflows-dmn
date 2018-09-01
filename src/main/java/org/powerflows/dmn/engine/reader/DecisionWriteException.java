@@ -14,14 +14,14 @@
  * limitations under the License.
  */
 
-package org.powerflows.dmn.io;
+package org.powerflows.dmn.engine.reader;
 
-public class DecisionReadException extends RuntimeException {
-    public DecisionReadException(final String message) {
+public class DecisionWriteException extends RuntimeException {
+    public DecisionWriteException(final String message) {
         super(message);
     }
 
-    public DecisionReadException(final String message, final Throwable cause) {
+    public DecisionWriteException(final String message, final Throwable cause) {
         super(message, cause);
     }
 }

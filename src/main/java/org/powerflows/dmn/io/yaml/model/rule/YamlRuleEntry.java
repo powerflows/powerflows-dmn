@@ -14,14 +14,20 @@
  * limitations under the License.
  */
 
-package org.powerflows.dmn.io.yaml;
+package org.powerflows.dmn.io.yaml.model.rule;
 
-import org.powerflows.dmn.io.yaml.model.YamlDecision;
-import org.yaml.snakeyaml.constructor.Constructor;
+import lombok.Data;
+import org.powerflows.dmn.engine.model.decision.expression.ExpressionType;
 
-public class YamlDecisionConstructor extends Constructor {
-    public YamlDecisionConstructor() {
-        super(YamlDecision.class);
-        this.setPropertyUtils(new CustomPropertyUtils());
+@Data
+public final class YamlRuleEntry {
+    public YamlRuleEntry(final Object value) {
+        this.expression = value;
     }
+
+    public YamlRuleEntry() {
+    }
+
+    private ExpressionType expressionType = ExpressionType.LITERAL;
+    private Object expression;
 }

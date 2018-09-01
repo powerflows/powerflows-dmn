@@ -16,13 +16,18 @@
 
 package org.powerflows.dmn.engine.model.decision.rule.entry;
 
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 import org.powerflows.dmn.engine.model.builder.AbstractBuilder;
 import org.powerflows.dmn.engine.model.decision.expression.Expression;
+import org.powerflows.dmn.engine.model.decision.expression.ExpressionType;
 
 import java.io.Serializable;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
+@EqualsAndHashCode
+@ToString
 public class InputEntry implements Serializable {
 
     private static final long serialVersionUID = 1;
@@ -67,6 +72,15 @@ public class InputEntry implements Serializable {
 
         public Builder withExpression(final Function<Expression.Builder, Expression> expressionBuilderConsumer) {
             this.product.expression = expressionBuilderConsumer.apply(Expression.builder());
+
+            return this;
+        }
+
+        public Builder withLiteralValue(final Object literalValue) {
+            this.product.expression = Expression.builder()
+                    .type(ExpressionType.LITERAL)
+                    .value(literalValue)
+                    .build();
 
             return this;
         }

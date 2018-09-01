@@ -13,17 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-package org.powerflows.dmn.io;
+package org.powerflows.dmn.engine.reader;
 
 import org.powerflows.dmn.engine.model.decision.Decision;
 
-import java.io.InputStream;
-import java.util.List;
+import java.io.OutputStream;
 
-public interface DecisionReader {
+public interface DecisionWriter {
+    void write(Decision decision, OutputStream outputStream);
 
-    List<Decision> readAll(InputStream inputStream);
-
-    Decision read(InputStream inputStream);
+    void writeAll(Iterable<Decision> decisions, OutputStream outputStream);
 }

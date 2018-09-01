@@ -22,9 +22,9 @@ import org.powerflows.dmn.engine.model.decision.expression.ExpressionType
 import org.powerflows.dmn.engine.model.decision.field.ValueType
 import spock.lang.Specification
 
-class YamlReaderSpec extends Specification {
-    final String singleDecision = 'test_single_decision.yml'
-    final String multipleDecisions = 'test_multiple_decisions.yml'
+class YamlDecisionReaderSpec extends Specification {
+    final String singleDecision = 'test-single-decision.yml'
+    final String multipleDecisions = 'test-multiple-decisions.yml'
     final String decisionNamePrefix = 'sample_decision_'
 
     void 'should read decision using InputStream'() {
@@ -32,7 +32,7 @@ class YamlReaderSpec extends Specification {
         final InputStream inputStream = this.class.getResourceAsStream(singleDecision)
 
         when:
-        final Decision result = new YamlReader().read(inputStream)
+        final Decision result = new YamlDecisionReader().read(inputStream)
 
         then:
         result != null
@@ -44,7 +44,7 @@ class YamlReaderSpec extends Specification {
         final InputStream inputStream = this.class.getResourceAsStream(multipleDecisions)
 
         when:
-        final List<Decision> result = new YamlReader().readAll(inputStream)
+        final List<Decision> result = new YamlDecisionReader().readAll(inputStream)
 
         then:
         result?.size() == 2
@@ -73,8 +73,7 @@ class YamlReaderSpec extends Specification {
 
         with(decision.inputs[1]) {
             name == 'colour'
-            expression.value == null
-            expression.type == ExpressionType.LITERAL
+            expression == null
             type == ValueType.STRING
         }
 

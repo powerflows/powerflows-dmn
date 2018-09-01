@@ -16,6 +16,8 @@
 
 package org.powerflows.dmn.engine.model.decision;
 
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 import org.powerflows.dmn.engine.model.builder.AbstractBuilder;
 import org.powerflows.dmn.engine.model.decision.expression.ExpressionType;
 import org.powerflows.dmn.engine.model.decision.field.Input;
@@ -30,6 +32,8 @@ import java.util.function.Function;
 
 import static java.util.Collections.unmodifiableList;
 
+@EqualsAndHashCode
+@ToString
 public class Decision implements Serializable {
 
     private static final long serialVersionUID = 1;
