@@ -14,14 +14,25 @@
  * limitations under the License.
  */
 
-package org.powerflows.dmn.engine.reader;
+package org.powerflows.dmn.engine.configuration;
 
-public class DecisionWriteException extends RuntimeException {
-    public DecisionWriteException(final String message) {
-        super(message);
+
+import org.powerflows.dmn.engine.DecisionEngine;
+import org.powerflows.dmn.engine.reader.DecisionReader;
+
+public abstract class AbstractDecisionEngineConfiguration implements DecisionEngineConfiguration {
+
+    protected DecisionReader decisionReader;
+
+    @Override
+    public void setDecisionReader(final DecisionReader decisionReader) {
+        this.decisionReader = decisionReader;
     }
 
-    public DecisionWriteException(final String message, final Throwable cause) {
-        super(message, cause);
+    @Override
+    public DecisionReader getDecisionReader() {
+        return decisionReader;
     }
+
+    public abstract DecisionEngine configure();
 }

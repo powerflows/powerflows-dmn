@@ -16,8 +16,8 @@
 package org.powerflows.dmn.io.yaml;
 
 import org.powerflows.dmn.engine.model.decision.Decision;
-import org.powerflows.dmn.engine.reader.DecisionWriteException;
-import org.powerflows.dmn.engine.reader.DecisionWriter;
+import org.powerflows.dmn.engine.writer.DecisionWriteException;
+import org.powerflows.dmn.engine.writer.DecisionWriter;
 import org.yaml.snakeyaml.DumperOptions;
 import org.yaml.snakeyaml.Yaml;
 

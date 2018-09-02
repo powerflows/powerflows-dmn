@@ -1,0 +1,38 @@
+id: some_table_id_1
+name: Some Table Name
+hit-policy: UNIQUE
+fields:
+  in:
+    inputOne:
+      description: Some Input 1 Description
+      type: INTEGER
+      expression-type: LITERAL
+      expression: '> 5'
+    inputTwo:
+      type: INTEGER
+  out:
+    outputOne:
+      description: Some Output 1 Description
+      type: BOOLEAN
+    outputTwo:
+      description: Some Output 2 Description
+      type: STRING
+rules:
+- description: Some Rule 1 Description
+  in:
+    inputOne:
+      expression-type: LITERAL
+      expression: 2
+    inputTwo:
+      expression-type: LITERAL
+      expression: 3
+  out:
+    outputOne:
+      expression-type: LITERAL
+      expression: false
+- in:
+    inputOne: 5
+    inputTwo: seven
+  out:
+    outputOne: true
+    outputTwo: The output

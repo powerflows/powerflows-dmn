@@ -53,7 +53,6 @@ class YamlDecisionWriterSpec extends Specification {
     final boolean someOutput1LiteralValue = true
     final String someOutput2LiteralValue = "The output"
 
-
     void 'should write single model'() {
         given:
         final Decision decision = createDecision(someTableId1)

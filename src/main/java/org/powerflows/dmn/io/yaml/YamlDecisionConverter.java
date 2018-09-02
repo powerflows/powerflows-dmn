@@ -17,6 +17,7 @@
 package org.powerflows.dmn.io.yaml;
 
 import org.powerflows.dmn.engine.model.decision.Decision;
+import org.powerflows.dmn.engine.model.decision.expression.ExpressionType;
 import org.powerflows.dmn.engine.model.decision.field.Input;
 import org.powerflows.dmn.engine.model.decision.field.Output;
 import org.powerflows.dmn.engine.model.decision.rule.Rule;
@@ -61,8 +62,13 @@ public class YamlDecisionConverter implements DecisionToExternalModelConverter<Y
             yamlInput.setDescription(input.getDescription());
             yamlInput.setType(input.getType());
             if (input.getExpression() != null) {
-                yamlInput.setExpression(input.getExpression().getValue());
-                yamlInput.setExpressionType(input.getExpression().getType());
+                if (input.getExpression().getValue() != null) {
+                    yamlInput.setExpression(input.getExpression().getValue());
+                    yamlInput.setExpressionType(
+                            input.getExpression().getType() == ExpressionType.LITERAL ? null : input
+                                    .getExpression()
+                                    .getType());
+                }
             }
 
             in.put(input.getName(), yamlInput);
@@ -119,16 +125,10 @@ public class YamlDecisionConverter implements DecisionToExternalModelConverter<Y
                         .name(name)
                         .type(input.getType())
                         .description(input.getDescription())
-                        .withExpression(expressionBuilder -> {
-                            if (input.getExpression() == null) {
-                                return null;
-                            } else {
-                                return expressionBuilder
-                                        .type(input.getExpressionType())
-                                        .value(input.getExpression())
-                                        .build();
-                            }
-                        })
+                        .withExpression(expressionBuilder -> expressionBuilder
+                                .type(input.getExpressionType())
+                                .value(input.getExpression())
+                                .build())
                         .build()));
 
         model.getFields().getOut().forEach((name, output) -> builder
