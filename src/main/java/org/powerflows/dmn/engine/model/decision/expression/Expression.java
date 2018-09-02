@@ -16,11 +16,15 @@
 
 package org.powerflows.dmn.engine.model.decision.expression;
 
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 import org.powerflows.dmn.engine.model.builder.AbstractBuilder;
 
 import java.io.Serializable;
 import java.util.function.Consumer;
 
+@EqualsAndHashCode
+@ToString
 public class Expression implements Serializable {
 
     private static final long serialVersionUID = 1;

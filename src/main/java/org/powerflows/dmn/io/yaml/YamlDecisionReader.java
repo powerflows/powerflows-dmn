@@ -17,6 +17,7 @@
 package org.powerflows.dmn.io.yaml;
 
 import org.powerflows.dmn.engine.model.decision.Decision;
+import org.powerflows.dmn.engine.reader.DecisionReadException;
 import org.powerflows.dmn.io.AbstractDecisionReader;
 import org.powerflows.dmn.io.yaml.model.YamlDecision;
 import org.yaml.snakeyaml.Yaml;
@@ -28,22 +29,30 @@ import java.util.stream.StreamSupport;
 import static java.util.stream.Collectors.toList;
 
 
-public class YamlReader extends AbstractDecisionReader {
+public class YamlDecisionReader extends AbstractDecisionReader {
 
-    private final Yaml yaml = new Yaml(new YamlDecisionConstructor());
-    private final YamlDecsionConverter converter = new YamlDecsionConverter();
+    private final Yaml yaml = new Yaml(new CustomConstructor());
+    private final YamlDecisionConverter converter = new YamlDecisionConverter();
 
     @Override
     public List<Decision> readAll(final InputStream inputStream) {
-        return StreamSupport.stream(yaml.loadAll(inputStream).spliterator(), true)
-                .map(o -> (YamlDecision) o)
-                .map(converter::from)
-                .collect(toList());
+        try {
+            return StreamSupport.stream(yaml.loadAll(inputStream).spliterator(), true)
+                    .map(o -> (YamlDecision) o)
+                    .map(converter::from)
+                    .collect(toList());
+        } catch (final Exception e) {
+            throw new DecisionReadException("Unable to read from stream", e);
+        }
     }
 
     @Override
     public Decision read(final InputStream inputStream) {
-        return converter.from(yaml.load(inputStream));
+        try {
+            return converter.from(yaml.load(inputStream));
+        } catch (final Exception e) {
+            throw new DecisionReadException("Unable to read from stream", e);
+        }
     }
 
 }

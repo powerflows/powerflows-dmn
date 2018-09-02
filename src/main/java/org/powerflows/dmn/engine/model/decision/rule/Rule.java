@@ -16,6 +16,8 @@
 
 package org.powerflows.dmn.engine.model.decision.rule;
 
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 import org.powerflows.dmn.engine.model.builder.AbstractBuilder;
 import org.powerflows.dmn.engine.model.decision.rule.entry.InputEntry;
 import org.powerflows.dmn.engine.model.decision.rule.entry.OutputEntry;
@@ -28,6 +30,8 @@ import java.util.function.Function;
 
 import static java.util.Collections.unmodifiableList;
 
+@EqualsAndHashCode
+@ToString
 public class Rule implements Serializable {
 
     private static final long serialVersionUID = 1;

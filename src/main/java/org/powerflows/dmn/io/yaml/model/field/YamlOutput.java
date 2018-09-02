@@ -17,12 +17,10 @@
 package org.powerflows.dmn.io.yaml.model.field;
 
 import lombok.Data;
-import org.powerflows.dmn.engine.model.decision.expression.ExpressionType;
 import org.powerflows.dmn.engine.model.decision.field.ValueType;
 
 @Data
 public final class YamlOutput {
-    private String name;
     private String description;
     private ValueType type;
 }

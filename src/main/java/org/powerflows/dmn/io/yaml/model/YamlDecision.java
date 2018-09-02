@@ -17,7 +17,6 @@
 package org.powerflows.dmn.io.yaml.model;
 
 import lombok.Data;
-import lombok.ToString;
 import org.powerflows.dmn.engine.model.decision.HitPolicy;
 import org.powerflows.dmn.engine.model.decision.expression.ExpressionType;
 import org.powerflows.dmn.io.yaml.model.field.YamlFields;

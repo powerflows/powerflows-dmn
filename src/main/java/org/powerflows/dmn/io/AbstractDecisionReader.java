@@ -16,6 +16,8 @@
 
 package org.powerflows.dmn.io;
 
+import org.powerflows.dmn.engine.reader.DecisionReader;
+
 public abstract class AbstractDecisionReader implements DecisionReader {
 
 }

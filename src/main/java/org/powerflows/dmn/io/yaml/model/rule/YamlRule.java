@@ -18,11 +18,11 @@ package org.powerflows.dmn.io.yaml.model.rule;
 
 import lombok.Data;
 
-import java.util.Map;
+import java.util.LinkedHashMap;
 
 @Data
 public final class YamlRule {
     private String description;
-    private Map<String, YamlRuleInput> in;
-    private Map<String, YamlRuleOutput> out;
+    private LinkedHashMap<String, YamlRuleEntry> in;
+    private LinkedHashMap<String, YamlRuleEntry> out;
 }

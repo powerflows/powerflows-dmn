@@ -14,20 +14,16 @@
  * limitations under the License.
  */
 
-package org.powerflows.dmn.io.yaml.model.rule;
+package org.powerflows.dmn.engine.reader;
 
-import lombok.Data;
-import org.powerflows.dmn.engine.model.decision.expression.ExpressionType;
+import org.powerflows.dmn.engine.model.decision.Decision;
 
-@Data
-public final class YamlRuleOutput {
-    public YamlRuleOutput(final Object value) {
-        this.expression = value;
-    }
+import java.io.InputStream;
+import java.util.List;
 
-    public YamlRuleOutput() {
-    }
+public interface DecisionReader {
 
-    private ExpressionType expressionType = ExpressionType.LITERAL;
-    private Object expression;
+    List<Decision> readAll(InputStream inputStream);
+
+    Decision read(InputStream inputStream);
 }

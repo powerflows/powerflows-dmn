@@ -22,9 +22,9 @@ import org.powerflows.dmn.engine.model.decision.field.ValueType;
 
 @Data
 public final class YamlInput {
-    private String name;
     private String description;
     private ValueType type;
-    private String expression;
     private ExpressionType expressionType = ExpressionType.LITERAL;
+    private Object expression;
+
 }
