@@ -46,7 +46,13 @@ class LiteralExpressionEvaluationProvider extends AbstractExpressionEvaluationPr
 
     @Override
     public Object evaluateInput(final Input input, final ModifiableContextVariables contextVariables) {
-        return contextVariables.get(input.getName());
+        final Object value = contextVariables.get(input.getName());
+
+        if (value == null) {
+            //warn logger here
+        }
+
+        return value;
     }
 
     @Override

@@ -20,7 +20,6 @@ import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import org.powerflows.dmn.engine.model.builder.AbstractBuilder;
 import org.powerflows.dmn.engine.model.decision.expression.Expression;
-import org.powerflows.dmn.engine.model.decision.expression.ExpressionType;
 
 import java.io.Serializable;
 import java.util.function.Consumer;
@@ -88,21 +87,20 @@ public class Input implements Serializable {
 
             return (B) this;
         }
+
+        @Override
+        protected Input assembleProduct() {
+            if (product.expression == null) {
+                product.expression = Expression.builder().build();
+            }
+            return product;
+        }
     }
 
     public static final class Builder extends InputBuilder<Builder> {
 
         public Builder withExpression(final Function<Expression.Builder, Expression> expressionBuilderConsumer) {
             this.product.expression = expressionBuilderConsumer.apply(Expression.builder());
-
-            return this;
-        }
-
-        public Builder withLiteralValue(final Object literalValue) {
-            this.product.expression = Expression.builder()
-                    .type(ExpressionType.LITERAL)
-                    .value(literalValue)
-                    .build();
 
             return this;
         }

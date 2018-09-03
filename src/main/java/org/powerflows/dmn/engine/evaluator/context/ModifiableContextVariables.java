@@ -21,13 +21,15 @@ import org.powerflows.dmn.engine.model.evaluation.context.AbstractContextVariabl
 import org.powerflows.dmn.engine.model.evaluation.context.ContextVariables;
 
 import java.io.Serializable;
+import java.util.HashMap;
 
 public class ModifiableContextVariables extends AbstractContextVariables implements Serializable {
 
     private static final long serialVersionUID = 1;
 
     public ModifiableContextVariables(ContextVariables contextVariables) {
-        this.variables = contextVariables.getAll();
+        this.variables = new HashMap<>();
+        this.variables.putAll(contextVariables.getAll());
     }
 
     synchronized public void addVariable(final String key, Object value) {
