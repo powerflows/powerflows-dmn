@@ -14,11 +14,13 @@
  * limitations under the License.
  */
 
-package org.powerflows.dmn.engine.model.decision;
+package org.powerflows.dmn.engine.evaluator.exception;
 
-public enum HitPolicy {
-    UNIQUE,
-    FIRST,
-    ANY,
-    COLLECT
+
+public class EvaluationException extends RuntimeException {
+
+    public EvaluationException(String message) {
+        super(message);
+    }
+
 }

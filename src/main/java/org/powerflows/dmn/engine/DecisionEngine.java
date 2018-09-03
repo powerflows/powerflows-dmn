@@ -18,21 +18,26 @@ package org.powerflows.dmn.engine;
 
 
 import org.powerflows.dmn.engine.model.decision.Decision;
-import org.powerflows.dmn.engine.model.evaluation.context.ContextVariables;
+import org.powerflows.dmn.engine.model.evaluation.context.DecisionContextVariables;
 import org.powerflows.dmn.engine.model.evaluation.result.DecisionResult;
 
 import java.io.InputStream;
+import java.util.List;
 
 public interface DecisionEngine {
 
-    DecisionResult evaluate(Decision decision, ContextVariables contextVariables);
+    DecisionResult evaluate(Decision decision, DecisionContextVariables contextVariables);
 
-    DecisionResult evaluate(String decisionId, ContextVariables contextVariables);
+    DecisionResult evaluate(String decisionId, DecisionContextVariables contextVariables);
 
-    DecisionResult evaluate(InputStream decisionFile, ContextVariables contextVariables);
+    DecisionResult evaluate(InputStream decisionFile, DecisionContextVariables contextVariables);
 
     Decision toDecision(String decisionId);
 
     Decision toDecision(InputStream decisionFile);
+
+    List<Decision> toDecisions(List<String> decisionIds);
+
+    List<Decision> toDecisions(InputStream decisionsFile);
 
 }

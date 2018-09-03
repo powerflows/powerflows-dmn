@@ -14,11 +14,20 @@
  * limitations under the License.
  */
 
-package org.powerflows.dmn.engine.model.decision;
+package org.powerflows.dmn.engine.model.evaluation.context;
 
-public enum HitPolicy {
-    UNIQUE,
-    FIRST,
-    ANY,
-    COLLECT
+
+import java.io.Serializable;
+import java.util.Map;
+
+import static java.util.Collections.unmodifiableMap;
+
+public class DecisionContextVariables extends AbstractContextVariables implements Serializable {
+
+    private static final long serialVersionUID = 1;
+
+    public DecisionContextVariables(Map<String, Object> variables) {
+        super.variables = unmodifiableMap(variables);
+    }
+
 }

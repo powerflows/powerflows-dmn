@@ -17,22 +17,13 @@
 package org.powerflows.dmn.engine.model.evaluation.context;
 
 
-import java.io.Serializable;
 import java.util.Map;
 
-import static java.util.Collections.unmodifiableMap;
+public interface ContextVariables {
 
-public class ContextVariables implements Serializable {
+    Object get(final String name);
 
-    private static final long serialVersionUID = 1;
+    Map<String, Object> getAll();
 
-    private final Map<String, Object> variables;
-
-    public ContextVariables(Map<String, Object> variables) {
-        this.variables = unmodifiableMap(variables);
-    }
-
-    public Map<String, Object> get() {
-        return variables;
-    }
+    boolean isPresent(final String name);
 }

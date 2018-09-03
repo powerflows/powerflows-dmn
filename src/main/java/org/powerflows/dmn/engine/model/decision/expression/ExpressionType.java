@@ -19,5 +19,6 @@ package org.powerflows.dmn.engine.model.decision.expression;
 public enum ExpressionType {
     LITERAL,
     FEEL,
+    JUEL,
     GROOVY
 }

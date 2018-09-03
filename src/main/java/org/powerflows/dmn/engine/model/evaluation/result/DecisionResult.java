@@ -71,11 +71,11 @@ public class DecisionResult implements Serializable {
         return ruleResults;
     }
 
-    public static <P extends AbstractBuilder> Builder<P> builder() {
-        return new Builder<>();
+    public static  Builder builder() {
+        return new Builder();
     }
 
-    public static final class Builder<P extends AbstractBuilder> extends AbstractBuilder<DecisionResult> {
+    public static final class Builder extends AbstractBuilder<DecisionResult>{
 
         private Builder() {
         }
@@ -85,10 +85,10 @@ public class DecisionResult implements Serializable {
             this.product = new DecisionResult();
         }
 
-        public RuleResult.Builder<Builder<P>> withRuleResults() {
-            final Consumer<RuleResult> ruleResultConsumer = this.product.ruleResults::add;
+        public Builder ruleResults(List<RuleResult> ruleResults) {
+            this.product.ruleResults = ruleResults;
 
-            return RuleResult.builder(this, ruleResultConsumer);
+            return this;
         }
 
         @Override

@@ -22,9 +22,6 @@ import org.powerflows.dmn.engine.model.builder.AbstractBuilder;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.function.Consumer;
-
-import static java.util.Collections.unmodifiableList;
 
 public class RuleResult implements Serializable {
 
@@ -39,18 +36,13 @@ public class RuleResult implements Serializable {
         return entryResults;
     }
 
-    public static <P extends AbstractBuilder> Builder<P> builder(P parentBuilder, Consumer<RuleResult> ruleResultConsumer) {
-        return new Builder<>(parentBuilder, ruleResultConsumer);
+    public static Builder builder() {
+        return new Builder();
     }
 
-    public static final class Builder<P extends AbstractBuilder> extends AbstractBuilder<RuleResult> {
+    public static final class Builder extends AbstractBuilder<RuleResult> {
 
-        private P parentBuilder;
-        private Consumer<RuleResult> callback;
-
-        private Builder(P parentBuilder, Consumer<RuleResult> ruleResultConsumer) {
-            this.parentBuilder = parentBuilder;
-            this.callback = ruleResultConsumer;
+        private Builder() {
         }
 
         @Override
@@ -58,27 +50,11 @@ public class RuleResult implements Serializable {
             this.product = new RuleResult();
         }
 
-        public EntryResult.Builder<Builder<P>> withEntryResults() {
-            final Consumer<EntryResult> entryResultConsumer = entryResult -> this.product.entryResults.add(entryResult);
+        public Builder entryResults(List<EntryResult> entryResults) {
+            this.product.entryResults = entryResults;
 
-            return EntryResult.builder(this, entryResultConsumer);
+            return this;
         }
 
-        public Builder<P> next() {
-            accept();
-
-            return builder(parentBuilder, callback);
-        }
-
-        public P end() {
-            accept();
-
-            return parentBuilder;
-        }
-
-        private void accept() {
-            this.product.entryResults = unmodifiableList(this.product.entryResults);
-            callback.accept(build());
-        }
     }
 }

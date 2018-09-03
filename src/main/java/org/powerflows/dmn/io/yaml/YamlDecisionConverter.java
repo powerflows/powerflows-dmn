@@ -17,7 +17,6 @@
 package org.powerflows.dmn.io.yaml;
 
 import org.powerflows.dmn.engine.model.decision.Decision;
-import org.powerflows.dmn.engine.model.decision.expression.ExpressionType;
 import org.powerflows.dmn.engine.model.decision.field.Input;
 import org.powerflows.dmn.engine.model.decision.field.Output;
 import org.powerflows.dmn.engine.model.decision.rule.Rule;
@@ -46,7 +45,7 @@ public class YamlDecisionConverter implements DecisionToExternalModelConverter<Y
                 .stream()
                 .map(this::ruleToYamlRule)
                 .collect(Collectors.toList()));
-        
+
         return yamlDecision;
     }
 
