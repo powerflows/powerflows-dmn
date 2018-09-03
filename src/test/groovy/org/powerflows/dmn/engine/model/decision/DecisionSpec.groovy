@@ -41,10 +41,10 @@ class DecisionSpec extends Specification {
     final String someInput2Name = 'Some Input 2 Name'
     final String someInput2Description = 'Some Input 2 Description'
     final ValueType someOutput1Type = ValueType.BOOLEAN
+    final ValueType someInput3Type = ValueType.STRING
+    final String someInput3Name = 'Some Input 3 Name'
     final String someOutput1Name = 'Some Input 1 Name'
     final String someOutput1Description = 'Some Output 1 Description'
-    final ExpressionType someOutput1Expression1Type = ExpressionType.GROOVY
-    final String someOutput1Expression1Value = '>= someVariable'
     final ValueType someOutput2Type = ValueType.STRING
     final String someOutput2Name = 'Some Input 2 Name'
     final String someOutput2Description = 'Some Output 2 Description'
@@ -167,6 +167,13 @@ class DecisionSpec extends Specification {
             getDescription() == someInput2Description
             getType() == someInput2Type
         }
+
+        final Expression input1Expression2 = input2.getExpression()
+        with(input1Expression2) {
+            getType() == ExpressionType.LITERAL
+            getValue() == null
+        }
+
 
         final Output output1 = decision.getOutputs().get(0)
         with(output1) {

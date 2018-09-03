@@ -73,7 +73,9 @@ class YamlDecisionReaderSpec extends Specification {
 
         with(decision.inputs[1]) {
             name == 'colour'
-            expression == null
+            expression.value == null
+            expression.type == ExpressionType.LITERAL
+            description == 'This is something about colour'
             type == ValueType.STRING
         }
 
