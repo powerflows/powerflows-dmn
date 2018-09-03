@@ -66,21 +66,30 @@ public class InputEntry implements Serializable {
 
             return (B) this;
         }
+
+        public B withLiteralValue(final Object literalValue) {
+            this.product.expression = Expression.builder()
+                    .type(ExpressionType.LITERAL)
+                    .value(literalValue)
+                    .build();
+
+            return (B) this;
+        }
+
+        @Override
+        protected InputEntry assembleProduct() {
+            if (product.expression == null) {
+                product.expression = Expression.builder().build();
+            }
+
+            return product;
+        }
     }
 
     public static final class Builder extends InputEntryBuilder<Builder> {
 
         public Builder withExpression(final Function<Expression.Builder, Expression> expressionBuilderConsumer) {
             this.product.expression = expressionBuilderConsumer.apply(Expression.builder());
-
-            return this;
-        }
-
-        public Builder withLiteralValue(final Object literalValue) {
-            this.product.expression = Expression.builder()
-                    .type(ExpressionType.LITERAL)
-                    .value(literalValue)
-                    .build();
 
             return this;
         }

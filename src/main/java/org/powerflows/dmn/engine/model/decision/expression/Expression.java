@@ -69,6 +69,15 @@ public class Expression implements Serializable {
 
             return (B) this;
         }
+
+        @Override
+        protected Expression assembleProduct() {
+            if (product.type == null) {
+                product.type = ExpressionType.LITERAL;
+            }
+            
+            return product;
+        }
     }
 
     public static class Builder extends ExpressionBuilder<Builder> {

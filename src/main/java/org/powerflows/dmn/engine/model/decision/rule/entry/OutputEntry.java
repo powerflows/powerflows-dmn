@@ -66,21 +66,21 @@ public class OutputEntry implements Serializable {
 
             return (B) this;
         }
+
+        public B withLiteralValue(final Object literalValue) {
+            this.product.expression = Expression.builder()
+                    .type(ExpressionType.LITERAL)
+                    .value(literalValue)
+                    .build();
+
+            return (B) this;
+        }
     }
 
     public static final class Builder extends OutputEntryBuilder<Builder> {
 
         public Builder withExpression(final Function<Expression.Builder, Expression> expressionBuilderConsumer) {
             this.product.expression = expressionBuilderConsumer.apply(Expression.builder());
-
-            return this;
-        }
-
-        public Builder withLiteralValue(final Object literalValue) {
-            this.product.expression = Expression.builder()
-                    .type(ExpressionType.LITERAL)
-                    .value(literalValue)
-                    .build();
 
             return this;
         }
