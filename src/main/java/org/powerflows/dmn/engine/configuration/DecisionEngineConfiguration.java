@@ -13,14 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.powerflows.dmn.engine.reader;
 
-import org.powerflows.dmn.engine.model.decision.Decision;
+package org.powerflows.dmn.engine.configuration;
 
-import java.io.OutputStream;
 
-public interface DecisionWriter {
-    void write(Decision decision, OutputStream outputStream);
+import org.powerflows.dmn.engine.DecisionEngine;
 
-    void writeAll(Iterable<Decision> decisions, OutputStream outputStream);
+public interface DecisionEngineConfiguration {
+
+    DecisionEngine configure();
+
 }

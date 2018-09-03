@@ -14,15 +14,12 @@
  * limitations under the License.
  */
 
-package org.powerflows.dmn.engine;
+package org.powerflows.dmn.engine.configuration;
 
 
-import org.powerflows.dmn.engine.model.decision.Decision;
-import org.powerflows.dmn.engine.model.evaluation.context.DecisionContextVariables;
-import org.powerflows.dmn.engine.model.evaluation.result.DecisionResult;
+import org.powerflows.dmn.engine.DecisionEngine;
 
-public interface DecisionEngine {
+public abstract class AbstractDecisionEngineConfiguration implements DecisionEngineConfiguration {
 
-    DecisionResult evaluate(Decision decision, DecisionContextVariables contextVariables);
-
+    public abstract DecisionEngine configure();
 }

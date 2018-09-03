@@ -23,7 +23,7 @@ import org.powerflows.dmn.engine.evaluator.entry.expression.provider.ExpressionE
 import org.powerflows.dmn.engine.model.decision.rule.entry.OutputEntry;
 import org.powerflows.dmn.engine.model.evaluation.result.EntryResult;
 
-class OutputEntryEvaluator {
+public class OutputEntryEvaluator {
 
     private final EvaluationProviderFactory evaluationProviderFactory;
 
