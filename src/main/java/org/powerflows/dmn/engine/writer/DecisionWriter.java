@@ -13,15 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+package org.powerflows.dmn.engine.writer;
 
-package org.powerflows.dmn.engine.reader;
+import org.powerflows.dmn.engine.model.decision.Decision;
 
-public class DecisionWriteException extends RuntimeException {
-    public DecisionWriteException(final String message) {
-        super(message);
-    }
+import java.io.OutputStream;
 
-    public DecisionWriteException(final String message, final Throwable cause) {
-        super(message, cause);
-    }
+public interface DecisionWriter {
+    void write(Decision decision, OutputStream outputStream);
+
+    void writeAll(Iterable<Decision> decisions, OutputStream outputStream);
 }

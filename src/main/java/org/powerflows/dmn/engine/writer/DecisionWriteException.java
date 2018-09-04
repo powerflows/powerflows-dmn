@@ -14,15 +14,14 @@
  * limitations under the License.
  */
 
-package org.powerflows.dmn.engine;
+package org.powerflows.dmn.engine.writer;
 
+public class DecisionWriteException extends RuntimeException {
+    public DecisionWriteException(final String message) {
+        super(message);
+    }
 
-import org.powerflows.dmn.engine.model.decision.Decision;
-import org.powerflows.dmn.engine.model.evaluation.context.DecisionContextVariables;
-import org.powerflows.dmn.engine.model.evaluation.result.DecisionResult;
-
-public interface DecisionEngine {
-
-    DecisionResult evaluate(Decision decision, DecisionContextVariables contextVariables);
-
+    public DecisionWriteException(final String message, final Throwable cause) {
+        super(message, cause);
+    }
 }

@@ -25,7 +25,7 @@ import org.powerflows.dmn.engine.model.decision.field.Input;
 import org.powerflows.dmn.engine.model.decision.rule.entry.InputEntry;
 import org.powerflows.dmn.engine.model.evaluation.context.DecisionContextVariables;
 
-class InputEntryEvaluator {
+public class InputEntryEvaluator {
 
     private final EvaluationProviderFactory evaluationProviderFactory;
 

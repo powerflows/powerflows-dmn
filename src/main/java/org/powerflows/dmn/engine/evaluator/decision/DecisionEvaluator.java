@@ -67,7 +67,6 @@ public class DecisionEvaluator {
 
         for (Rule rule : decision.getRules()) {
             final RuleResult ruleResult = ruleEvaluator.evaluate(rule, inputs, modifiableContextVariables);
-            ruleResults.add(ruleResult);
 
             if (ruleResult != null) {
                 ruleResults.add(ruleResult);
