@@ -17,7 +17,7 @@
         <maven.compiler.version>3.2</maven.compiler.version>
         <gmavenplus.version>1.5</gmavenplus.version>
         <gmaven.plugin.version>1.5</gmaven.plugin.version>
-        <jacoco.maven.plugin>0.7.9</jacoco.maven.plugin>
+        <jacoco.maven.plugin>0.8.2</jacoco.maven.plugin>
         <jacoco.out.ut.file>jacoco-ut.exec</jacoco.out.ut.file>
         <jacoco.out.it.file>jacoco-it.exec</jacoco.out.it.file>
         <jacoco.outputDir>${project.build.directory}/jacoco-reports</jacoco.outputDir>
