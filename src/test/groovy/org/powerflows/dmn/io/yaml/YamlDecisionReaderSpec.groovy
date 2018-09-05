@@ -20,12 +20,46 @@ import org.powerflows.dmn.engine.model.decision.Decision
 import org.powerflows.dmn.engine.model.decision.HitPolicy
 import org.powerflows.dmn.engine.model.decision.expression.ExpressionType
 import org.powerflows.dmn.engine.model.decision.field.ValueType
+import org.powerflows.dmn.engine.reader.DecisionReadException
 import spock.lang.Specification
 
 class YamlDecisionReaderSpec extends Specification {
     final String singleDecision = 'test-single-decision.yml'
     final String multipleDecisions = 'test-multiple-decisions.yml'
     final String decisionNamePrefix = 'sample_decision_'
+
+    void 'should wrap exceptions in framework ones when reading single decision'() {
+        given:
+        final InputStream inputStream = Mock()
+
+        when:
+        new YamlDecisionReader().read(inputStream)
+
+        then:
+        thrown(DecisionReadException)
+    }
+
+    void 'should not support read by id yet'() {
+        given:
+        final String id = 'id'
+
+        when:
+        new YamlDecisionReader().read(id)
+
+        then:
+        thrown(UnsupportedOperationException)
+    }
+
+    void 'should not support readAll by ids yet'() {
+        given:
+        final String id = 'id'
+
+        when:
+        new YamlDecisionReader().readAll([id])
+
+        then:
+        thrown(UnsupportedOperationException)
+    }
 
     void 'should read decision using InputStream'() {
         given:
@@ -37,6 +71,17 @@ class YamlDecisionReaderSpec extends Specification {
         then:
         result != null
         assertDecision(result, decisionNamePrefix + 1)
+    }
+
+    void 'should wrap exceptions in framework ones when reading multiple decisions'() {
+        given:
+        final InputStream inputStream = Mock()
+
+        when:
+        new YamlDecisionReader().readAll(inputStream)
+
+        then:
+        thrown(DecisionReadException)
     }
 
     void 'should read all decisions using InputStream'() {

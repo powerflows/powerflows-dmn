@@ -59,7 +59,7 @@ public class CustomPropertyUtils extends PropertyUtils {
         if (propertiesCache.containsKey(type)) {
             return propertiesCache.get(type);
         }
-        final Map<String, Property> properties = new LinkedHashMap<String, Property>();
+        final Map<String, Property> properties = new LinkedHashMap<>();
         super.getPropertiesMap(type, beanAccess).forEach((name, property) -> {
             if (PROPERTY_NAME_MAP.containsKey(name)) {
                 final String newName = PROPERTY_NAME_MAP.get(name);

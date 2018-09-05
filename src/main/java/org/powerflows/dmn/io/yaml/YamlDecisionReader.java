@@ -18,7 +18,7 @@ package org.powerflows.dmn.io.yaml;
 
 import org.powerflows.dmn.engine.model.decision.Decision;
 import org.powerflows.dmn.engine.reader.DecisionReadException;
-import org.powerflows.dmn.io.AbstractDecisionReader;
+import org.powerflows.dmn.engine.reader.DecisionReader;
 import org.powerflows.dmn.io.yaml.model.YamlDecision;
 import org.yaml.snakeyaml.Yaml;
 
@@ -29,7 +29,7 @@ import java.util.stream.StreamSupport;
 import static java.util.stream.Collectors.toList;
 
 
-public class YamlDecisionReader extends AbstractDecisionReader {
+public class YamlDecisionReader implements DecisionReader {
 
     private final Yaml yaml = new Yaml(new CustomConstructor());
     private final YamlDecisionConverter converter = new YamlDecisionConverter();

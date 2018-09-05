@@ -17,10 +17,6 @@
 package org.powerflows.dmn.engine.reader;
 
 public class DecisionReadException extends RuntimeException {
-    public DecisionReadException(final String message) {
-        super(message);
-    }
-
     public DecisionReadException(final String message, final Throwable cause) {
         super(message, cause);
     }

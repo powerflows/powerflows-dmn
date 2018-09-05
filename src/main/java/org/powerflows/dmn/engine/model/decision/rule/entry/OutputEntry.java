@@ -54,7 +54,7 @@ public class OutputEntry implements Serializable {
         return new Builder();
     }
 
-    private static abstract class OutputEntryBuilder<B extends OutputEntryBuilder<B>> extends AbstractBuilder<OutputEntry> {
+    private abstract static class OutputEntryBuilder<B extends OutputEntryBuilder<B>> extends AbstractBuilder<OutputEntry> {
 
         @Override
         protected void initProduct() {

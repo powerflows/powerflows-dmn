@@ -233,80 +233,80 @@ public class DecisionTest {
     private void assertOnDecision(final Decision decision) {
         assertNotNull(decision);
 
-        assertEquals(decision.getId(), someTableId);
-        assertEquals(decision.getName(), someTableName);
-        assertEquals(decision.getHitPolicy(), someHitPolicy);
-        assertEquals(decision.getInputs().size(), 2);
-        assertEquals(decision.getOutputs().size(), 2);
-        assertEquals(decision.getRules().size(), 2);
+        assertEquals(someTableId, decision.getId());
+        assertEquals(someTableName, decision.getName());
+        assertEquals(someHitPolicy, decision.getHitPolicy());
+        assertEquals(2, decision.getInputs().size());
+        assertEquals(2, decision.getOutputs().size());
+        assertEquals(2, decision.getRules().size());
 
         final Input input1 = decision.getInputs().get(0);
-        assertEquals(input1.getName(), someInput1Name);
-        assertEquals(input1.getDescription(), someInput1Description);
-        assertEquals(input1.getType(), someInput1Type);
+        assertEquals(someInput1Name, input1.getName());
+        assertEquals(someInput1Description, input1.getDescription());
+        assertEquals(someInput1Type, input1.getType());
 
         final Expression input1Expression1 = input1.getExpression();
-        assertEquals(input1Expression1.getType(), someInput1Expression1Type);
-        assertEquals(input1Expression1.getValue(), someInput1Expression1Value);
+        assertEquals(someInput1Expression1Type, input1Expression1.getType());
+        assertEquals(someInput1Expression1Value, input1Expression1.getValue());
 
         final Input input2 = decision.getInputs().get(1);
-        assertEquals(input2.getName(), someInput2Name);
-        assertEquals(input2.getDescription(), someInput2Description);
-        assertEquals(input2.getType(), someInput2Type);
+        assertEquals(someInput2Name, input2.getName());
+        assertEquals(someInput2Description, input2.getDescription());
+        assertEquals(someInput2Type, input2.getType());
 
         final Output output1 = decision.getOutputs().get(0);
-        assertEquals(output1.getName(), someOutput1Name);
-        assertEquals(output1.getDescription(), someOutput1Description);
-        assertEquals(output1.getType(), someOutput1Type);
+        assertEquals(someOutput1Name, output1.getName());
+        assertEquals(someOutput1Description, output1.getDescription());
+        assertEquals(someOutput1Type, output1.getType());
 
         final Output output2 = decision.getOutputs().get(1);
-        assertEquals(output2.getName(), someOutput2Name);
-        assertEquals(output2.getDescription(), someOutput2Description);
-        assertEquals(output2.getType(), someOutput2Type);
+        assertEquals(someOutput2Name, output2.getName());
+        assertEquals(someOutput2Description, output2.getDescription());
+        assertEquals(someOutput2Type, output2.getType());
 
         final Rule rule1 = decision.getRules().get(0);
-        assertEquals(rule1.getDescription(), someRule1Description);
-        assertEquals(rule1.getInputEntries().size(), 2);
-        assertEquals(rule1.getOutputEntries().size(), 1);
+        assertEquals(someRule1Description, rule1.getDescription());
+        assertEquals(2, rule1.getInputEntries().size());
+        assertEquals(1, rule1.getOutputEntries().size());
 
         final InputEntry rule1InputEntry1 = rule1.getInputEntries().get(0);
-        assertEquals(rule1InputEntry1.getName(), someRule1InputEntry1Name);
+        assertEquals(someRule1InputEntry1Name, rule1InputEntry1.getName());
 
         final Expression rule1InputEntry1Expression = rule1InputEntry1.getExpression();
 
-        assertEquals(rule1InputEntry1Expression.getType(), someRule1InputEntry1ExpressionType);
-        assertEquals(rule1InputEntry1Expression.getValue(), someRule1InputEntry1ExpressionValue);
+        assertEquals(someRule1InputEntry1ExpressionType, rule1InputEntry1Expression.getType());
+        assertEquals(someRule1InputEntry1ExpressionValue, rule1InputEntry1Expression.getValue());
 
         final InputEntry rule1InputEntry2 = rule1.getInputEntries().get(1);
-        assertEquals(rule1InputEntry2.getName(), someRule1InputEntry2Name);
+        assertEquals(someRule1InputEntry2Name, rule1InputEntry2.getName());
 
         final Expression rule1InputEntry2Expression = rule1InputEntry2.getExpression();
 
-        assertEquals(rule1InputEntry2Expression.getType(), someRule1InputEntry2ExpressionType);
-        assertEquals(rule1InputEntry2Expression.getValue(), someRule1InputEntry2ExpressionValue);
+        assertEquals(someRule1InputEntry2ExpressionType, rule1InputEntry2Expression.getType());
+        assertEquals(someRule1InputEntry2ExpressionValue, rule1InputEntry2Expression.getValue());
 
         final OutputEntry rule1OutputEntry1 = rule1.getOutputEntries().get(0);
-        assertEquals(rule1OutputEntry1.getName(), someRule1OutputEntry1Name);
+        assertEquals(someRule1OutputEntry1Name, rule1OutputEntry1.getName());
 
         final Expression rule1OutputEntry1Expression = rule1OutputEntry1.getExpression();
-        assertEquals(rule1OutputEntry1Expression.getType(), someRule1OutputEntry1ExpressionType);
-        assertEquals(rule1OutputEntry1Expression.getValue(), someRule1OutputEntry1ExpressionValue);
+        assertEquals(someRule1OutputEntry1ExpressionType, rule1OutputEntry1Expression.getType());
+        assertEquals(someRule1OutputEntry1ExpressionValue, rule1OutputEntry1Expression.getValue());
 
         final Rule rule2 = decision.getRules().get(1);
-        assertEquals(rule2.getDescription(), someRule2Description);
-        assertEquals(rule2.getInputEntries().size(), 2);
-        assertEquals(rule2.getOutputEntries().size(), 2);
+        assertEquals(someRule2Description, rule2.getDescription());
+        assertEquals(2, rule2.getInputEntries().size());
+        assertEquals(2, rule2.getOutputEntries().size());
 
         final InputEntry rule2InputEntry1 = rule2.getInputEntries().get(0);
-        assertEquals(rule2InputEntry1.getName(), someRule2InputEntry1Name);
+        assertEquals(someRule2InputEntry1Name, rule2InputEntry1.getName());
 
         final InputEntry rule2InputEntry2 = rule2.getInputEntries().get(1);
-        assertEquals(rule2InputEntry2.getName(), someRule2InputEntry2Name);
+        assertEquals(someRule2InputEntry2Name, rule2InputEntry2.getName());
 
         final OutputEntry rule2OutputEntry1 = rule2.getOutputEntries().get(0);
-        assertEquals(rule2OutputEntry1.getName(), someRule2OutputEntry1Name);
+        assertEquals(someRule2OutputEntry1Name, rule2OutputEntry1.getName());
 
         final OutputEntry rule2OutputEntry2 = rule2.getOutputEntries().get(1);
-        assertEquals(rule2OutputEntry2.getName(), someRule2OutputEntry2Name);
+        assertEquals(someRule2OutputEntry2Name, rule2OutputEntry2.getName());
     }
 }

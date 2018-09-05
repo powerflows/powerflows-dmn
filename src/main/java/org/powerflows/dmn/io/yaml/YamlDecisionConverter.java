@@ -61,14 +61,13 @@ public class YamlDecisionConverter implements DecisionToExternalModelConverter<Y
             final YamlInput yamlInput = new YamlInput();
             yamlInput.setDescription(input.getDescription());
             yamlInput.setType(input.getType());
-            if (input.getExpression() != null) {
-                if (input.getExpression().getValue() != null) {
-                    yamlInput.setExpression(input.getExpression().getValue());
-                    yamlInput.setExpressionType(
-                            input.getExpression().getType() == ExpressionType.LITERAL ? null : input
-                                    .getExpression()
-                                    .getType());
-                }
+            if (input.getExpression() != null && input.getExpression().getValue() != null) {
+                yamlInput.setExpression(input.getExpression().getValue());
+                yamlInput.setExpressionType(
+                        input.getExpression().getType() == ExpressionType.LITERAL ? null : input
+                                .getExpression()
+                                .getType());
+
             }
 
             in.put(input.getName(), yamlInput);
