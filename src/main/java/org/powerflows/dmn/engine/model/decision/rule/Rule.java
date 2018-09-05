@@ -63,7 +63,7 @@ public class Rule implements Serializable {
         return new Builder();
     }
 
-    private static abstract class RuleBuilder<B extends Rule.RuleBuilder<B>> extends AbstractBuilder<Rule> {
+    private abstract static class RuleBuilder<B extends Rule.RuleBuilder<B>> extends AbstractBuilder<Rule> {
 
         @Override
         protected void initProduct() {
@@ -76,6 +76,7 @@ public class Rule implements Serializable {
             return (B) this;
         }
 
+        @Override
         protected Rule assembleProduct() {
             this.product.inputEntries = unmodifiableList(this.product.inputEntries);
             this.product.outputEntries = unmodifiableList(this.product.outputEntries);
@@ -86,7 +87,7 @@ public class Rule implements Serializable {
 
     public static final class Builder extends RuleBuilder<Builder> {
 
-        public Builder withInputEntry(final Function<InputEntry.Builder,InputEntry> inputEntryBuilderConsumer) {
+        public Builder withInputEntry(final Function<InputEntry.Builder, InputEntry> inputEntryBuilderConsumer) {
             this.product.inputEntries.add(inputEntryBuilderConsumer.apply(InputEntry.builder()));
 
             return this;

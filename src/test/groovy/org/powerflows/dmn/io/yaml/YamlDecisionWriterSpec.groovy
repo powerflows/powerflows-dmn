@@ -19,6 +19,7 @@ import org.powerflows.dmn.engine.model.decision.Decision
 import org.powerflows.dmn.engine.model.decision.HitPolicy
 import org.powerflows.dmn.engine.model.decision.expression.ExpressionType
 import org.powerflows.dmn.engine.model.decision.field.ValueType
+import org.powerflows.dmn.engine.writer.DecisionWriteException
 import spock.lang.Specification
 
 class YamlDecisionWriterSpec extends Specification {
@@ -72,6 +73,23 @@ class YamlDecisionWriterSpec extends Specification {
         }
     }
 
+    void 'should wrap exceptions in framework ones when reading single decision'() {
+        given:
+        final Decision decision = createDecision(someTableId1)
+        final YamlDecisionWriter writer = new YamlDecisionWriter()
+        final OutputStream outputStream = Mock() {
+            write(_, _, _) >>> { byte[] buffer, int offset, int count ->
+                throw new RuntimeException('Error')
+            }
+        }
+
+        when:
+        writer.write(decision, outputStream)
+
+        then:
+        thrown(DecisionWriteException)
+    }
+
     void 'should write multiple models'() {
         given:
         final Decision decision1 = createDecision(someTableId1)
@@ -90,6 +108,23 @@ class YamlDecisionWriterSpec extends Specification {
         for (int i = 0; i < result.size(); i++) {
             assert result[i] == referenceResult[i]
         }
+    }
+
+    void 'should wrap exceptions in framework ones when reading multiple decisions'() {
+        given:
+        final Decision decision = createDecision(someTableId1)
+        final YamlDecisionWriter writer = new YamlDecisionWriter()
+        final OutputStream outputStream = Mock() {
+            write(_, _, _) >>> { byte[] buffer, int offset, int count ->
+                throw new RuntimeException('Error')
+            }
+        }
+
+        when:
+        writer.writeAll([decision], outputStream)
+
+        then:
+        thrown(DecisionWriteException)
     }
 
     void 'should do perfect round trip of data with identical files'() {

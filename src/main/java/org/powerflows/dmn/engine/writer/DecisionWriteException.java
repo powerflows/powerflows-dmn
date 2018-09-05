@@ -17,10 +17,6 @@
 package org.powerflows.dmn.engine.writer;
 
 public class DecisionWriteException extends RuntimeException {
-    public DecisionWriteException(final String message) {
-        super(message);
-    }
-
     public DecisionWriteException(final String message, final Throwable cause) {
         super(message, cause);
     }

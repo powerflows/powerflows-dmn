@@ -56,7 +56,7 @@ public class Output implements Serializable {
         return new Builder();
     }
 
-    private static abstract class OutputBuilder<B extends Output.OutputBuilder<B>> extends AbstractBuilder<Output> {
+    private abstract static class OutputBuilder<B extends Output.OutputBuilder<B>> extends AbstractBuilder<Output> {
         @Override
         protected void initProduct() {
             this.product = new Output();

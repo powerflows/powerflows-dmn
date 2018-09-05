@@ -85,7 +85,7 @@ public class Decision implements Serializable {
         return new Builder();
     }
 
-    private static abstract class DecisionBuilder<B extends DecisionBuilder<B>> extends AbstractBuilder<Decision> {
+    private abstract static class DecisionBuilder<B extends DecisionBuilder<B>> extends AbstractBuilder<Decision> {
         @Override
         protected void initProduct() {
             this.product = new Decision();

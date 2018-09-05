@@ -24,9 +24,13 @@ import java.util.List;
 
 public interface DecisionReader {
 
-    Decision read(String decisionId);
+    default Decision read(final String decisionId) {
+        throw new UnsupportedOperationException();
+    }
 
-    List<Decision> readAll(List<String> decisionIds);
+    default List<Decision> readAll(final Iterable<String> decisionIds) {
+        throw new UnsupportedOperationException();
+    }
 
     Decision read(InputStream inputStream);
 

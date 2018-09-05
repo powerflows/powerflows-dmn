@@ -63,7 +63,7 @@ public class Input implements Serializable {
         return new Builder();
     }
 
-    private static abstract class InputBuilder<B extends InputBuilder<B>> extends AbstractBuilder<Input> {
+    private abstract static class InputBuilder<B extends InputBuilder<B>> extends AbstractBuilder<Input> {
 
         @Override
         protected void initProduct() {
