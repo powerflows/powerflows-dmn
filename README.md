@@ -341,6 +341,58 @@ Decision decision = Decision.builder()
                         .build())
                 .build();
 ```
+
+# IO
+Thanks to IO module there is a possibility to:
+* Read decisions from *.yml files;
+* Write decisions to *.yml files.
+
+## Reading
+The follow example shows how to read *.yml file and get decision object.
+First of all input stream is needed. Then, using YamlDecisionReader class a developer can read the decision from the input stream.
+
+```java
+InputStream inputStream = this.class.getResourceAsStream("sample-decision.yml");
+Decision result = new YamlDecisionReader().read(inputStream);
+```
+
+## Writing
+The IO module can be used to conversion between different formats. For now the only one supported is *.yml.
+
+```java
+Decision decision = Decision.builder().build(); //here developer has to build a valid decision object
+
+YamlDecisionWriter writer = new YamlDecisionWriter();
+FileOutputStream outputStream = new FileOutputStream("sample-decision.yml");
+
+writer.write(decision, outputStream);
+```
+
+# Decision Engine
+A decision engine is a service that allows evaluation of decision tables. Default decision engine instance can be created using
+DefaultDecisionEngineConfiguration class. Decision engine expects decision object and context variables.
+The result of an evaluation process is decision result object.
+```java
+Decision decision = Decision.builder().build(); //here developer has to build a valid decision object
+DecisionEngine decisionEngine = new DefaultDecisionEngineConfiguration().configure();
+
+Map<String, Object> variables = new HashMap<>();
+variables.put("inputOne", 2);
+variables.put("inputTwo", "five");
+DecisionContextVariables contextVariables = new DecisionContextVariables(variables);
+
+DecisionResult decisionResult = decisionEngine.evaluate(decision, contextVariables);
+```
+The decision result has methods like follows:
+```java
+decisionResult.isSingleEntryResult();
+decisionResult.isSingleRuleResult();
+decisionResult.isCollectionRulesResult();
+decisionResult.getSingleEntryResult();
+decisionResult.getSingleRuleResult();
+decisionResult.getCollectionRulesResult();
+```
+
 # How to contribute to the repository
 Contributors wishing to join Power Flows project have to comply with a few rules: 
 
