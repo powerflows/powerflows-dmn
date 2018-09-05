@@ -31,10 +31,12 @@ public class CustomPropertyUtils extends PropertyUtils {
 
     private Map<Class<?>, Map<String, Property>> propertiesCache = new HashMap<>();
 
-    private static final Map<String, String> PROPERTY_NAME_MAP = new HashMap<String, String>() {{
-        put("hitPolicy", "hit-policy");
-        put("expressionType", "expression-type");
-    }};
+    private static final Map<String, String> PROPERTY_NAME_MAP = new HashMap<>();
+
+    static {
+        PROPERTY_NAME_MAP.put("hitPolicy", "hit-policy");
+        PROPERTY_NAME_MAP.put("expressionType", "expression-type");
+    }
 
     CustomPropertyUtils() {
         this.setBeanAccess(BeanAccess.FIELD);
