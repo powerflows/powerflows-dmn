@@ -91,7 +91,7 @@ public class DecisionEvaluator {
     private void validateContextVariables(final List<Input> inputs, final ContextVariables contextVariables) {
         final String invalidInputNames = inputs
                 .stream()
-                .filter(input -> !ExpressionType.LITERAL.equals(input.getExpression().getType()))
+                .filter(input -> input.getExpression().getValue() != null)
                 .filter(input -> contextVariables.isPresent(input.getName()))
                 .map(Input::getName)
                 .collect(Collectors.joining(","));
