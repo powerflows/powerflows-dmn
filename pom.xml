@@ -40,8 +40,8 @@
 
     <scm>
         <url>https://github.com/powerflows/powerflows-dmn</url>
-        <connection>scm:git:git://github.com/powerflows/powerflows-dmn.git</connection>
-        <developerConnection>scm:git:git://github.com/powerflows/powerflows-dmn.git</developerConnection>
+        <connection>scm:git:https://github.com/powerflows/powerflows-dmn.git</connection>
+        <developerConnection>scm:git:https://github.com/powerflows/powerflows-dmn.git</developerConnection>
         <tag>HEAD</tag>
     </scm>
     <issueManagement>
