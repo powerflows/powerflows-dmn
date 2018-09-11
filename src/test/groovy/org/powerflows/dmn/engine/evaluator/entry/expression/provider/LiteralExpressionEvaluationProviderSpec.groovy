@@ -19,6 +19,7 @@ package org.powerflows.dmn.engine.evaluator.entry.expression.provider
 import org.powerflows.dmn.engine.evaluator.context.ModifiableContextVariables
 import org.powerflows.dmn.engine.model.decision.expression.Expression
 import org.powerflows.dmn.engine.model.decision.expression.ExpressionType
+import org.powerflows.dmn.engine.model.decision.field.Input
 import org.powerflows.dmn.engine.model.decision.rule.entry.InputEntry
 import org.powerflows.dmn.engine.model.decision.rule.entry.OutputEntry
 import org.powerflows.dmn.engine.model.evaluation.context.ContextVariables
@@ -65,6 +66,42 @@ class LiteralExpressionEvaluationProviderSpec extends Specification {
         null as Set        | [4] as Set      || false
         [4] as Set         | null as Set     || false
         null as Set        | null as Set     || true
+    }
+
+    void 'should evaluate input and return nonnull for matching names input and variables'() {
+        given:
+        final String inputValue = 5
+        final String inputName = 'TestInputName'
+        final Input input = [name: inputName]
+
+        final Map<String, Object> contextVariablesMap = [:]
+        contextVariablesMap.put(inputName, inputValue)
+        contextVariablesMap.put('x', 'y')
+        final ContextVariables decisionContextVariables = new DecisionContextVariables(contextVariablesMap)
+        final ModifiableContextVariables contextVariables = new ModifiableContextVariables(decisionContextVariables)
+
+        when:
+        final Object result = expressionEvaluationProvider.evaluateInput(input, contextVariables)
+
+        then:
+        result == inputValue
+    }
+
+    void 'should evaluate input and return null for non matching names input and variables'() {
+        given:
+        final Input input = [name: 'nonMatchingName']
+
+        final Map<String, Object> contextVariablesMap = [:]
+        contextVariablesMap.put('q', 5)
+        contextVariablesMap.put('x', 'y')
+        final ContextVariables decisionContextVariables = new DecisionContextVariables(contextVariablesMap)
+        final ModifiableContextVariables contextVariables = new ModifiableContextVariables(decisionContextVariables)
+
+        when:
+        final Object result = expressionEvaluationProvider.evaluateInput(input, contextVariables)
+
+        then:
+        result == null
     }
 
     void 'should evaluate output entry literal expression value'() {

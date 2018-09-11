@@ -60,7 +60,6 @@ class EntryEvaluatorSpec extends Specification {
 
     void 'should evaluate nonempty list of entry result'() {
         given:
-
         final Map<String, Object> variables = [:]
         variables.put(input1Name, inputEntry1Value)
         variables.put(input2Name, inputEntry2Value)
