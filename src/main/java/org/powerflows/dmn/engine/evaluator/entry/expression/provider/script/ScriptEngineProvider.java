@@ -14,17 +14,13 @@
  * limitations under the License.
  */
 
-package org.powerflows.dmn.engine.evaluator.exception;
+package org.powerflows.dmn.engine.evaluator.entry.expression.provider.script;
 
+import org.powerflows.dmn.engine.model.decision.expression.ExpressionType;
 
-public class EvaluationException extends RuntimeException {
+import javax.script.ScriptEngine;
 
-    public EvaluationException(final String message) {
-        super(message);
-    }
+public interface ScriptEngineProvider {
 
-    public EvaluationException(final Throwable throwable) {
-        super(throwable);
-    }
-
+    ScriptEngine getScriptEngine(ExpressionType expressionType);
 }

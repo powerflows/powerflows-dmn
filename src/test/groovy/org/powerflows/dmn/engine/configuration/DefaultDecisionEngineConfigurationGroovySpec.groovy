@@ -26,10 +26,7 @@ import org.powerflows.dmn.io.yaml.YamlDecisionReader
 import spock.lang.Shared
 import spock.lang.Specification
 
-class DefaultDecisionEngineConfigurationSpec extends Specification {
-    @Shared
-    private DecisionEngineConfiguration decisionEngineConfiguration
-
+class DefaultDecisionEngineConfigurationGroovySpec extends Specification {
     @Shared
     private DecisionEngine decisionEngine
 
@@ -38,30 +35,21 @@ class DefaultDecisionEngineConfigurationSpec extends Specification {
 
     void setupSpec() {
         final DecisionReader decisionReader = new YamlDecisionReader()
-        decisionEngineConfiguration = new DefaultDecisionEngineConfiguration()
+        final DecisionEngineConfiguration decisionEngineConfiguration = new DefaultDecisionEngineConfiguration()
 
         decisionEngine = decisionEngineConfiguration.configure()
 
-        final String decisionFileName = 'decision-with-literal-expressions-only.yml'
+        final String decisionFileName = 'decision-with-groovy-expressions-only.yml'
         final InputStream decisionInputStream = this.class.getResourceAsStream(decisionFileName)
         decision = decisionReader.read(decisionInputStream)
     }
-
-    void 'should configure default decision engine'() {
-        given:
-
-        when:
-        final DecisionEngine decisionEngine = decisionEngineConfiguration.configure()
-
-        then:
-        decisionEngine != null
-    }
-
     void 'should evaluate empty collection rules result using default decision engine'() {
         given:
         final Map<String, Object> variables = [:]
-        variables.put('inputOne', 2)
-        variables.put('inputTwo', 'five')
+        variables.put('x', 2)
+        variables.put('y', 3)
+        variables.put('p', 0)
+        variables.put('q', 0)
         final DecisionContextVariables decisionContextVariables = new DecisionContextVariables(variables)
 
         when:
@@ -81,8 +69,10 @@ class DefaultDecisionEngineConfigurationSpec extends Specification {
     void 'should evaluate single rule and single entry result using default decision engine'() {
         given:
         final Map<String, Object> variables = [:]
-        variables.put('inputOne', 2)
-        variables.put('inputTwo', 'three')
+        variables.put('x', 1)
+        variables.put('y', 1)
+        variables.put('p', 0)
+        variables.put('q', 0)
         final DecisionContextVariables decisionContextVariables = new DecisionContextVariables(variables)
 
         when:
@@ -108,8 +98,10 @@ class DefaultDecisionEngineConfigurationSpec extends Specification {
     void 'should evaluate single rule result using default decision engine'() {
         given:
         final Map<String, Object> variables = [:]
-        variables.put('inputOne', 5)
-        variables.put('inputTwo', 'seven')
+        variables.put('x', 5)
+        variables.put('y', 7)
+        variables.put('p', 0)
+        variables.put('q', 0)
         final DecisionContextVariables decisionContextVariables = new DecisionContextVariables(variables)
 
         when:
@@ -134,7 +126,55 @@ class DefaultDecisionEngineConfigurationSpec extends Specification {
         final EntryResult entryResult2 = decisionResult.getSingleRuleResult().getEntryResults()[1]
         with(entryResult2) {
             getName() == 'outputTwo'
-            getValue() == 'The output'
+            getValue() == 'The output rule two'
+        }
+    }
+
+    void 'should evaluate multiple rule result using default decision engine'() {
+        given:
+        final Map<String, Object> variables = [:]
+        variables.put('x', 5)
+        variables.put('y', 7)
+        variables.put('p', 3)
+        variables.put('q', 4)
+        final DecisionContextVariables decisionContextVariables = new DecisionContextVariables(variables)
+
+        when:
+        final DecisionResult decisionResult = decisionEngine.evaluate(decision, decisionContextVariables)
+
+        then:
+        decisionResult != null
+
+        with(decisionResult) {
+            !isSingleEntryResult()
+            !isSingleRuleResult()
+            isCollectionRulesResult()
+            getCollectionRulesResult().get(0).getEntryResults().size() == 2
+            getCollectionRulesResult().get(1).getEntryResults().size() == 2
+        }
+
+        final EntryResult entryResult11 = decisionResult.getCollectionRulesResult().get(0).getEntryResults()[0]
+        with(entryResult11) {
+            getName() == 'outputOne'
+            getValue()
+        }
+
+        final EntryResult entryResult12 = decisionResult.getCollectionRulesResult().get(0).getEntryResults()[1]
+        with(entryResult12) {
+            getName() == 'outputTwo'
+            getValue() == 'The output rule two'
+        }
+
+        final EntryResult entryResult21 = decisionResult.getCollectionRulesResult().get(1).getEntryResults()[0]
+        with(entryResult21) {
+            getName() == 'outputOne'
+            getValue()
+        }
+
+        final EntryResult entryResult22 = decisionResult.getCollectionRulesResult().get(1).getEntryResults()[1]
+        with(entryResult22) {
+            getName() == 'outputTwo'
+            getValue() == 'The output rule three'
         }
     }
 
