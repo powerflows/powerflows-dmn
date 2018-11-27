@@ -16,6 +16,7 @@
 
 package org.powerflows.dmn.engine.evaluator.entry.expression.provider;
 
+import org.powerflows.dmn.engine.evaluator.entry.expression.provider.script.ScriptEngineProvider;
 import org.powerflows.dmn.engine.model.decision.expression.ExpressionType;
 
 import java.util.HashMap;
@@ -25,11 +26,11 @@ public class EvaluationProviderFactory {
 
     private final Map<ExpressionType, ExpressionEvaluationProvider> factories = new HashMap<>();
 
-    public EvaluationProviderFactory() {
+    public EvaluationProviderFactory(ScriptEngineProvider scriptEngineProvider) {
         factories.put(ExpressionType.LITERAL, new LiteralExpressionEvaluationProvider());
         factories.put(ExpressionType.FEEL, new FeelExpressionEvaluationProvider());
         factories.put(ExpressionType.JUEL, new JuelExpressionEvaluationProvider());
-        factories.put(ExpressionType.GROOVY, new GroovyExpressionEvaluationProvider());
+        factories.put(ExpressionType.GROOVY, new GroovyExpressionEvaluationProvider(scriptEngineProvider));
     }
 
     public ExpressionEvaluationProvider getInstance(final ExpressionType expressionType) {

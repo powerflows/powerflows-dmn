@@ -22,26 +22,14 @@ import org.powerflows.dmn.engine.model.decision.rule.entry.InputEntry;
 import org.powerflows.dmn.engine.model.decision.rule.entry.OutputEntry;
 import org.powerflows.dmn.engine.model.evaluation.result.EntryResult;
 
-import java.util.Set;
-
 class LiteralExpressionEvaluationProvider extends AbstractExpressionEvaluationProvider {
 
     @Override
     public boolean evaluateInputEntry(final InputEntry inputEntry, final ModifiableContextVariables contextVariables) {
-        final Object contextVariableValue = contextVariables.get(inputEntry.getName());
+        final Object inputValue = contextVariables.get(inputEntry.getName());
         final Object inputEntryValue = inputEntry.getExpression().getValue();
 
-        final boolean evaluationResult;
-
-        if (contextVariableValue instanceof Set && inputEntryValue instanceof Set) {
-            evaluationResult = areSetsEqual((Set<Object>) contextVariableValue, (Set<Object>) inputEntryValue);
-        } else if (!(contextVariableValue instanceof Set) && !(inputEntryValue instanceof Set)) {
-            evaluationResult = areObjectsEqual(contextVariableValue, inputEntryValue);
-        } else {
-            evaluationResult = false;
-        }
-
-        return evaluationResult;
+        return isInputEntryValueEqualsInputValue(inputEntryValue, inputValue);
     }
 
     @Override
@@ -65,35 +53,4 @@ class LiteralExpressionEvaluationProvider extends AbstractExpressionEvaluationPr
 
         return entryResult;
     }
-
-    private boolean areObjectsEqual(final Object object1, final Object object2) {
-        final boolean result;
-
-        if (object1 == null && object2 == null) {
-            result = true;
-        } else if (object1 == null) {
-            result = false;
-        } else {
-            result = object1.equals(object2);
-        }
-
-        return result;
-    }
-
-    private boolean areSetsEqual(final Set<Object> objects1, final Set<Object> objects2) {
-        final boolean result;
-
-        if (objects1 == null && objects2 == null) {
-            result = true;
-        } else if (objects1 == null || objects2 == null) {
-            result = false;
-        } else if (objects1.size() != objects2.size()) {
-            result = false;
-        } else {
-            result = objects1.containsAll(objects2);
-        }
-
-        return result;
-    }
-
 }

@@ -24,7 +24,11 @@ import org.powerflows.dmn.engine.evaluator.entry.EntryEvaluator;
 import org.powerflows.dmn.engine.evaluator.entry.InputEntryEvaluator;
 import org.powerflows.dmn.engine.evaluator.entry.OutputEntryEvaluator;
 import org.powerflows.dmn.engine.evaluator.entry.expression.provider.EvaluationProviderFactory;
+import org.powerflows.dmn.engine.evaluator.entry.expression.provider.script.DefaultScriptEngineProvider;
+import org.powerflows.dmn.engine.evaluator.entry.expression.provider.script.ScriptEngineProvider;
 import org.powerflows.dmn.engine.evaluator.rule.RuleEvaluator;
+
+import javax.script.ScriptEngineManager;
 
 public class DefaultDecisionEngineConfiguration extends AbstractDecisionEngineConfiguration {
 
@@ -33,10 +37,12 @@ public class DefaultDecisionEngineConfiguration extends AbstractDecisionEngineCo
     private EntryEvaluator entryEvaluator;
     private InputEntryEvaluator inputEntryEvaluator;
     private OutputEntryEvaluator outputEntryEvaluator;
+    private ScriptEngineProvider scriptEngineProvider;
     private EvaluationProviderFactory evaluationProviderFactory;
 
     @Override
     public DecisionEngine configure() {
+        initScriptEngineProvider();
         initEvaluationProviderFactory();
         initInputEntryEvaluator();
         initOutputEntryEvaluator();
@@ -48,7 +54,11 @@ public class DefaultDecisionEngineConfiguration extends AbstractDecisionEngineCo
     }
 
     private void initEvaluationProviderFactory() {
-        evaluationProviderFactory = new EvaluationProviderFactory();
+        evaluationProviderFactory = new EvaluationProviderFactory(scriptEngineProvider);
+    }
+
+    private void initScriptEngineProvider() {
+        scriptEngineProvider = new DefaultScriptEngineProvider(new ScriptEngineManager());
     }
 
     private void initInputEntryEvaluator() {
