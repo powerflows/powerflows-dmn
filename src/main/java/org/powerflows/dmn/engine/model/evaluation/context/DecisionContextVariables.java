@@ -17,11 +17,14 @@
 package org.powerflows.dmn.engine.model.evaluation.context;
 
 
+import lombok.ToString;
+
 import java.io.Serializable;
 import java.util.Map;
 
 import static java.util.Collections.unmodifiableMap;
 
+@ToString(callSuper = true)
 public class DecisionContextVariables extends AbstractContextVariables implements Serializable {
 
     private static final long serialVersionUID = 1;

@@ -17,9 +17,12 @@
 package org.powerflows.dmn.engine.model.evaluation.context;
 
 
+import lombok.ToString;
+
 import java.util.HashMap;
 import java.util.Map;
 
+@ToString
 public class AbstractContextVariables implements ContextVariables {
 
     protected Map<String, Object> variables = new HashMap<>();

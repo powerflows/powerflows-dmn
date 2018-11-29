@@ -17,12 +17,14 @@
 package org.powerflows.dmn.engine.evaluator.context;
 
 
+import lombok.ToString;
 import org.powerflows.dmn.engine.model.evaluation.context.AbstractContextVariables;
 import org.powerflows.dmn.engine.model.evaluation.context.ContextVariables;
 
 import java.io.Serializable;
 import java.util.HashMap;
 
+@ToString(callSuper = true)
 public class ModifiableContextVariables extends AbstractContextVariables implements Serializable {
 
     private static final long serialVersionUID = 1;
