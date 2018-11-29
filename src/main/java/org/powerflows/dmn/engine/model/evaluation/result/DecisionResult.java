@@ -17,16 +17,17 @@
 package org.powerflows.dmn.engine.model.evaluation.result;
 
 
+import lombok.ToString;
 import org.powerflows.dmn.engine.model.builder.AbstractBuilder;
 import org.powerflows.dmn.engine.model.evaluation.result.exception.EvaluationResultException;
 
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.function.Consumer;
 
 import static java.util.Collections.unmodifiableList;
 
+@ToString
 public class DecisionResult implements Serializable {
 
     private static final long serialVersionUID = 1;
@@ -71,11 +72,11 @@ public class DecisionResult implements Serializable {
         return ruleResults;
     }
 
-    public static  Builder builder() {
+    public static Builder builder() {
         return new Builder();
     }
 
-    public static final class Builder extends AbstractBuilder<DecisionResult>{
+    public static final class Builder extends AbstractBuilder<DecisionResult> {
 
         private Builder() {
         }
