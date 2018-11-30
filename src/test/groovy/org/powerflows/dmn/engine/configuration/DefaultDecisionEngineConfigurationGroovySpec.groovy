@@ -43,6 +43,7 @@ class DefaultDecisionEngineConfigurationGroovySpec extends Specification {
         final InputStream decisionInputStream = this.class.getResourceAsStream(decisionFileName)
         decision = decisionReader.read(decisionInputStream)
     }
+
     void 'should evaluate empty collection rules result using default decision engine'() {
         given:
         final Map<String, Object> variables = [:]
@@ -50,6 +51,7 @@ class DefaultDecisionEngineConfigurationGroovySpec extends Specification {
         variables.put('y', 3)
         variables.put('p', 0)
         variables.put('q', 0)
+        variables.put('arrayVar', '')
         final DecisionContextVariables decisionContextVariables = new DecisionContextVariables(variables)
 
         when:
@@ -73,6 +75,7 @@ class DefaultDecisionEngineConfigurationGroovySpec extends Specification {
         variables.put('y', 1)
         variables.put('p', 0)
         variables.put('q', 0)
+        variables.put('arrayVar', '')
         final DecisionContextVariables decisionContextVariables = new DecisionContextVariables(variables)
 
         when:
@@ -102,6 +105,7 @@ class DefaultDecisionEngineConfigurationGroovySpec extends Specification {
         variables.put('y', 7)
         variables.put('p', 0)
         variables.put('q', 0)
+        variables.put('arrayVar', '')
         final DecisionContextVariables decisionContextVariables = new DecisionContextVariables(variables)
 
         when:
@@ -137,6 +141,7 @@ class DefaultDecisionEngineConfigurationGroovySpec extends Specification {
         variables.put('y', 7)
         variables.put('p', 3)
         variables.put('q', 4)
+        variables.put('arrayVar', '')
         final DecisionContextVariables decisionContextVariables = new DecisionContextVariables(variables)
 
         when:
@@ -175,6 +180,42 @@ class DefaultDecisionEngineConfigurationGroovySpec extends Specification {
         with(entryResult22) {
             getName() == 'outputTwo'
             getValue() == 'The output rule three'
+        }
+    }
+
+    void 'should evaluate single rule on collection operations basis result using default decision engine'() {
+        given:
+        final Map<String, Object> variables = [:]
+        variables.put('x', 10)
+        variables.put('y', 20)
+        variables.put('p', 0)
+        variables.put('q', 0)
+        variables.put('arrayVar', 'a,e,c')
+        final DecisionContextVariables decisionContextVariables = new DecisionContextVariables(variables)
+
+        when:
+        final DecisionResult decisionResult = decisionEngine.evaluate(decision, decisionContextVariables)
+
+        then:
+        decisionResult != null
+
+        with(decisionResult) {
+            !isSingleEntryResult()
+            isSingleRuleResult()
+            !isCollectionRulesResult()
+            getSingleRuleResult().getEntryResults().size() == 2
+        }
+
+        final EntryResult entryResult1 = decisionResult.getSingleRuleResult().getEntryResults()[0]
+        with(entryResult1) {
+            getName() == 'outputOne'
+            getValue()
+        }
+
+        final EntryResult entryResult2 = decisionResult.getSingleRuleResult().getEntryResults()[1]
+        with(entryResult2) {
+            getName() == 'outputTwo'
+            getValue() == 'The output rule four'
         }
     }
 

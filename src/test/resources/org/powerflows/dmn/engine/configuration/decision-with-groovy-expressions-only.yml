@@ -12,6 +12,10 @@ fields:
       type: BOOLEAN
       expression-type: GROOVY
       expression: inputOne < 10
+    inputThree:
+      type: STRING
+      expression-type: GROOVY
+      expression: "arrayVar.split(',')"
   out:
     outputOne:
       description: Some Output 1 Description
@@ -47,3 +51,15 @@ rules:
   out:
     outputOne: true
     outputTwo: The output rule three
+- description: Some Rule 4 Description
+  in:
+    inputThree:
+      - a
+      - b
+      - c
+      - d
+      - e
+      - f
+  out:
+    outputOne: true
+    outputTwo: The output rule four
