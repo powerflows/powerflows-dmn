@@ -49,23 +49,43 @@ class LiteralExpressionEvaluationProviderSpec extends Specification {
         inputEntryResult == expectedInputEntryResult
 
         where:
-        inputEntryVariable | contextVariable || expectedInputEntryResult
-        4                  | 4               || true
-        4                  | 3               || false
-        null               | null            || true
-        null               | 4               || false
-        4                  | null            || false
-        [1, 4] as Set      | [1, 4] as Set   || true
-        [1, 4] as Set      | [1, 3] as Set   || false
-        [] as Set          | [1, 3] as Set   || false
-        [1, 4] as Set      | [] as Set       || false
-        [] as Set          | [] as Set       || true
-        [null] as Set      | [null] as Set   || true
-        [4] as Set         | [null] as Set   || false
-        [null] as Set      | [4] as Set      || false
-        null as Set        | [4] as Set      || false
-        [4] as Set         | null as Set     || false
-        null as Set        | null as Set     || true
+        inputEntryVariable | contextVariable  || expectedInputEntryResult
+        4                  | 4                || true
+        4                  | 3                || false
+        null               | null             || true
+        null               | 4                || false
+        4                  | null             || false
+        [1, 4] as Set      | [1, 4] as Set    || true
+        [1, 4] as Set      | [1, 3] as Set    || false
+        [] as Set          | [1, 3] as Set    || false
+        [1, 4] as Set      | [] as Set        || false
+        [] as Set          | [] as Set        || true
+        [null] as Set      | [null] as Set    || true
+        [4] as Set         | [null] as Set    || false
+        [null] as Set      | [4] as Set       || false
+        null as Set        | [4] as Set       || false
+        [4] as Set         | null as Set      || false
+        null as Set        | null as Set      || true
+        [1, 4] as Set      | [1, 4] as List   || true
+        [1, 4] as Set      | [1, 4].toArray() || true
+        [1, 4] as List     | [1, 4] as Set    || true
+        [1, 4] as List     | [1, 4].toArray() || true
+        [1, 4].toArray()   | [1, 4] as List   || true
+        [1, 4].toArray()   | [1, 4] as Set    || true
+        [1, 4].toArray()   | [1, 4].toArray() || true
+        [1, 4] as List     | [1, 4] as List   || true
+        1                  | [1] as List      || true
+        1                  | [1] as Set       || true
+        1                  | [1].toArray()    || true
+        [1] as List        | 1                || true
+        [1] as Set         | 1                || true
+        [1].toArray()      | 1                || true
+        1                  | [1, 2] as List   || false
+        1                  | [1, 2] as Set    || false
+        1                  | [1, 2].toArray() || false
+        [1, 2] as List     | 1                || true
+        [1, 2] as Set      | 1                || true
+        [1, 2].toArray()   | 1                || true
     }
 
     void 'should evaluate input and return nonnull for matching names input and variables'() {

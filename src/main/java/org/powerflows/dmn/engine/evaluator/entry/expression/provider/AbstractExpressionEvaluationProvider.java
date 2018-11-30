@@ -22,7 +22,9 @@ import org.powerflows.dmn.engine.model.decision.rule.entry.InputEntry;
 import org.powerflows.dmn.engine.model.decision.rule.entry.OutputEntry;
 import org.powerflows.dmn.engine.model.evaluation.result.EntryResult;
 
-import java.util.Set;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
 
 public abstract class AbstractExpressionEvaluationProvider implements ExpressionEvaluationProvider {
 
@@ -33,43 +35,39 @@ public abstract class AbstractExpressionEvaluationProvider implements Expression
     public abstract EntryResult evaluateOutputEntry(OutputEntry outputEntry, ModifiableContextVariables contextVariables);
 
     protected boolean isInputEntryValueEqualsInputValue(final Object inputEntryValue, final Object inputValue) {
-        final boolean result;
-        if (inputValue instanceof Set && inputEntryValue instanceof Set) {
-            result = areSetsEqual((Set<Object>) inputValue, (Set<Object>) inputEntryValue);
-        } else if (!(inputValue instanceof Set) && !(inputEntryValue instanceof Set)) {
-            result = areObjectsEqual(inputValue, inputEntryValue);
-        } else {
-            result = false;
-        }
+        final Collection<Object> inputEntryValues = convertObjectToCollection(inputEntryValue);
+        final Collection<Object> inputValues = convertObjectToCollection(inputValue);
 
-        return result;
+        return areSubCollections(inputValues, inputEntryValues);
     }
 
-    private boolean areObjectsEqual(final Object object1, final Object object2) {
-        final boolean result;
+    private Collection<Object> convertObjectToCollection(final Object object) {
+        final Collection<Object> objects;
 
-        if (object1 == null && object2 == null) {
-            result = true;
-        } else if (object1 == null) {
-            result = false;
+        if (object == null) {
+            objects = null;
+        } else if (object instanceof Collection) {
+            objects = (Collection<Object>) object;
+        } else if (object.getClass().isArray()) {
+            objects = Arrays.asList((Object[]) object);
         } else {
-            result = object1.equals(object2);
+            objects = Collections.singleton(object);
         }
 
-        return result;
+        return objects;
     }
 
-    private boolean areSetsEqual(final Set<Object> objects1, final Set<Object> objects2) {
+    private boolean areSubCollections(final Collection<Object> inputCollection, final Collection<Object> entryCollection) {
         final boolean result;
 
-        if (objects1 == null && objects2 == null) {
+        if (inputCollection == null && entryCollection == null) {
             result = true;
-        } else if (objects1 == null || objects2 == null) {
+        } else if (inputCollection == null || entryCollection == null) {
             result = false;
-        } else if (objects1.size() != objects2.size()) {
+        } else if (inputCollection.isEmpty() && !entryCollection.isEmpty()) {
             result = false;
         } else {
-            result = objects1.containsAll(objects2);
+            result = entryCollection.containsAll(inputCollection);
         }
 
         return result;
