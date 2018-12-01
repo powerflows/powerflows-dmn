@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.powerflows.dmn.engine.evaluator.entry.expression.provider.script;
+package org.powerflows.dmn.engine.evaluator.expression.script;
 
 import org.powerflows.dmn.engine.model.decision.expression.ExpressionType;
 

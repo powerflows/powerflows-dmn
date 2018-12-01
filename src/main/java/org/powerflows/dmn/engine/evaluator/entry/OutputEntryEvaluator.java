@@ -18,8 +18,8 @@ package org.powerflows.dmn.engine.evaluator.entry;
 
 
 import org.powerflows.dmn.engine.evaluator.context.ModifiableContextVariables;
-import org.powerflows.dmn.engine.evaluator.entry.expression.provider.EvaluationProviderFactory;
-import org.powerflows.dmn.engine.evaluator.entry.expression.provider.ExpressionEvaluationProvider;
+import org.powerflows.dmn.engine.evaluator.expression.provider.EvaluationProviderFactory;
+import org.powerflows.dmn.engine.evaluator.expression.provider.ExpressionEvaluationProvider;
 import org.powerflows.dmn.engine.model.decision.rule.entry.OutputEntry;
 import org.powerflows.dmn.engine.model.evaluation.result.EntryResult;
 

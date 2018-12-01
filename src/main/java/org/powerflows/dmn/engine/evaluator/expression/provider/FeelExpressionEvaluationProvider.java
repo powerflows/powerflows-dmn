@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.powerflows.dmn.engine.evaluator.entry.expression.provider;
+package org.powerflows.dmn.engine.evaluator.expression.provider;
 
 import org.powerflows.dmn.engine.evaluator.context.ModifiableContextVariables;
 import org.powerflows.dmn.engine.model.decision.field.Input;
@@ -25,7 +25,7 @@ import org.powerflows.dmn.engine.model.evaluation.result.EntryResult;
 /**
  * This provider should be moved to external jar as an optional dependency
  */
-class FeelExpressionEvaluationProvider extends AbstractExpressionEvaluationProvider {
+class FeelExpressionEvaluationProvider implements ExpressionEvaluationProvider {
 
     @Override
     public boolean evaluateInputEntry(final InputEntry inputEntry, final ModifiableContextVariables contextVariables) {
