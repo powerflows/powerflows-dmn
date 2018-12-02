@@ -14,27 +14,16 @@
  * limitations under the License.
  */
 
-package org.powerflows.dmn.engine.evaluator.entry.expression.provider;
-
-import org.powerflows.dmn.engine.evaluator.context.ModifiableContextVariables;
-import org.powerflows.dmn.engine.model.decision.field.Input;
-import org.powerflows.dmn.engine.model.decision.rule.entry.InputEntry;
-import org.powerflows.dmn.engine.model.decision.rule.entry.OutputEntry;
-import org.powerflows.dmn.engine.model.evaluation.result.EntryResult;
+package org.powerflows.dmn.engine.evaluator.expression.comparator;
 
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 
-public abstract class AbstractExpressionEvaluationProvider implements ExpressionEvaluationProvider {
+public class DefaultObjectsComparator implements ObjectsComparator {
 
-    public abstract boolean evaluateInputEntry(InputEntry inputEntry, ModifiableContextVariables contextVariables);
-
-    public abstract Object evaluateInput(Input input, ModifiableContextVariables contextVariables);
-
-    public abstract EntryResult evaluateOutputEntry(OutputEntry outputEntry, ModifiableContextVariables contextVariables);
-
-    protected boolean isInputEntryValueEqualsInputValue(final Object inputEntryValue, final Object inputValue) {
+    @Override
+    public boolean isInputEntryValueEqualInputValue(final Object inputEntryValue, final Object inputValue) {
         final Collection<Object> inputEntryValues = convertObjectToCollection(inputEntryValue);
         final Collection<Object> inputValues = convertObjectToCollection(inputValue);
 

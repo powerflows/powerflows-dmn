@@ -14,13 +14,14 @@
  * limitations under the License.
  */
 
-package org.powerflows.dmn.engine.evaluator.entry.expression.provider;
+package org.powerflows.dmn.engine.evaluator.expression.provider;
 
 import lombok.extern.slf4j.Slf4j;
 import org.powerflows.dmn.engine.evaluator.context.ModifiableContextVariables;
-import org.powerflows.dmn.engine.evaluator.entry.expression.provider.script.ScriptEngineProvider;
-import org.powerflows.dmn.engine.evaluator.entry.expression.provider.script.bindings.ContextVariablesBindings;
 import org.powerflows.dmn.engine.evaluator.exception.EvaluationException;
+import org.powerflows.dmn.engine.evaluator.expression.comparator.ObjectsComparator;
+import org.powerflows.dmn.engine.evaluator.expression.script.ScriptEngineProvider;
+import org.powerflows.dmn.engine.evaluator.expression.script.bindings.ContextVariablesBindings;
 import org.powerflows.dmn.engine.model.decision.expression.Expression;
 import org.powerflows.dmn.engine.model.decision.field.Input;
 import org.powerflows.dmn.engine.model.decision.rule.entry.InputEntry;
@@ -35,12 +36,15 @@ import javax.script.ScriptException;
  * This provider should be moved to external jar as an optional dependency
  */
 @Slf4j
-class GroovyExpressionEvaluationProvider extends AbstractExpressionEvaluationProvider {
+class ScriptExpressionEvaluationProvider implements ExpressionEvaluationProvider {
 
-    private ScriptEngineProvider scriptEngineProvider;
+    private final ScriptEngineProvider scriptEngineProvider;
+    private final ObjectsComparator objectsComparator;
 
-    public GroovyExpressionEvaluationProvider(ScriptEngineProvider scriptEngineProvider) {
+    public ScriptExpressionEvaluationProvider(final ScriptEngineProvider scriptEngineProvider,
+                                              final ObjectsComparator objectsComparator) {
         this.scriptEngineProvider = scriptEngineProvider;
+        this.objectsComparator = objectsComparator;
     }
 
     @Override
@@ -50,7 +54,7 @@ class GroovyExpressionEvaluationProvider extends AbstractExpressionEvaluationPro
         final Object inputValue = contextVariables.get(inputEntry.getName());
         final Object inputEntryValue = evaluateValue(inputEntry.getExpression(), contextVariables);
 
-        final boolean result = isInputEntryValueEqualsInputValue(inputEntryValue, inputValue);
+        final boolean result = objectsComparator.isInputEntryValueEqualInputValue(inputEntryValue, inputValue);
 
         log.debug("Evaluated input entry result: {}", result);
 
@@ -90,7 +94,7 @@ class GroovyExpressionEvaluationProvider extends AbstractExpressionEvaluationPro
         try {
             value = scriptEngine.eval((String) expression.getValue(), bindings);
         } catch (ScriptException e) {
-            throw new EvaluationException(e);
+            throw new EvaluationException("Script evaluation exception", e);
         }
 
         return value;

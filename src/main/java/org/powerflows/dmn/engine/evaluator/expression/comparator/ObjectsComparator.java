@@ -14,17 +14,9 @@
  * limitations under the License.
  */
 
-package org.powerflows.dmn.engine.evaluator.exception;
+package org.powerflows.dmn.engine.evaluator.expression.comparator;
 
+public interface ObjectsComparator {
 
-public class EvaluationException extends RuntimeException {
-
-    public EvaluationException(final String message) {
-        super(message);
-    }
-
-    public EvaluationException(final String message, final Throwable throwable) {
-        super(message, throwable);
-    }
-
+    boolean isInputEntryValueEqualInputValue(final Object inputEntryValue, final Object inputValue);
 }

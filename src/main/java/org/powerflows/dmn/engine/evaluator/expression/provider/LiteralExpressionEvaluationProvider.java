@@ -14,10 +14,11 @@
  * limitations under the License.
  */
 
-package org.powerflows.dmn.engine.evaluator.entry.expression.provider;
+package org.powerflows.dmn.engine.evaluator.expression.provider;
 
 import lombok.extern.slf4j.Slf4j;
 import org.powerflows.dmn.engine.evaluator.context.ModifiableContextVariables;
+import org.powerflows.dmn.engine.evaluator.expression.comparator.ObjectsComparator;
 import org.powerflows.dmn.engine.model.decision.field.Input;
 import org.powerflows.dmn.engine.model.decision.rule.entry.InputEntry;
 import org.powerflows.dmn.engine.model.decision.rule.entry.OutputEntry;
@@ -25,7 +26,13 @@ import org.powerflows.dmn.engine.model.evaluation.result.EntryResult;
 
 
 @Slf4j
-class LiteralExpressionEvaluationProvider extends AbstractExpressionEvaluationProvider {
+class LiteralExpressionEvaluationProvider implements ExpressionEvaluationProvider {
+
+    private final ObjectsComparator objectsComparator;
+
+    public LiteralExpressionEvaluationProvider(final ObjectsComparator objectsComparator) {
+        this.objectsComparator = objectsComparator;
+    }
 
     @Override
     public boolean evaluateInputEntry(final InputEntry inputEntry, final ModifiableContextVariables contextVariables) {
@@ -34,7 +41,7 @@ class LiteralExpressionEvaluationProvider extends AbstractExpressionEvaluationPr
         final Object inputValue = contextVariables.get(inputEntry.getName());
         final Object inputEntryValue = inputEntry.getExpression().getValue();
 
-        final boolean result = isInputEntryValueEqualsInputValue(inputEntryValue, inputValue);
+        final boolean result = objectsComparator.isInputEntryValueEqualInputValue(inputEntryValue, inputValue);
 
         log.debug("Evaluated input entry result: {}", result);
 

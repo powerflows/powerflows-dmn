@@ -14,23 +14,26 @@
  * limitations under the License.
  */
 
-package org.powerflows.dmn.engine.evaluator.entry.expression.provider;
+package org.powerflows.dmn.engine.evaluator.expression.provider;
 
-import org.powerflows.dmn.engine.evaluator.entry.expression.provider.script.ScriptEngineProvider;
+import org.powerflows.dmn.engine.evaluator.expression.comparator.DefaultObjectsComparator;
+import org.powerflows.dmn.engine.evaluator.expression.comparator.ObjectsComparator;
+import org.powerflows.dmn.engine.evaluator.expression.script.ScriptEngineProvider;
 import org.powerflows.dmn.engine.model.decision.expression.ExpressionType;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.EnumMap;
 
 public class EvaluationProviderFactory {
 
-    private final Map<ExpressionType, ExpressionEvaluationProvider> factories = new HashMap<>();
+    private final EnumMap<ExpressionType, ExpressionEvaluationProvider> factories = new EnumMap<>(ExpressionType.class);
 
-    public EvaluationProviderFactory(ScriptEngineProvider scriptEngineProvider) {
-        factories.put(ExpressionType.LITERAL, new LiteralExpressionEvaluationProvider());
+    public EvaluationProviderFactory(final ScriptEngineProvider scriptEngineProvider) {
+        final ObjectsComparator objectsComparator = new DefaultObjectsComparator();
+
+        factories.put(ExpressionType.LITERAL, new LiteralExpressionEvaluationProvider(objectsComparator));
         factories.put(ExpressionType.FEEL, new FeelExpressionEvaluationProvider());
         factories.put(ExpressionType.JUEL, new JuelExpressionEvaluationProvider());
-        factories.put(ExpressionType.GROOVY, new GroovyExpressionEvaluationProvider(scriptEngineProvider));
+        factories.put(ExpressionType.GROOVY, new ScriptExpressionEvaluationProvider(scriptEngineProvider, objectsComparator));
     }
 
     public ExpressionEvaluationProvider getInstance(final ExpressionType expressionType) {

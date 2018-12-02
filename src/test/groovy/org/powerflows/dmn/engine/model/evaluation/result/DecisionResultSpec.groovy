@@ -107,7 +107,7 @@ class DecisionResultSpec extends Specification {
         }
 
         final EvaluationResultException exception = thrown()
-        exception.message == 'Evaluation has no single result'
+        exception.getMessage() == 'Evaluation has no single result'
     }
 
     void 'should build decision result and be single entry result and single rule result'() {
@@ -202,6 +202,6 @@ class DecisionResultSpec extends Specification {
         }
 
         final EvaluationResultException exception = thrown()
-        exception.message == 'Evaluation has no single entry result'
+        exception.getMessage() == 'Evaluation has no single entry result'
     }
 }

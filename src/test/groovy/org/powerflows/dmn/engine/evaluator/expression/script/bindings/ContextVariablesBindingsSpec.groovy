@@ -14,11 +14,11 @@
  * limitations under the License.
  */
 
-package org.powerflows.dmn.engine.evaluator.entry.expression.provider.script.bindings
+package org.powerflows.dmn.engine.evaluator.expression.script.bindings
 
 import org.powerflows.dmn.engine.evaluator.context.ModifiableContextVariables
-import org.powerflows.dmn.engine.evaluator.entry.expression.provider.script.DefaultScriptEngineProvider
-import org.powerflows.dmn.engine.evaluator.entry.expression.provider.script.ScriptEngineProvider
+import org.powerflows.dmn.engine.evaluator.expression.script.DefaultScriptEngineProvider
+import org.powerflows.dmn.engine.evaluator.expression.script.ScriptEngineProvider
 import org.powerflows.dmn.engine.model.decision.expression.ExpressionType
 import org.powerflows.dmn.engine.model.evaluation.context.ContextVariables
 import org.powerflows.dmn.engine.model.evaluation.context.DecisionContextVariables
