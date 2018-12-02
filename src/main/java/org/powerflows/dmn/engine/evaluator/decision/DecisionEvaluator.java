@@ -111,12 +111,7 @@ public class DecisionEvaluator {
         return HitPolicy.UNIQUE.equals(decision.getHitPolicy());
     }
 
-    private boolean isCollectionRulesResultExpected(final Decision decision) {
-        return HitPolicy.COLLECT.equals(decision.getHitPolicy());
-    }
-
     private boolean isNonUniqueRuleResult(final List<RuleResult> ruleResults) {
         return ruleResults.size() > 1;
     }
-
 }

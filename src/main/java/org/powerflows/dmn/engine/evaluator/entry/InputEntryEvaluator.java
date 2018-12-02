@@ -20,10 +20,8 @@ package org.powerflows.dmn.engine.evaluator.entry;
 import org.powerflows.dmn.engine.evaluator.context.ModifiableContextVariables;
 import org.powerflows.dmn.engine.evaluator.expression.provider.EvaluationProviderFactory;
 import org.powerflows.dmn.engine.evaluator.expression.provider.ExpressionEvaluationProvider;
-import org.powerflows.dmn.engine.model.decision.expression.ExpressionType;
 import org.powerflows.dmn.engine.model.decision.field.Input;
 import org.powerflows.dmn.engine.model.decision.rule.entry.InputEntry;
-import org.powerflows.dmn.engine.model.evaluation.context.DecisionContextVariables;
 
 public class InputEntryEvaluator {
 
