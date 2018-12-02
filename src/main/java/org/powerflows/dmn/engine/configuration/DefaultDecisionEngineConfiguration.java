@@ -23,9 +23,9 @@ import org.powerflows.dmn.engine.evaluator.decision.DecisionEvaluator;
 import org.powerflows.dmn.engine.evaluator.entry.EntryEvaluator;
 import org.powerflows.dmn.engine.evaluator.entry.InputEntryEvaluator;
 import org.powerflows.dmn.engine.evaluator.entry.OutputEntryEvaluator;
-import org.powerflows.dmn.engine.evaluator.entry.expression.provider.EvaluationProviderFactory;
-import org.powerflows.dmn.engine.evaluator.entry.expression.provider.script.DefaultScriptEngineProvider;
-import org.powerflows.dmn.engine.evaluator.entry.expression.provider.script.ScriptEngineProvider;
+import org.powerflows.dmn.engine.evaluator.expression.provider.EvaluationProviderFactory;
+import org.powerflows.dmn.engine.evaluator.expression.script.DefaultScriptEngineProvider;
+import org.powerflows.dmn.engine.evaluator.expression.script.ScriptEngineProvider;
 import org.powerflows.dmn.engine.evaluator.rule.RuleEvaluator;
 
 import javax.script.ScriptEngineManager;

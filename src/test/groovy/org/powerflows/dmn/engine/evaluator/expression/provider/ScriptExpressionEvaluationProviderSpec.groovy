@@ -14,27 +14,32 @@
  * limitations under the License.
  */
 
-package org.powerflows.dmn.engine.evaluator.entry.expression.provider
+package org.powerflows.dmn.engine.evaluator.expression.provider
 
 import org.powerflows.dmn.engine.evaluator.context.ModifiableContextVariables
-import org.powerflows.dmn.engine.evaluator.entry.expression.provider.script.DefaultScriptEngineProvider
-import org.powerflows.dmn.engine.evaluator.entry.expression.provider.script.ScriptEngineProvider
+import org.powerflows.dmn.engine.evaluator.exception.EvaluationException
+import org.powerflows.dmn.engine.evaluator.expression.comparator.DefaultObjectsComparator
+import org.powerflows.dmn.engine.evaluator.expression.script.DefaultScriptEngineProvider
+import org.powerflows.dmn.engine.evaluator.expression.script.ScriptEngineProvider
 import org.powerflows.dmn.engine.model.decision.expression.Expression
 import org.powerflows.dmn.engine.model.decision.expression.ExpressionType
 import org.powerflows.dmn.engine.model.decision.field.Input
 import org.powerflows.dmn.engine.model.decision.rule.entry.InputEntry
+import org.powerflows.dmn.engine.model.decision.rule.entry.OutputEntry
 import org.powerflows.dmn.engine.model.evaluation.context.ContextVariables
 import org.powerflows.dmn.engine.model.evaluation.context.DecisionContextVariables
+import org.powerflows.dmn.engine.model.evaluation.result.EntryResult
 import spock.lang.Specification
 import spock.lang.Unroll
 
 import javax.script.ScriptEngineManager
 
-class GroovyExpressionEvaluationProviderSpec extends Specification {
+class ScriptExpressionEvaluationProviderSpec extends Specification {
 
     private final ScriptEngineProvider scriptEngineProvider = new DefaultScriptEngineProvider(new ScriptEngineManager())
-    private
-    final ExpressionEvaluationProvider expressionEvaluationProvider = new GroovyExpressionEvaluationProvider(scriptEngineProvider)
+    private final DefaultObjectsComparator defaultObjectsComparator = Mock()
+    private final ExpressionEvaluationProvider expressionEvaluationProvider =
+            new ScriptExpressionEvaluationProvider(scriptEngineProvider, defaultObjectsComparator)
 
     @Unroll
     void 'should evaluate input entry groovy expression value #inputEntryExpression and variables #contextVariable with #expectedInputEntryResult'(
@@ -51,6 +56,8 @@ class GroovyExpressionEvaluationProviderSpec extends Specification {
 
         then:
         inputEntryResult == expectedInputEntryResult
+        1 * defaultObjectsComparator.isInputEntryValueEqualInputValue(expectedInputEntryResult, true) >> expectedInputEntryResult
+        0 * _
 
         where:
         inputEntryExpression | contextVariable || expectedInputEntryResult
@@ -83,5 +90,39 @@ class GroovyExpressionEvaluationProviderSpec extends Specification {
         '"a" + 4'       | null            || 'a4'
     }
 
-    //TODO add missing coverage
+    void 'should evaluate output entry groovy expression value'() {
+        given:
+        final String outputEntryValue = 'x + 7'
+        final String outputEntryName = 'TestOutputName'
+        final Expression expression = [value: outputEntryValue, type: ExpressionType.GROOVY]
+        final OutputEntry outputEntry = [name: outputEntryName, expression: expression]
+        final ContextVariables decisionContextVariables = new DecisionContextVariables([x: 2])
+        final ModifiableContextVariables contextVariables = new ModifiableContextVariables(decisionContextVariables)
+
+        when:
+        final EntryResult outputEntryResult = expressionEvaluationProvider.evaluateOutputEntry(outputEntry, contextVariables)
+
+        then:
+        outputEntryResult != null
+        outputEntryResult.getValue() == 9
+        outputEntryResult.getName() == outputEntryName
+    }
+
+    void 'should throw exception when missing variable evaluating groovy expression'() {
+        given:
+        final String outputEntryValue = 'x'
+        final String outputEntryName = 'TestOutputName'
+        final Expression expression = [value: outputEntryValue, type: ExpressionType.GROOVY]
+        final OutputEntry outputEntry = [name: outputEntryName, expression: expression]
+        final ContextVariables decisionContextVariables = new DecisionContextVariables([:])
+        final ModifiableContextVariables contextVariables = new ModifiableContextVariables(decisionContextVariables)
+
+        when:
+        expressionEvaluationProvider.evaluateOutputEntry(outputEntry, contextVariables)
+
+        then:
+        final EvaluationException exception = thrown()
+        exception != null
+        exception.getMessage() == 'Script evaluation exception'
+    }
 }

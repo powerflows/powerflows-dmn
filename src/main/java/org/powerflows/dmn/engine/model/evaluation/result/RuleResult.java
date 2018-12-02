@@ -17,12 +17,14 @@
 package org.powerflows.dmn.engine.model.evaluation.result;
 
 
+import lombok.ToString;
 import org.powerflows.dmn.engine.model.builder.AbstractBuilder;
 
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+@ToString
 public class RuleResult implements Serializable {
 
     private static final long serialVersionUID = 1;

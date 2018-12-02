@@ -17,17 +17,18 @@
 package org.powerflows.dmn.engine.evaluator.rule;
 
 
+import lombok.extern.slf4j.Slf4j;
 import org.powerflows.dmn.engine.evaluator.context.ModifiableContextVariables;
 import org.powerflows.dmn.engine.evaluator.entry.EntryEvaluator;
 import org.powerflows.dmn.engine.model.decision.field.Input;
 import org.powerflows.dmn.engine.model.decision.rule.Rule;
-import org.powerflows.dmn.engine.model.evaluation.context.DecisionContextVariables;
 import org.powerflows.dmn.engine.model.evaluation.result.EntryResult;
 import org.powerflows.dmn.engine.model.evaluation.result.RuleResult;
 
 import java.util.List;
 import java.util.Map;
 
+@Slf4j
 public class RuleEvaluator {
 
     private final EntryEvaluator entryEvaluator;
@@ -37,6 +38,8 @@ public class RuleEvaluator {
     }
 
     public RuleResult evaluate(final Rule rule, final Map<String, Input> inputs, final ModifiableContextVariables contextVariables) {
+        log.debug("Starting evaluation of rule: {} with inputs: {} and context variables: {}", rule, inputs, contextVariables);
+
         final RuleResult ruleResult;
 
         final List<EntryResult> entryResults = entryEvaluator.evaluate(rule.getInputEntries(), rule.getOutputEntries(), inputs, contextVariables);
@@ -46,6 +49,8 @@ public class RuleEvaluator {
         } else {
             ruleResult = RuleResult.builder().entryResults(entryResults).build();
         }
+
+        log.debug("Evaluated rule result: {}", ruleResult);
 
         return ruleResult;
     }

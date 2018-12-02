@@ -14,31 +14,9 @@
  * limitations under the License.
  */
 
-package org.powerflows.dmn.engine.model.evaluation.context;
+package org.powerflows.dmn.engine.evaluator.expression.comparator;
 
+public interface ObjectsComparator {
 
-import lombok.ToString;
-
-import java.util.HashMap;
-import java.util.Map;
-
-@ToString
-public class AbstractContextVariables implements ContextVariables {
-
-    protected Map<String, Object> variables = new HashMap<>();
-
-    @Override
-    public Object get(final String name) {
-        return variables.get(name);
-    }
-
-    @Override
-    public Map<String, Object> getAll() {
-        return variables;
-    }
-
-    @Override
-    public boolean isPresent(final String name) {
-        return variables.get(name) != null;
-    }
+    boolean isInputEntryValueEqualInputValue(final Object inputEntryValue, final Object inputValue);
 }

@@ -14,42 +14,64 @@
  * limitations under the License.
  */
 
-package org.powerflows.dmn.engine.evaluator.entry.expression.provider;
+package org.powerflows.dmn.engine.evaluator.expression.provider;
 
+import lombok.extern.slf4j.Slf4j;
 import org.powerflows.dmn.engine.evaluator.context.ModifiableContextVariables;
+import org.powerflows.dmn.engine.evaluator.expression.comparator.ObjectsComparator;
 import org.powerflows.dmn.engine.model.decision.field.Input;
 import org.powerflows.dmn.engine.model.decision.rule.entry.InputEntry;
 import org.powerflows.dmn.engine.model.decision.rule.entry.OutputEntry;
 import org.powerflows.dmn.engine.model.evaluation.result.EntryResult;
 
-class LiteralExpressionEvaluationProvider extends AbstractExpressionEvaluationProvider {
+
+@Slf4j
+class LiteralExpressionEvaluationProvider implements ExpressionEvaluationProvider {
+
+    private final ObjectsComparator objectsComparator;
+
+    public LiteralExpressionEvaluationProvider(final ObjectsComparator objectsComparator) {
+        this.objectsComparator = objectsComparator;
+    }
 
     @Override
     public boolean evaluateInputEntry(final InputEntry inputEntry, final ModifiableContextVariables contextVariables) {
+        log.debug("Starting evaluation of input entry: {} with context variables: {}", inputEntry, contextVariables);
+
         final Object inputValue = contextVariables.get(inputEntry.getName());
         final Object inputEntryValue = inputEntry.getExpression().getValue();
 
-        return isInputEntryValueEqualsInputValue(inputEntryValue, inputValue);
+        final boolean result = objectsComparator.isInputEntryValueEqualInputValue(inputEntryValue, inputValue);
+
+        log.debug("Evaluated input entry result: {}", result);
+
+        return result;
     }
 
     @Override
     public Object evaluateInput(final Input input, final ModifiableContextVariables contextVariables) {
+        log.debug("Starting evaluation of input: {} with context variables: {}", input, contextVariables);
+
         final Object value = contextVariables.get(input.getName());
 
         if (value == null) {
-            //warn logger here
+            log.warn("Input value is null");
         }
+
+        log.debug("Evaluated input result: {}", value);
 
         return value;
     }
 
     @Override
     public EntryResult evaluateOutputEntry(final OutputEntry outputEntry, final ModifiableContextVariables contextVariables) {
+        log.debug("Starting evaluation of output entry: {} with context variables: {}", outputEntry, contextVariables);
+
         final Object outputEntryValue = outputEntry.getExpression().getValue();
 
         final EntryResult entryResult = EntryResult.builder().name(outputEntry.getName()).value(outputEntryValue).build();
 
-        //TODO logger will be here
+        log.debug("Evaluated output result: {}", entryResult);
 
         return entryResult;
     }

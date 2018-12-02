@@ -23,8 +23,8 @@ public class EvaluationException extends RuntimeException {
         super(message);
     }
 
-    public EvaluationException(final Throwable throwable) {
-        super(throwable);
+    public EvaluationException(final String message, final Throwable throwable) {
+        super(message, throwable);
     }
 
 }

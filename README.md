@@ -1,7 +1,7 @@
 [![Build Status](https://travis-ci.org/powerflows/powerflows-dmn.svg?branch=master)](https://travis-ci.org/powerflows/powerflows-dmn)
 [![Quality Gate](https://sonarcloud.io/api/project_badges/measure?project=org.powerflows%3Admn&metric=alert_status)](https://sonarcloud.io/dashboard?id=org.powerflows%3Admn)
 [![Coverage](https://sonarcloud.io/api/project_badges/measure?project=org.powerflows%3Admn&metric=coverage)](https://sonarcloud.io/component_measures?id=org.powerflows%3Admn&metric=coverage)
-
+[![Maven Central](https://maven-badges.herokuapp.com/maven-central/org.powerflows/dmn/badge.svg)](https://maven-badges.herokuapp.com/maven-central/org.powerflows/dmn)
 # About Power Flows DMN
 Power Flows DMN - a powerful decision engine.
 

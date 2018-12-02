@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.powerflows.dmn.engine.evaluator.entry.expression.provider.script.bindings;
+package org.powerflows.dmn.engine.evaluator.expression.script.bindings;
 
 import org.powerflows.dmn.engine.evaluator.context.ModifiableContextVariables;
 

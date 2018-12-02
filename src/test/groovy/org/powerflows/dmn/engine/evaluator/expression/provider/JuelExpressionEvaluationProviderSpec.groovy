@@ -14,13 +14,13 @@
  * limitations under the License.
  */
 
-package org.powerflows.dmn.engine.evaluator.entry.expression.provider
+package org.powerflows.dmn.engine.evaluator.expression.provider
 
 import spock.lang.Specification
 
-class FeelExpressionEvaluationProviderSpec extends Specification {
+class JuelExpressionEvaluationProviderSpec extends Specification {
 
-    private final ExpressionEvaluationProvider expressionEvaluationProvider = new FeelExpressionEvaluationProvider()
+    private final ExpressionEvaluationProvider expressionEvaluationProvider = new JuelExpressionEvaluationProvider()
 
     void 'should throw exception for evaluate input entry'() {
         given:

@@ -17,10 +17,12 @@
 package org.powerflows.dmn.engine.model.evaluation.result;
 
 
+import lombok.ToString;
 import org.powerflows.dmn.engine.model.builder.AbstractBuilder;
 
 import java.io.Serializable;
 
+@ToString
 public class EntryResult implements Serializable {
 
     private static final long serialVersionUID = 1;

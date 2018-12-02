@@ -17,16 +17,15 @@
 package org.powerflows.dmn.engine.evaluator.decision;
 
 
+import lombok.extern.slf4j.Slf4j;
 import org.powerflows.dmn.engine.evaluator.context.ModifiableContextVariables;
 import org.powerflows.dmn.engine.evaluator.exception.EvaluationException;
 import org.powerflows.dmn.engine.evaluator.rule.RuleEvaluator;
 import org.powerflows.dmn.engine.model.decision.Decision;
 import org.powerflows.dmn.engine.model.decision.HitPolicy;
-import org.powerflows.dmn.engine.model.decision.expression.ExpressionType;
 import org.powerflows.dmn.engine.model.decision.field.Input;
 import org.powerflows.dmn.engine.model.decision.rule.Rule;
 import org.powerflows.dmn.engine.model.evaluation.context.ContextVariables;
-import org.powerflows.dmn.engine.model.evaluation.context.DecisionContextVariables;
 import org.powerflows.dmn.engine.model.evaluation.result.DecisionResult;
 import org.powerflows.dmn.engine.model.evaluation.result.RuleResult;
 
@@ -36,6 +35,7 @@ import java.util.Map;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
+@Slf4j
 public class DecisionEvaluator {
 
     private final RuleEvaluator ruleEvaluator;
@@ -46,12 +46,14 @@ public class DecisionEvaluator {
 
     public DecisionResult evaluate(final Decision decision, final ContextVariables contextVariables) {
         if (decision == null) {
-            throw new NullPointerException("Decision can not be null.");
+            throw new NullPointerException("Decision can not be null");
         }
 
         if (contextVariables == null) {
-            throw new NullPointerException("Context variables can not be null.");
+            throw new NullPointerException("Context variables can not be null");
         }
+
+        log.info("Starting evaluation of decision: {} with context variables: {}", decision, contextVariables);
 
         validateContextVariables(decision.getInputs(), contextVariables);
 
@@ -83,7 +85,7 @@ public class DecisionEvaluator {
 
         final DecisionResult decisionResult = DecisionResult.builder().ruleResults(ruleResults).build();
 
-        //TODO here will be logger
+        log.info("Evaluated decision result: {}", decisionResult);
 
         return decisionResult;
     }

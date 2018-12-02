@@ -14,9 +14,10 @@
  * limitations under the License.
  */
 
-package org.powerflows.dmn.engine.evaluator.entry.expression.provider
+package org.powerflows.dmn.engine.evaluator.expression.provider
 
 import org.powerflows.dmn.engine.evaluator.context.ModifiableContextVariables
+import org.powerflows.dmn.engine.evaluator.expression.comparator.DefaultObjectsComparator
 import org.powerflows.dmn.engine.model.decision.expression.Expression
 import org.powerflows.dmn.engine.model.decision.expression.ExpressionType
 import org.powerflows.dmn.engine.model.decision.field.Input
@@ -26,17 +27,18 @@ import org.powerflows.dmn.engine.model.evaluation.context.ContextVariables
 import org.powerflows.dmn.engine.model.evaluation.context.DecisionContextVariables
 import org.powerflows.dmn.engine.model.evaluation.result.EntryResult
 import spock.lang.Specification
-import spock.lang.Unroll
 
 class LiteralExpressionEvaluationProviderSpec extends Specification {
 
-    private final ExpressionEvaluationProvider expressionEvaluationProvider = new LiteralExpressionEvaluationProvider()
+    private final DefaultObjectsComparator defaultObjectsComparator = Mock()
+    private final ExpressionEvaluationProvider expressionEvaluationProvider =
+            new LiteralExpressionEvaluationProvider(defaultObjectsComparator)
 
-    @Unroll
-    void 'should evaluate input entry literal expression value #inputEntryVariable and variables #contextVariable with #expectedInputEntryResult'(
-            final Object inputEntryVariable, final Object contextVariable, final boolean expectedInputEntryResult) {
+    void 'should evaluate input entry literal expression value'() {
         given:
-        final Expression expression = [value: inputEntryVariable, type: ExpressionType.LITERAL]
+        final Object inputEntryValue = 5
+        final Object contextVariable = 6
+        final Expression expression = [value: inputEntryValue, type: ExpressionType.LITERAL]
         final InputEntry inputEntry = [name: 'TestInputName', expression: expression]
 
         final ContextVariables decisionContextVariables = new DecisionContextVariables([TestInputName: contextVariable])
@@ -46,26 +48,9 @@ class LiteralExpressionEvaluationProviderSpec extends Specification {
         final boolean inputEntryResult = expressionEvaluationProvider.evaluateInputEntry(inputEntry, contextVariables)
 
         then:
-        inputEntryResult == expectedInputEntryResult
-
-        where:
-        inputEntryVariable | contextVariable || expectedInputEntryResult
-        4                  | 4               || true
-        4                  | 3               || false
-        null               | null            || true
-        null               | 4               || false
-        4                  | null            || false
-        [1, 4] as Set      | [1, 4] as Set   || true
-        [1, 4] as Set      | [1, 3] as Set   || false
-        [] as Set          | [1, 3] as Set   || false
-        [1, 4] as Set      | [] as Set       || false
-        [] as Set          | [] as Set       || true
-        [null] as Set      | [null] as Set   || true
-        [4] as Set         | [null] as Set   || false
-        [null] as Set      | [4] as Set      || false
-        null as Set        | [4] as Set      || false
-        [4] as Set         | null as Set     || false
-        null as Set        | null as Set     || true
+        inputEntryResult
+        1 * defaultObjectsComparator.isInputEntryValueEqualInputValue(inputEntryValue, contextVariable) >> true
+        0 * _
     }
 
     void 'should evaluate input and return nonnull for matching names input and variables'() {
