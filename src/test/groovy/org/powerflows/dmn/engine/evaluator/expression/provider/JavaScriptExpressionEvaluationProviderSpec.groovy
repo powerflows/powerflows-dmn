@@ -34,7 +34,7 @@ import spock.lang.Unroll
 
 import javax.script.ScriptEngineManager
 
-class ScriptExpressionEvaluationProviderSpec extends Specification {
+class JavaScriptExpressionEvaluationProviderSpec extends Specification {
 
     private final ScriptEngineProvider scriptEngineProvider = new DefaultScriptEngineProvider(new ScriptEngineManager())
     private final DefaultObjectsComparator defaultObjectsComparator = Mock()
@@ -42,10 +42,10 @@ class ScriptExpressionEvaluationProviderSpec extends Specification {
             new ScriptExpressionEvaluationProvider(scriptEngineProvider, defaultObjectsComparator)
 
     @Unroll
-    void 'should evaluate input entry groovy expression value #inputEntryExpression and variables #contextVariable with #expectedInputEntryResult'(
+    void 'should evaluate input entry javascript expression value #inputEntryExpression and variables #contextVariable with #expectedInputEntryResult'(
             final Object inputEntryExpression, final Object contextVariable, final boolean expectedInputEntryResult) {
         given:
-        final Expression expression = [value: inputEntryExpression, type: ExpressionType.GROOVY]
+        final Expression expression = [value: inputEntryExpression, type: ExpressionType.JAVASCRIPT]
         final InputEntry inputEntry = [name: 'TestInputName', expression: expression]
 
         final ContextVariables decisionContextVariables = new DecisionContextVariables([x: contextVariable, TestInputName: true])
@@ -68,10 +68,10 @@ class ScriptExpressionEvaluationProviderSpec extends Specification {
     }
 
     @Unroll
-    void 'should evaluate input groovy expression value #inputExpression and variables #contextVariable with #expectedInputResult'(
+    void 'should evaluate input javascript expression value #inputExpression and variables #contextVariable with #expectedInputResult'(
             final Object inputExpression, final Object contextVariable, final boolean expectedInputResult) {
         given:
-        final Expression expression = [value: inputExpression, type: ExpressionType.GROOVY]
+        final Expression expression = [value: inputExpression, type: ExpressionType.JAVASCRIPT]
         final Input input = [name: 'TestInputName', expression: expression]
 
         final ContextVariables decisionContextVariables = new DecisionContextVariables([x: contextVariable])
@@ -90,11 +90,11 @@ class ScriptExpressionEvaluationProviderSpec extends Specification {
         '"a" + 4'       | null            || 'a4'
     }
 
-    void 'should evaluate output entry groovy expression value'() {
+    void 'should evaluate output entry javascript expression value'() {
         given:
         final String outputEntryValue = 'x + 7'
         final String outputEntryName = 'TestOutputName'
-        final Expression expression = [value: outputEntryValue, type: ExpressionType.GROOVY]
+        final Expression expression = [value: outputEntryValue, type: ExpressionType.JAVASCRIPT]
         final OutputEntry outputEntry = [name: outputEntryName, expression: expression]
         final ContextVariables decisionContextVariables = new DecisionContextVariables([x: 2])
         final ModifiableContextVariables contextVariables = new ModifiableContextVariables(decisionContextVariables)
@@ -108,11 +108,11 @@ class ScriptExpressionEvaluationProviderSpec extends Specification {
         outputEntryResult.getName() == outputEntryName
     }
 
-    void 'should throw exception when missing variable evaluating groovy expression'() {
+    void 'should throw exception when missing variable evaluating javascript expression'() {
         given:
         final String outputEntryValue = 'x'
         final String outputEntryName = 'TestOutputName'
-        final Expression expression = [value: outputEntryValue, type: ExpressionType.GROOVY]
+        final Expression expression = [value: outputEntryValue, type: ExpressionType.JAVASCRIPT]
         final OutputEntry outputEntry = [name: outputEntryName, expression: expression]
         final ContextVariables decisionContextVariables = new DecisionContextVariables([:])
         final ModifiableContextVariables contextVariables = new ModifiableContextVariables(decisionContextVariables)

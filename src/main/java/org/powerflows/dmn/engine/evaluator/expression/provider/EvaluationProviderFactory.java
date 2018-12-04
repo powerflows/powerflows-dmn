@@ -29,11 +29,13 @@ public class EvaluationProviderFactory {
 
     public EvaluationProviderFactory(final ScriptEngineProvider scriptEngineProvider) {
         final ObjectsComparator objectsComparator = new DefaultObjectsComparator();
+        final ExpressionEvaluationProvider scriptExpressionEvaluationProvider = new ScriptExpressionEvaluationProvider(scriptEngineProvider, objectsComparator);
 
         factories.put(ExpressionType.LITERAL, new LiteralExpressionEvaluationProvider(objectsComparator));
         factories.put(ExpressionType.FEEL, new FeelExpressionEvaluationProvider());
         factories.put(ExpressionType.JUEL, new JuelExpressionEvaluationProvider());
-        factories.put(ExpressionType.GROOVY, new ScriptExpressionEvaluationProvider(scriptEngineProvider, objectsComparator));
+        factories.put(ExpressionType.GROOVY, scriptExpressionEvaluationProvider);
+        factories.put(ExpressionType.JAVASCRIPT, scriptExpressionEvaluationProvider);
     }
 
     public ExpressionEvaluationProvider getInstance(final ExpressionType expressionType) {
