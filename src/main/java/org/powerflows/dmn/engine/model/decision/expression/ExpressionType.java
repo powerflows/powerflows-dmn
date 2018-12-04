@@ -20,5 +20,6 @@ public enum ExpressionType {
     LITERAL,
     FEEL,
     JUEL,
-    GROOVY
+    GROOVY,
+    JAVASCRIPT
 }

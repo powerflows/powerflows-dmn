@@ -23,6 +23,7 @@ import org.powerflows.dmn.engine.evaluator.exception.EvaluationException;
 import org.powerflows.dmn.engine.evaluator.rule.RuleEvaluator;
 import org.powerflows.dmn.engine.model.decision.Decision;
 import org.powerflows.dmn.engine.model.decision.HitPolicy;
+import org.powerflows.dmn.engine.model.decision.expression.ExpressionType;
 import org.powerflows.dmn.engine.model.decision.field.Input;
 import org.powerflows.dmn.engine.model.decision.rule.Rule;
 import org.powerflows.dmn.engine.model.evaluation.context.ContextVariables;
@@ -93,7 +94,7 @@ public class DecisionEvaluator {
     private void validateContextVariables(final List<Input> inputs, final ContextVariables contextVariables) {
         final String invalidInputNames = inputs
                 .stream()
-                .filter(input -> input.getExpression().getValue() != null)
+                .filter(input -> input.getExpression().getValue() != null && !ExpressionType.LITERAL.equals(input.getExpression().getType()))
                 .filter(input -> contextVariables.isPresent(input.getName()))
                 .map(Input::getName)
                 .collect(Collectors.joining(","));
