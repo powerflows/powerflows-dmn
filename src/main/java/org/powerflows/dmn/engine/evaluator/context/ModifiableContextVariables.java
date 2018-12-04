@@ -34,7 +34,7 @@ public class ModifiableContextVariables extends AbstractContextVariables impleme
         this.variables.putAll(contextVariables.getAll());
     }
 
-    synchronized public void addVariable(final String key, Object value) {
+    public synchronized void addVariable(final String key, Object value) {
         variables.put(key, value);
     }
 }

@@ -30,7 +30,7 @@ import org.powerflows.dmn.engine.evaluator.rule.RuleEvaluator;
 
 import javax.script.ScriptEngineManager;
 
-public class DefaultDecisionEngineConfiguration extends AbstractDecisionEngineConfiguration {
+public class DefaultDecisionEngineConfiguration implements DecisionEngineConfiguration {
 
     private DecisionEvaluator decisionEvaluator;
     private RuleEvaluator ruleEvaluator;
