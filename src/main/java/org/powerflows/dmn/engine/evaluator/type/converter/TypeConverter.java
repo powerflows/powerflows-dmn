@@ -14,15 +14,11 @@
  * limitations under the License.
  */
 
-package org.powerflows.dmn.engine.evaluator.expression.provider;
+package org.powerflows.dmn.engine.evaluator.type.converter;
 
-import org.powerflows.dmn.engine.evaluator.context.ModifiableContextVariables;
-import org.powerflows.dmn.engine.model.decision.expression.Expression;
-import org.powerflows.dmn.engine.model.decision.field.Input;
+import org.powerflows.dmn.engine.evaluator.type.value.SpecifiedTypeValue;
 
-public interface ExpressionEvaluationProvider {
+public interface TypeConverter<T> {
 
-    Object evaluateInput(Input input, ModifiableContextVariables contextVariables);
-
-    Object evaluateEntry(Expression entryExpression, ModifiableContextVariables contextVariables);
+    SpecifiedTypeValue<T> convert(Object object);
 }

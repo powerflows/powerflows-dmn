@@ -19,6 +19,7 @@ package org.powerflows.dmn.engine.evaluator.rule
 import org.powerflows.dmn.engine.evaluator.context.ModifiableContextVariables
 import org.powerflows.dmn.engine.evaluator.entry.EntryEvaluator
 import org.powerflows.dmn.engine.model.decision.field.Input
+import org.powerflows.dmn.engine.model.decision.field.Output
 import org.powerflows.dmn.engine.model.decision.rule.Rule
 import org.powerflows.dmn.engine.model.evaluation.context.DecisionContextVariables
 import org.powerflows.dmn.engine.model.evaluation.result.EntryResult
@@ -32,6 +33,7 @@ class RuleEvaluatorSpec extends Specification {
 
     final Rule rule = [inputEntries: [], outputEntries: []]
     final Map<String, Input> inputs = [:]
+    final Map<String, Output> outputs = [:]
     final DecisionContextVariables decisionContextVariables = new DecisionContextVariables([:])
     final ModifiableContextVariables contextVariables = new ModifiableContextVariables(decisionContextVariables)
 
@@ -39,12 +41,12 @@ class RuleEvaluatorSpec extends Specification {
         given:
 
         when:
-        final RuleResult ruleResult = ruleEvaluator.evaluate(rule, inputs, contextVariables)
+        final RuleResult ruleResult = ruleEvaluator.evaluate(rule, inputs, outputs, contextVariables)
 
         then:
         ruleResult == null
 
-        1 * entryEvaluator.evaluate(rule.getInputEntries(), rule.getOutputEntries(), inputs, contextVariables) >> []
+        1 * entryEvaluator.evaluate(rule.getInputEntries(), rule.getOutputEntries(), inputs, outputs, contextVariables) >> []
         0 * _
     }
 
@@ -58,7 +60,7 @@ class RuleEvaluatorSpec extends Specification {
         final List<EntryResult> someEntryResults = [someEntryResult]
 
         when:
-        final RuleResult ruleResult = ruleEvaluator.evaluate(rule, inputs, contextVariables)
+        final RuleResult ruleResult = ruleEvaluator.evaluate(rule, inputs, outputs, contextVariables)
 
         then:
         ruleResult != null
@@ -69,8 +71,7 @@ class RuleEvaluatorSpec extends Specification {
             getEntryResults()[0].getName() == someEntryResultName
         }
 
-        1 * entryEvaluator.evaluate(rule.getInputEntries(), rule.getOutputEntries(), inputs, contextVariables) >> someEntryResults
+        1 * entryEvaluator.evaluate(rule.getInputEntries(), rule.getOutputEntries(), inputs, outputs, contextVariables) >> someEntryResults
         0 * _
     }
-
 }

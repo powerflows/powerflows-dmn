@@ -18,35 +18,12 @@ package org.powerflows.dmn.engine.evaluator.expression.provider;
 
 import lombok.extern.slf4j.Slf4j;
 import org.powerflows.dmn.engine.evaluator.context.ModifiableContextVariables;
-import org.powerflows.dmn.engine.evaluator.expression.comparator.ObjectsComparator;
+import org.powerflows.dmn.engine.model.decision.expression.Expression;
 import org.powerflows.dmn.engine.model.decision.field.Input;
-import org.powerflows.dmn.engine.model.decision.rule.entry.InputEntry;
-import org.powerflows.dmn.engine.model.decision.rule.entry.OutputEntry;
-import org.powerflows.dmn.engine.model.evaluation.result.EntryResult;
 
 
 @Slf4j
 class LiteralExpressionEvaluationProvider implements ExpressionEvaluationProvider {
-
-    private final ObjectsComparator objectsComparator;
-
-    public LiteralExpressionEvaluationProvider(final ObjectsComparator objectsComparator) {
-        this.objectsComparator = objectsComparator;
-    }
-
-    @Override
-    public boolean evaluateInputEntry(final InputEntry inputEntry, final ModifiableContextVariables contextVariables) {
-        log.debug("Starting evaluation of input entry: {} with context variables: {}", inputEntry, contextVariables);
-
-        final Object inputValue = contextVariables.get(inputEntry.getName());
-        final Object inputEntryValue = inputEntry.getExpression().getValue();
-
-        final boolean result = objectsComparator.isInputEntryValueEqualInputValue(inputEntryValue, inputValue);
-
-        log.debug("Evaluated input entry result: {}", result);
-
-        return result;
-    }
 
     @Override
     public Object evaluateInput(final Input input, final ModifiableContextVariables contextVariables) {
@@ -64,15 +41,13 @@ class LiteralExpressionEvaluationProvider implements ExpressionEvaluationProvide
     }
 
     @Override
-    public EntryResult evaluateOutputEntry(final OutputEntry outputEntry, final ModifiableContextVariables contextVariables) {
-        log.debug("Starting evaluation of output entry: {} with context variables: {}", outputEntry, contextVariables);
+    public Object evaluateEntry(final Expression entryExpression, final ModifiableContextVariables contextVariables) {
+        log.debug("Starting evaluation of entry with expression: {} and context variables: {}", entryExpression, contextVariables);
 
-        final Object outputEntryValue = outputEntry.getExpression().getValue();
+        final Object result = entryExpression.getValue();
 
-        final EntryResult entryResult = EntryResult.builder().name(outputEntry.getName()).value(outputEntryValue).build();
+        log.debug("Evaluated entry result: {}", result);
 
-        log.debug("Evaluated output result: {}", entryResult);
-
-        return entryResult;
+        return result;
     }
 }

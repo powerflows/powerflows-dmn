@@ -25,6 +25,7 @@ import org.powerflows.dmn.engine.model.decision.Decision;
 import org.powerflows.dmn.engine.model.decision.HitPolicy;
 import org.powerflows.dmn.engine.model.decision.expression.ExpressionType;
 import org.powerflows.dmn.engine.model.decision.field.Input;
+import org.powerflows.dmn.engine.model.decision.field.Output;
 import org.powerflows.dmn.engine.model.decision.rule.Rule;
 import org.powerflows.dmn.engine.model.evaluation.context.ContextVariables;
 import org.powerflows.dmn.engine.model.evaluation.result.DecisionResult;
@@ -66,10 +67,15 @@ public class DecisionEvaluator {
                 .stream()
                 .collect(Collectors.toMap(Input::getName, Function.identity()));
 
+        final Map<String, Output> outputs = decision
+                .getOutputs()
+                .stream()
+                .collect(Collectors.toMap(Output::getName, Function.identity()));
+
         final ModifiableContextVariables modifiableContextVariables = new ModifiableContextVariables(contextVariables);
 
         for (Rule rule : decision.getRules()) {
-            final RuleResult ruleResult = ruleEvaluator.evaluate(rule, inputs, modifiableContextVariables);
+            final RuleResult ruleResult = ruleEvaluator.evaluate(rule, inputs, outputs, modifiableContextVariables);
 
             if (ruleResult != null) {
                 ruleResults.add(ruleResult);

@@ -27,6 +27,7 @@ import spock.lang.Shared
 import spock.lang.Specification
 
 class DefaultDecisionEngineConfigurationReferenceSingleSpec extends Specification {
+
     @Shared
     private DecisionEngine decisionEngine
 
@@ -232,4 +233,39 @@ class DefaultDecisionEngineConfigurationReferenceSingleSpec extends Specificatio
         }
     }
 
+    void 'should evaluate single rule on boolean input entry result basis using default decision engine'() {
+        given:
+        final Map<String, Object> variables = [:]
+        variables.put('x', 0)
+        variables.put('y', 0)
+        variables.put('p', 25)
+        variables.put('q', 26)
+        variables.put('arrayVar', '')
+        final DecisionContextVariables decisionContextVariables = new DecisionContextVariables(variables)
+
+        when:
+        final DecisionResult decisionResult = decisionEngine.evaluate(decision, decisionContextVariables)
+
+        then:
+        decisionResult != null
+
+        with(decisionResult) {
+            !isSingleEntryResult()
+            isSingleRuleResult()
+            !isCollectionRulesResult()
+            getSingleRuleResult().getEntryResults().size() == 2
+        }
+
+        final EntryResult entryResult1 = decisionResult.getSingleRuleResult().getEntryResults()[0]
+        with(entryResult1) {
+            getName() == 'outputOne'
+            getValue()
+        }
+
+        final EntryResult entryResult2 = decisionResult.getSingleRuleResult().getEntryResults()[1]
+        with(entryResult2) {
+            getName() == 'outputTwo'
+            getValue() == 'The output rule five'
+        }
+    }
 }

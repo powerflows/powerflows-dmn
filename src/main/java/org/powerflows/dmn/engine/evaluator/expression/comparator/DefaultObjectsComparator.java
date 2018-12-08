@@ -16,44 +16,45 @@
 
 package org.powerflows.dmn.engine.evaluator.expression.comparator;
 
-import java.util.Arrays;
+import org.powerflows.dmn.engine.evaluator.type.value.SpecifiedTypeValue;
+
 import java.util.Collection;
 import java.util.Collections;
 
 public class DefaultObjectsComparator implements ObjectsComparator {
 
     @Override
-    public boolean isInputEntryValueEqualInputValue(final Object inputEntryValue, final Object inputValue) {
-        final Collection<Object> inputEntryValues = convertObjectToCollection(inputEntryValue);
-        final Collection<Object> inputValues = convertObjectToCollection(inputValue);
+    public <T, P> boolean isInputEntryValueEqualInputValue(final SpecifiedTypeValue<T> inputEntryValue, final SpecifiedTypeValue<P> inputValue) {
+        if (inputEntryValue == null) {
+            throw new NullPointerException("Input entry value can not be null");
+        }
 
-        return areSubCollections(inputValues, inputEntryValues);
+        if (inputValue == null) {
+            throw new NullPointerException("Input value can not be null");
+        }
+
+        final Collection<T> inputEntryValues = convertObjectToCollection(inputEntryValue);
+        final Collection<P> inputValues = convertObjectToCollection(inputValue);
+
+        return areSubCollections(inputEntryValues, inputValues);
     }
 
-    private Collection<Object> convertObjectToCollection(final Object object) {
-        final Collection<Object> objects;
+    private <X> Collection<X> convertObjectToCollection(final SpecifiedTypeValue<X> object) {
+        final Collection<X> objects;
 
-        if (object == null) {
-            objects = null;
-        } else if (object instanceof Collection) {
-            objects = (Collection<Object>) object;
-        } else if (object.getClass().isArray()) {
-            objects = Arrays.asList((Object[]) object);
+        if (object.isSingleValue()) {
+            objects = Collections.singleton(object.getValue());
         } else {
-            objects = Collections.singleton(object);
+            objects = object.getValues();
         }
 
         return objects;
     }
 
-    private boolean areSubCollections(final Collection<Object> inputCollection, final Collection<Object> entryCollection) {
+    private <T, P> boolean areSubCollections(final Collection<T> entryCollection, final Collection<P> inputCollection) {
         final boolean result;
 
-        if (inputCollection == null && entryCollection == null) {
-            result = true;
-        } else if (inputCollection == null || entryCollection == null) {
-            result = false;
-        } else if (inputCollection.isEmpty() && !entryCollection.isEmpty()) {
+        if (inputCollection.isEmpty() && !entryCollection.isEmpty()) {
             result = false;
         } else {
             result = entryCollection.containsAll(inputCollection);

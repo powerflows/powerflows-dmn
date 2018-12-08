@@ -20,6 +20,7 @@ import org.powerflows.dmn.engine.evaluator.context.ModifiableContextVariables
 import org.powerflows.dmn.engine.model.decision.expression.Expression
 import org.powerflows.dmn.engine.model.decision.expression.ExpressionType
 import org.powerflows.dmn.engine.model.decision.field.Input
+import org.powerflows.dmn.engine.model.decision.field.Output
 import org.powerflows.dmn.engine.model.decision.field.ValueType
 import org.powerflows.dmn.engine.model.decision.rule.entry.InputEntry
 import org.powerflows.dmn.engine.model.decision.rule.entry.OutputEntry
@@ -58,6 +59,9 @@ class EntryEvaluatorSpec extends Specification {
     final Input input1 = [name: input1Name, type: ValueType.INTEGER]
     final Input input2 = [name: input2Name, type: ValueType.INTEGER]
 
+    final Output output1 = [name: output1Name, type: ValueType.BOOLEAN]
+    final Output output2 = [name: output2Name, type: ValueType.STRING]
+
     void 'should evaluate nonempty list of entry result'() {
         given:
         final Map<String, Object> variables = [:]
@@ -70,8 +74,12 @@ class EntryEvaluatorSpec extends Specification {
         inputsMap.put(input1Name, input1)
         inputsMap.put(input2Name, input2)
 
+        final Map<String, Output> outputsMap = [:]
+        outputsMap.put(output1Name, output1)
+        outputsMap.put(output2Name, output2)
+
         when:
-        final List<EntryResult> entryResults = entryEvaluator.evaluate(inputEntries, outputEntries, inputsMap, contextVariables)
+        final List<EntryResult> entryResults = entryEvaluator.evaluate(inputEntries, outputEntries, inputsMap, outputsMap, contextVariables)
 
         then:
         entryResults.size() == 2
@@ -89,8 +97,8 @@ class EntryEvaluatorSpec extends Specification {
 
         1 * inputEntryEvaluator.evaluate(inputEntry1, input1, contextVariables) >> true
         1 * inputEntryEvaluator.evaluate(inputEntry2, input2, contextVariables) >> true
-        1 * outputEntryEvaluator.evaluate(outputEntry1, contextVariables) >> EntryResult.builder().value(outputEntry1Value).name(output1Name).build()
-        1 * outputEntryEvaluator.evaluate(outputEntry2, contextVariables) >> EntryResult.builder().value(outputEntry2Value).name(output2Name).build()
+        1 * outputEntryEvaluator.evaluate(outputEntry1, output1, contextVariables) >> EntryResult.builder().value(outputEntry1Value).name(output1Name).build()
+        1 * outputEntryEvaluator.evaluate(outputEntry2, output2, contextVariables) >> EntryResult.builder().value(outputEntry2Value).name(output2Name).build()
         0 * _
     }
 
@@ -107,8 +115,10 @@ class EntryEvaluatorSpec extends Specification {
         inputsMap.put(input1Name, input1)
         inputsMap.put(input2Name, input2)
 
+        final Map<String, Output> outputsMap = [:]
+
         when:
-        final List<EntryResult> entryResults = entryEvaluator.evaluate(inputEntries, outputEntries, inputsMap, contextVariables)
+        final List<EntryResult> entryResults = entryEvaluator.evaluate(inputEntries, outputEntries, inputsMap, outputsMap, contextVariables)
 
         then:
         entryResults.size() == 0

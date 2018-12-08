@@ -10,7 +10,7 @@ fields:
       expression-type: FEEL
       expression: '> 5'
     inputTwo:
-      type: COLLECTION
+      type: INTEGER
   out:
     outputOne:
       description: Some Output 1 Description

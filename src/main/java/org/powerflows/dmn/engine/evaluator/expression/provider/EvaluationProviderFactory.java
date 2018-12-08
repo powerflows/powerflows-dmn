@@ -16,8 +16,6 @@
 
 package org.powerflows.dmn.engine.evaluator.expression.provider;
 
-import org.powerflows.dmn.engine.evaluator.expression.comparator.DefaultObjectsComparator;
-import org.powerflows.dmn.engine.evaluator.expression.comparator.ObjectsComparator;
 import org.powerflows.dmn.engine.evaluator.expression.script.ScriptEngineProvider;
 import org.powerflows.dmn.engine.model.decision.expression.ExpressionType;
 
@@ -28,10 +26,9 @@ public class EvaluationProviderFactory {
     private final EnumMap<ExpressionType, ExpressionEvaluationProvider> factories = new EnumMap<>(ExpressionType.class);
 
     public EvaluationProviderFactory(final ScriptEngineProvider scriptEngineProvider) {
-        final ObjectsComparator objectsComparator = new DefaultObjectsComparator();
-        final ExpressionEvaluationProvider scriptExpressionEvaluationProvider = new ScriptExpressionEvaluationProvider(scriptEngineProvider, objectsComparator);
+        final ExpressionEvaluationProvider scriptExpressionEvaluationProvider = new ScriptExpressionEvaluationProvider(scriptEngineProvider);
 
-        factories.put(ExpressionType.LITERAL, new LiteralExpressionEvaluationProvider(objectsComparator));
+        factories.put(ExpressionType.LITERAL, new LiteralExpressionEvaluationProvider());
         factories.put(ExpressionType.FEEL, new FeelExpressionEvaluationProvider());
         factories.put(ExpressionType.JUEL, new JuelExpressionEvaluationProvider());
         factories.put(ExpressionType.GROOVY, scriptExpressionEvaluationProvider);
