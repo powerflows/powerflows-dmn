@@ -44,7 +44,7 @@ public class DecisionTest {
     final String someInput1Description = "Some Input 1 Description";
     final ExpressionType someInput1Expression1Type = ExpressionType.LITERAL;
     final int someInput1Expression1Value = 5;
-    final ValueType someInput2Type = ValueType.COLLECTION;
+    final ValueType someInput2Type = ValueType.DOUBLE;
     final String someInput2Name = "Some Input 2 Name";
     final String someInput2Description = "Some Input 2 Description";
     final ValueType someOutput1Type = ValueType.BOOLEAN;

@@ -14,15 +14,17 @@
  * limitations under the License.
  */
 
-package org.powerflows.dmn.engine.evaluator.expression.provider;
+package org.powerflows.dmn.engine.evaluator.type.value;
 
-import org.powerflows.dmn.engine.evaluator.context.ModifiableContextVariables;
-import org.powerflows.dmn.engine.model.decision.expression.Expression;
-import org.powerflows.dmn.engine.model.decision.field.Input;
+import java.util.List;
 
-public interface ExpressionEvaluationProvider {
+public class DoubleValue extends AbstractSpecifiedTypeValues<Double> {
 
-    Object evaluateInput(Input input, ModifiableContextVariables contextVariables);
+    public DoubleValue(final Double value) {
+        super(value);
+    }
 
-    Object evaluateEntry(Expression entryExpression, ModifiableContextVariables contextVariables);
+    public DoubleValue(final List<Double> values) {
+        super(values);
+    }
 }

@@ -17,22 +17,37 @@
 package org.powerflows.dmn.engine.evaluator.entry;
 
 
+import lombok.extern.slf4j.Slf4j;
 import org.powerflows.dmn.engine.evaluator.context.ModifiableContextVariables;
+import org.powerflows.dmn.engine.evaluator.expression.comparator.ObjectsComparator;
 import org.powerflows.dmn.engine.evaluator.expression.provider.EvaluationProviderFactory;
 import org.powerflows.dmn.engine.evaluator.expression.provider.ExpressionEvaluationProvider;
+import org.powerflows.dmn.engine.evaluator.type.converter.TypeConverter;
+import org.powerflows.dmn.engine.evaluator.type.converter.TypeConverterFactory;
+import org.powerflows.dmn.engine.evaluator.type.value.SpecifiedTypeValue;
 import org.powerflows.dmn.engine.model.decision.field.Input;
+import org.powerflows.dmn.engine.model.decision.field.ValueType;
 import org.powerflows.dmn.engine.model.decision.rule.entry.InputEntry;
 
+@Slf4j
 public class InputEntryEvaluator {
 
     private final EvaluationProviderFactory evaluationProviderFactory;
+    private final TypeConverterFactory typeConverterFactory;
+    private final ObjectsComparator objectsComparator;
 
-    public InputEntryEvaluator(EvaluationProviderFactory evaluationProviderFactory) {
+
+    public InputEntryEvaluator(final EvaluationProviderFactory evaluationProviderFactory,
+                               final TypeConverterFactory typeConverterFactory,
+                               final ObjectsComparator objectsComparator) {
         this.evaluationProviderFactory = evaluationProviderFactory;
+        this.typeConverterFactory = typeConverterFactory;
+        this.objectsComparator = objectsComparator;
     }
 
-    boolean evaluate(final InputEntry inputEntry, final Input input, final ModifiableContextVariables contextVariables) {
+    public boolean evaluate(final InputEntry inputEntry, final Input input, final ModifiableContextVariables contextVariables) {
         final ExpressionEvaluationProvider inputEntryExpressionEvaluator = evaluationProviderFactory.getInstance(inputEntry.getExpression().getType());
+        final TypeConverter typeConverter = typeConverterFactory.getInstance(input.getType());
 
         if (!isInputEvaluated(input, contextVariables)) {
             final ExpressionEvaluationProvider inputExpressionEvaluator = evaluationProviderFactory.getInstance(input.getExpression().getType());
@@ -41,7 +56,30 @@ public class InputEntryEvaluator {
             contextVariables.addVariable(input.getName(), evaluatedInputValue);
         }
 
-        return inputEntryExpressionEvaluator.evaluateInputEntry(inputEntry, contextVariables);
+        final Object inputValue = contextVariables.get(inputEntry.getName());
+        final SpecifiedTypeValue<?> typedInputValue = typeConverter.convert(inputValue);
+
+        final Object inputEntryValue = inputEntryExpressionEvaluator.evaluateEntry(inputEntry.getExpression(), contextVariables);
+
+        final boolean result;
+
+        if (!ValueType.BOOLEAN.equals(input.getType())) {
+            if (inputEntryValue.equals(Boolean.TRUE)) {
+                result = true;
+            } else if (inputEntryValue.equals(Boolean.FALSE)) {
+                result = false;
+            } else {
+                final SpecifiedTypeValue<?> typedInputEntryValue = typeConverter.convert(inputEntryValue);
+                result = objectsComparator.isInputEntryValueEqualInputValue(typedInputEntryValue, typedInputValue);
+            }
+        } else {
+            final SpecifiedTypeValue<?> typedInputEntryValue = typeConverter.convert(inputEntryValue);
+            result = objectsComparator.isInputEntryValueEqualInputValue(typedInputEntryValue, typedInputValue);
+        }
+
+        log.debug("Evaluated input entry result: {}", result);
+
+        return result;
     }
 
     private boolean isInputEvaluated(final Input input, final ModifiableContextVariables contextVariables) {

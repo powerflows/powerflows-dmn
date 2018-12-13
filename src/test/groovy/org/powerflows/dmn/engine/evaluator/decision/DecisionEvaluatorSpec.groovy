@@ -82,8 +82,8 @@ class DecisionEvaluatorSpec extends Specification {
         exception != null
         exception.getMessage() == 'Unique result is expected'
 
-        1 * ruleEvaluator.evaluate(rule1, [:], _) >> RuleResult.builder().entryResults([]).build()
-        1 * ruleEvaluator.evaluate(rule2, [:], _) >> RuleResult.builder().entryResults([]).build()
+        1 * ruleEvaluator.evaluate(rule1, [:], [:], _) >> RuleResult.builder().entryResults([]).build()
+        1 * ruleEvaluator.evaluate(rule2, [:], [:], _) >> RuleResult.builder().entryResults([]).build()
         0 * _
     }
 
@@ -141,7 +141,7 @@ class DecisionEvaluatorSpec extends Specification {
         final RuleResult ruleResult = decisionResult.getSingleRuleResult()
         ruleResult == expectedRuleResult
 
-        1 * ruleEvaluator.evaluate(rule, [:], _) >> expectedRuleResult
+        1 * ruleEvaluator.evaluate(rule, [:], [:], _) >> expectedRuleResult
         0 * _
     }
 
@@ -177,8 +177,8 @@ class DecisionEvaluatorSpec extends Specification {
         ruleResults[0] == expectedRuleResult1
         ruleResults[1] == expectedRuleResult2
 
-        1 * ruleEvaluator.evaluate(rule1, [:], _) >> expectedRuleResult1
-        1 * ruleEvaluator.evaluate(rule2, [:], _) >> expectedRuleResult2
+        1 * ruleEvaluator.evaluate(rule1, [:], [:], _) >> expectedRuleResult1
+        1 * ruleEvaluator.evaluate(rule2, [:], [:], _) >> expectedRuleResult2
         0 * _
     }
 
@@ -211,7 +211,7 @@ class DecisionEvaluatorSpec extends Specification {
         final RuleResult ruleResult = decisionResult.getSingleRuleResult()
         ruleResult == expectedRuleResult
 
-        1 * ruleEvaluator.evaluate(rule1, [:], _) >> expectedRuleResult
+        1 * ruleEvaluator.evaluate(rule1, [:], [:], _) >> expectedRuleResult
         0 * _
     }
 }

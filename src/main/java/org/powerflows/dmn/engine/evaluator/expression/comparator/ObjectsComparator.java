@@ -16,7 +16,9 @@
 
 package org.powerflows.dmn.engine.evaluator.expression.comparator;
 
+import org.powerflows.dmn.engine.evaluator.type.value.SpecifiedTypeValue;
+
 public interface ObjectsComparator {
 
-    boolean isInputEntryValueEqualInputValue(final Object inputEntryValue, final Object inputValue);
+    <T, P> boolean isInputEntryValueEqualInputValue(final SpecifiedTypeValue<T> inputEntryValue, final SpecifiedTypeValue<P> inputValue);
 }

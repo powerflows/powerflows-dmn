@@ -17,28 +17,18 @@
 package org.powerflows.dmn.engine.evaluator.expression.provider;
 
 import org.powerflows.dmn.engine.evaluator.context.ModifiableContextVariables;
+import org.powerflows.dmn.engine.model.decision.expression.Expression;
 import org.powerflows.dmn.engine.model.decision.field.Input;
-import org.powerflows.dmn.engine.model.decision.rule.entry.InputEntry;
-import org.powerflows.dmn.engine.model.decision.rule.entry.OutputEntry;
-import org.powerflows.dmn.engine.model.evaluation.result.EntryResult;
 
-/**
- * This provider should be moved to external jar as an optional dependency
- */
 class FeelExpressionEvaluationProvider implements ExpressionEvaluationProvider {
 
     @Override
-    public boolean evaluateInputEntry(final InputEntry inputEntry, final ModifiableContextVariables contextVariables) {
+    public Object evaluateEntry(final Expression expression, final ModifiableContextVariables contextVariables) {
         throw new UnsupportedOperationException();
     }
 
     @Override
     public Object evaluateInput(final Input input, final ModifiableContextVariables contextVariables) {
-        throw new UnsupportedOperationException();
-    }
-
-    @Override
-    public EntryResult evaluateOutputEntry(final OutputEntry outputEntry, final ModifiableContextVariables contextVariables) {
         throw new UnsupportedOperationException();
     }
 }

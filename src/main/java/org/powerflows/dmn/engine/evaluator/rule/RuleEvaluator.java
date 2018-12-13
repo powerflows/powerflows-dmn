@@ -21,6 +21,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.powerflows.dmn.engine.evaluator.context.ModifiableContextVariables;
 import org.powerflows.dmn.engine.evaluator.entry.EntryEvaluator;
 import org.powerflows.dmn.engine.model.decision.field.Input;
+import org.powerflows.dmn.engine.model.decision.field.Output;
 import org.powerflows.dmn.engine.model.decision.rule.Rule;
 import org.powerflows.dmn.engine.model.evaluation.result.EntryResult;
 import org.powerflows.dmn.engine.model.evaluation.result.RuleResult;
@@ -37,12 +38,12 @@ public class RuleEvaluator {
         this.entryEvaluator = entryEvaluator;
     }
 
-    public RuleResult evaluate(final Rule rule, final Map<String, Input> inputs, final ModifiableContextVariables contextVariables) {
-        log.debug("Starting evaluation of rule: {} with inputs: {} and context variables: {}", rule, inputs, contextVariables);
+    public RuleResult evaluate(final Rule rule, final Map<String, Input> inputs, final Map<String, Output> outputs, final ModifiableContextVariables contextVariables) {
+        log.debug("Starting evaluation of rule: {} with inputs: {}, outputs: {} and context variables: {}", rule, inputs, outputs, contextVariables);
 
         final RuleResult ruleResult;
 
-        final List<EntryResult> entryResults = entryEvaluator.evaluate(rule.getInputEntries(), rule.getOutputEntries(), inputs, contextVariables);
+        final List<EntryResult> entryResults = entryEvaluator.evaluate(rule.getInputEntries(), rule.getOutputEntries(), inputs, outputs, contextVariables);
 
         if (entryResults.isEmpty()) {
             ruleResult = null;
