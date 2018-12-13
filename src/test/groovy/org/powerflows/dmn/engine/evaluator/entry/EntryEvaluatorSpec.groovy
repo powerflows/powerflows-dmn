@@ -16,7 +16,7 @@
 
 package org.powerflows.dmn.engine.evaluator.entry
 
-import org.powerflows.dmn.engine.evaluator.context.ModifiableContextVariables
+import org.powerflows.dmn.engine.evaluator.context.EvaluationContext
 import org.powerflows.dmn.engine.model.decision.expression.Expression
 import org.powerflows.dmn.engine.model.decision.expression.ExpressionType
 import org.powerflows.dmn.engine.model.decision.field.Input
@@ -24,7 +24,7 @@ import org.powerflows.dmn.engine.model.decision.field.Output
 import org.powerflows.dmn.engine.model.decision.field.ValueType
 import org.powerflows.dmn.engine.model.decision.rule.entry.InputEntry
 import org.powerflows.dmn.engine.model.decision.rule.entry.OutputEntry
-import org.powerflows.dmn.engine.model.evaluation.context.DecisionContextVariables
+import org.powerflows.dmn.engine.model.evaluation.variable.DecisionVariables
 import org.powerflows.dmn.engine.model.evaluation.result.EntryResult
 import spock.lang.Specification
 
@@ -67,8 +67,8 @@ class EntryEvaluatorSpec extends Specification {
         final Map<String, Object> variables = [:]
         variables.put(input1Name, inputEntry1Value)
         variables.put(input2Name, inputEntry2Value)
-        final DecisionContextVariables decisionContextVariables = new DecisionContextVariables(variables)
-        final ModifiableContextVariables contextVariables = new ModifiableContextVariables(decisionContextVariables)
+        final DecisionVariables decisionVariables = new DecisionVariables(variables)
+        final EvaluationContext evaluationContext = new EvaluationContext(decisionVariables)
 
         final Map<String, Input> inputsMap = [:]
         inputsMap.put(input1Name, input1)
@@ -79,7 +79,7 @@ class EntryEvaluatorSpec extends Specification {
         outputsMap.put(output2Name, output2)
 
         when:
-        final List<EntryResult> entryResults = entryEvaluator.evaluate(inputEntries, outputEntries, inputsMap, outputsMap, contextVariables)
+        final List<EntryResult> entryResults = entryEvaluator.evaluate(inputEntries, outputEntries, inputsMap, outputsMap, evaluationContext)
 
         then:
         entryResults.size() == 2
@@ -95,10 +95,10 @@ class EntryEvaluatorSpec extends Specification {
             getValue() == outputEntry2Value
         }
 
-        1 * inputEntryEvaluator.evaluate(inputEntry1, input1, contextVariables) >> true
-        1 * inputEntryEvaluator.evaluate(inputEntry2, input2, contextVariables) >> true
-        1 * outputEntryEvaluator.evaluate(outputEntry1, output1, contextVariables) >> EntryResult.builder().value(outputEntry1Value).name(output1Name).build()
-        1 * outputEntryEvaluator.evaluate(outputEntry2, output2, contextVariables) >> EntryResult.builder().value(outputEntry2Value).name(output2Name).build()
+        1 * inputEntryEvaluator.evaluate(inputEntry1, input1, evaluationContext) >> true
+        1 * inputEntryEvaluator.evaluate(inputEntry2, input2, evaluationContext) >> true
+        1 * outputEntryEvaluator.evaluate(outputEntry1, output1, evaluationContext) >> EntryResult.builder().value(outputEntry1Value).name(output1Name).build()
+        1 * outputEntryEvaluator.evaluate(outputEntry2, output2, evaluationContext) >> EntryResult.builder().value(outputEntry2Value).name(output2Name).build()
         0 * _
     }
 
@@ -108,8 +108,8 @@ class EntryEvaluatorSpec extends Specification {
         final Map<String, Object> variables = [:]
         variables.put(input1Name, inputEntry1Value)
         variables.put(input2Name, nonMatchingInputEntry2Value)
-        final DecisionContextVariables decisionContextVariables = new DecisionContextVariables(variables)
-        final ModifiableContextVariables contextVariables = new ModifiableContextVariables(decisionContextVariables)
+        final DecisionVariables decisionVariables = new DecisionVariables(variables)
+        final EvaluationContext contextVariables = new EvaluationContext(decisionVariables)
 
         final Map<String, Input> inputsMap = [:]
         inputsMap.put(input1Name, input1)

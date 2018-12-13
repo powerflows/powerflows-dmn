@@ -18,7 +18,7 @@ package org.powerflows.dmn.engine.evaluator.entry;
 
 
 import lombok.extern.slf4j.Slf4j;
-import org.powerflows.dmn.engine.evaluator.context.ModifiableContextVariables;
+import org.powerflows.dmn.engine.evaluator.context.EvaluationContext;
 import org.powerflows.dmn.engine.evaluator.expression.comparator.ObjectsComparator;
 import org.powerflows.dmn.engine.evaluator.expression.provider.EvaluationProviderFactory;
 import org.powerflows.dmn.engine.evaluator.expression.provider.ExpressionEvaluationProvider;
@@ -45,21 +45,21 @@ public class InputEntryEvaluator {
         this.objectsComparator = objectsComparator;
     }
 
-    public boolean evaluate(final InputEntry inputEntry, final Input input, final ModifiableContextVariables contextVariables) {
+    public boolean evaluate(final InputEntry inputEntry, final Input input, final EvaluationContext evaluationContext) {
         final ExpressionEvaluationProvider inputEntryExpressionEvaluator = evaluationProviderFactory.getInstance(inputEntry.getExpression().getType());
         final TypeConverter typeConverter = typeConverterFactory.getInstance(input.getType());
 
-        if (!isInputEvaluated(input, contextVariables)) {
+        if (!isInputEvaluated(input, evaluationContext)) {
             final ExpressionEvaluationProvider inputExpressionEvaluator = evaluationProviderFactory.getInstance(input.getExpression().getType());
-            final Object evaluatedInputValue = inputExpressionEvaluator.evaluateInput(input, contextVariables);
+            final Object evaluatedInputValue = inputExpressionEvaluator.evaluateInput(input, evaluationContext);
 
-            contextVariables.addVariable(input.getName(), evaluatedInputValue);
+            evaluationContext.addVariable(input.getName(), evaluatedInputValue);
         }
 
-        final Object inputValue = contextVariables.get(inputEntry.getName());
+        final Object inputValue = evaluationContext.get(inputEntry.getName());
         final SpecifiedTypeValue<?> typedInputValue = typeConverter.convert(inputValue);
 
-        final Object inputEntryValue = inputEntryExpressionEvaluator.evaluateEntry(inputEntry.getExpression(), contextVariables);
+        final Object inputEntryValue = inputEntryExpressionEvaluator.evaluateEntry(inputEntry.getExpression(), evaluationContext);
 
         final boolean result;
 
@@ -82,8 +82,8 @@ public class InputEntryEvaluator {
         return result;
     }
 
-    private boolean isInputEvaluated(final Input input, final ModifiableContextVariables contextVariables) {
-        return contextVariables.isPresent(input.getName());
+    private boolean isInputEvaluated(final Input input, final EvaluationContext evaluationContext) {
+        return evaluationContext.isPresent(input.getName());
     }
 
 }

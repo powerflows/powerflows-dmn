@@ -17,7 +17,7 @@
 package org.powerflows.dmn.engine.evaluator.entry;
 
 
-import org.powerflows.dmn.engine.evaluator.context.ModifiableContextVariables;
+import org.powerflows.dmn.engine.evaluator.context.EvaluationContext;
 import org.powerflows.dmn.engine.model.decision.field.Input;
 import org.powerflows.dmn.engine.model.decision.field.Output;
 import org.powerflows.dmn.engine.model.decision.rule.entry.InputEntry;
@@ -45,14 +45,14 @@ public class EntryEvaluator {
                                       final List<OutputEntry> outputEntries,
                                       final Map<String, Input> inputs,
                                       final Map<String, Output> outputs,
-                                      final ModifiableContextVariables contextVariables) {
+                                      final EvaluationContext evaluationContext) {
         final List<EntryResult> entryResults = new ArrayList<>();
         boolean positive = true;
 
         for (InputEntry inputEntry : inputEntries) {
             final Input input = inputs.get(inputEntry.getName());
 
-            if (!inputEntryEvaluator.evaluate(inputEntry, input, contextVariables)) {
+            if (!inputEntryEvaluator.evaluate(inputEntry, input, evaluationContext)) {
                 positive = false;
                 break;
             }
@@ -61,7 +61,7 @@ public class EntryEvaluator {
         if (positive) {
             for (OutputEntry outputEntry : outputEntries) {
                 final Output output = outputs.get(outputEntry.getName());
-                final EntryResult entryResult = outputEntryEvaluator.evaluate(outputEntry, output, contextVariables);
+                final EntryResult entryResult = outputEntryEvaluator.evaluate(outputEntry, output, evaluationContext);
                 entryResults.add(entryResult);
             }
         }

@@ -16,12 +16,11 @@
 
 package org.powerflows.dmn.engine.evaluator.expression.provider
 
-import org.powerflows.dmn.engine.evaluator.context.ModifiableContextVariables
+import org.powerflows.dmn.engine.evaluator.context.EvaluationContext
 import org.powerflows.dmn.engine.model.decision.expression.Expression
 import org.powerflows.dmn.engine.model.decision.expression.ExpressionType
 import org.powerflows.dmn.engine.model.decision.field.Input
-import org.powerflows.dmn.engine.model.evaluation.context.ContextVariables
-import org.powerflows.dmn.engine.model.evaluation.context.DecisionContextVariables
+import org.powerflows.dmn.engine.model.evaluation.variable.DecisionVariables
 import spock.lang.Specification
 
 class LiteralExpressionEvaluationProviderSpec extends Specification {
@@ -35,11 +34,11 @@ class LiteralExpressionEvaluationProviderSpec extends Specification {
         final Object contextVariable = 6
         final Expression entryExpression = [value: inputEntryValue, type: ExpressionType.LITERAL]
 
-        final ContextVariables decisionContextVariables = new DecisionContextVariables([TestInputName: contextVariable])
-        final ModifiableContextVariables contextVariables = new ModifiableContextVariables(decisionContextVariables)
+        final DecisionVariables decisionVariables = new DecisionVariables([TestInputName: contextVariable])
+        final EvaluationContext evaluationContext = new EvaluationContext(decisionVariables)
 
         when:
-        final boolean inputEntryResult = expressionEvaluationProvider.evaluateEntry(entryExpression, contextVariables)
+        final boolean inputEntryResult = expressionEvaluationProvider.evaluateEntry(entryExpression, evaluationContext)
 
         then:
         inputEntryResult
@@ -55,8 +54,8 @@ class LiteralExpressionEvaluationProviderSpec extends Specification {
         final Map<String, Object> contextVariablesMap = [:]
         contextVariablesMap.put(inputName, inputValue)
         contextVariablesMap.put('x', 'y')
-        final ContextVariables decisionContextVariables = new DecisionContextVariables(contextVariablesMap)
-        final ModifiableContextVariables contextVariables = new ModifiableContextVariables(decisionContextVariables)
+        final DecisionVariables decisionVariables = new DecisionVariables(contextVariablesMap)
+        final EvaluationContext contextVariables = new EvaluationContext(decisionVariables)
 
         when:
         final Object result = expressionEvaluationProvider.evaluateInput(input, contextVariables)
@@ -72,8 +71,8 @@ class LiteralExpressionEvaluationProviderSpec extends Specification {
         final Map<String, Object> contextVariablesMap = [:]
         contextVariablesMap.put('q', 5)
         contextVariablesMap.put('x', 'y')
-        final ContextVariables decisionContextVariables = new DecisionContextVariables(contextVariablesMap)
-        final ModifiableContextVariables contextVariables = new ModifiableContextVariables(decisionContextVariables)
+        final DecisionVariables decisionVariables = new DecisionVariables(contextVariablesMap)
+        final EvaluationContext contextVariables = new EvaluationContext(decisionVariables)
 
         when:
         final Object result = expressionEvaluationProvider.evaluateInput(input, contextVariables)

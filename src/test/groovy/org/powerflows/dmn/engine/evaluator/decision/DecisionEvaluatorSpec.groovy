@@ -24,7 +24,7 @@ import org.powerflows.dmn.engine.model.decision.expression.Expression
 import org.powerflows.dmn.engine.model.decision.expression.ExpressionType
 import org.powerflows.dmn.engine.model.decision.field.Input
 import org.powerflows.dmn.engine.model.decision.rule.Rule
-import org.powerflows.dmn.engine.model.evaluation.context.DecisionContextVariables
+import org.powerflows.dmn.engine.model.evaluation.variable.DecisionVariables
 import org.powerflows.dmn.engine.model.evaluation.result.DecisionResult
 import org.powerflows.dmn.engine.model.evaluation.result.RuleResult
 import spock.lang.Specification
@@ -37,7 +37,7 @@ class DecisionEvaluatorSpec extends Specification {
     void 'should throw exception when decision is null'() {
         given:
         final Decision decision = null
-        final DecisionContextVariables decisionContextVariables = new DecisionContextVariables([:])
+        final DecisionVariables decisionContextVariables = new DecisionVariables([:])
 
         when:
         decisionEvaluator.evaluate(decision, decisionContextVariables)
@@ -51,7 +51,7 @@ class DecisionEvaluatorSpec extends Specification {
     void 'should throw exception when context Variables are null'() {
         given:
         final Decision decision = [] as Decision
-        final DecisionContextVariables decisionContextVariables = null
+        final DecisionVariables decisionContextVariables = null
 
         when:
         decisionEvaluator.evaluate(decision, decisionContextVariables)
@@ -59,7 +59,7 @@ class DecisionEvaluatorSpec extends Specification {
         then:
         final NullPointerException exception = thrown()
         exception != null
-        exception.getMessage() == 'Context variables can not be null'
+        exception.getMessage() == 'Decision variables can not be null'
     }
 
     void 'should throw exception when unique result is expected but non-unique evaluated'() {
@@ -68,7 +68,7 @@ class DecisionEvaluatorSpec extends Specification {
         final Rule rule1 = [] as Rule
         final Rule rule2 = [] as Rule
         final List<Rule> rules = [rule1, rule2]
-        final DecisionContextVariables decisionContextVariables = new DecisionContextVariables([:])
+        final DecisionVariables decisionContextVariables = new DecisionVariables([:])
 
         final Decision decision = [hitPolicy: HitPolicy.UNIQUE,
                                    inputs   : inputs,
@@ -98,7 +98,7 @@ class DecisionEvaluatorSpec extends Specification {
 
         final Map<String, Object> variables = [:]
         variables.put(inputName, 100)
-        final DecisionContextVariables decisionContextVariables = new DecisionContextVariables(variables)
+        final DecisionVariables decisionContextVariables = new DecisionVariables(variables)
 
         final Decision decision = [hitPolicy: HitPolicy.UNIQUE,
                                    inputs   : inputs,
@@ -110,7 +110,7 @@ class DecisionEvaluatorSpec extends Specification {
         then:
         final EvaluationException exception = thrown()
         exception != null
-        exception.getMessage() == "Can not apply context variables to inputs '$inputName'. Only to inputs with literal expression possible."
+        exception.getMessage() == "Can not apply decision variables to inputs '$inputName'. Only to inputs with literal expression possible."
     }
 
     void 'should return decision result when unique result is expected and unique evaluated'() {
@@ -118,7 +118,7 @@ class DecisionEvaluatorSpec extends Specification {
         final List<Input> inputs = [];
         final Rule rule = [] as Rule
         final List<Rule> rules = [rule]
-        final DecisionContextVariables decisionContextVariables = new DecisionContextVariables([:])
+        final DecisionVariables decisionContextVariables = new DecisionVariables([:])
 
         final Decision decision = [hitPolicy: HitPolicy.UNIQUE,
                                    inputs   : inputs,
@@ -151,7 +151,7 @@ class DecisionEvaluatorSpec extends Specification {
         final Rule rule1 = [] as Rule
         final Rule rule2 = [] as Rule
         final List<Rule> rules = [rule1, rule2]
-        final DecisionContextVariables decisionContextVariables = new DecisionContextVariables([:])
+        final DecisionVariables decisionContextVariables = new DecisionVariables([:])
 
         final Decision decision = [hitPolicy: HitPolicy.COLLECT,
                                    inputs   : inputs,
@@ -188,7 +188,7 @@ class DecisionEvaluatorSpec extends Specification {
         final Rule rule1 = [] as Rule
         final Rule rule2 = [] as Rule
         final List<Rule> rules = [rule1, rule2]
-        final DecisionContextVariables decisionContextVariables = new DecisionContextVariables([:])
+        final DecisionVariables decisionContextVariables = new DecisionVariables([:])
 
         final Decision decision = [hitPolicy: HitPolicy.FIRST,
                                    inputs   : inputs,

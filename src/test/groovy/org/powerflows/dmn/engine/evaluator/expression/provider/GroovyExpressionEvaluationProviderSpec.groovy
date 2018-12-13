@@ -16,15 +16,14 @@
 
 package org.powerflows.dmn.engine.evaluator.expression.provider
 
-import org.powerflows.dmn.engine.evaluator.context.ModifiableContextVariables
+import org.powerflows.dmn.engine.evaluator.context.EvaluationContext
 import org.powerflows.dmn.engine.evaluator.exception.EvaluationException
 import org.powerflows.dmn.engine.evaluator.expression.script.DefaultScriptEngineProvider
 import org.powerflows.dmn.engine.evaluator.expression.script.ScriptEngineProvider
 import org.powerflows.dmn.engine.model.decision.expression.Expression
 import org.powerflows.dmn.engine.model.decision.expression.ExpressionType
 import org.powerflows.dmn.engine.model.decision.field.Input
-import org.powerflows.dmn.engine.model.evaluation.context.ContextVariables
-import org.powerflows.dmn.engine.model.evaluation.context.DecisionContextVariables
+import org.powerflows.dmn.engine.model.evaluation.variable.DecisionVariables
 import spock.lang.Specification
 import spock.lang.Unroll
 
@@ -42,11 +41,11 @@ class GroovyExpressionEvaluationProviderSpec extends Specification {
         given:
         final Expression entryExpression = [value: entryExpressionValue, type: ExpressionType.GROOVY]
 
-        final ContextVariables decisionContextVariables = new DecisionContextVariables([x: contextVariable, TestInputName: true])
-        final ModifiableContextVariables contextVariables = new ModifiableContextVariables(decisionContextVariables)
+        final DecisionVariables decisionVariables = new DecisionVariables([x: contextVariable, TestInputName: true])
+        final EvaluationContext evaluationContext = new EvaluationContext(decisionVariables)
 
         when:
-        final boolean inputEntryResult = expressionEvaluationProvider.evaluateEntry(entryExpression, contextVariables)
+        final boolean inputEntryResult = expressionEvaluationProvider.evaluateEntry(entryExpression, evaluationContext)
 
         then:
         inputEntryResult == expectedEntryResult
@@ -67,8 +66,8 @@ class GroovyExpressionEvaluationProviderSpec extends Specification {
         final Expression expression = [value: inputExpression, type: ExpressionType.GROOVY]
         final Input input = [name: 'TestInputName', expression: expression]
 
-        final ContextVariables decisionContextVariables = new DecisionContextVariables([x: contextVariable])
-        final ModifiableContextVariables contextVariables = new ModifiableContextVariables(decisionContextVariables)
+        final DecisionVariables decisionVariables = new DecisionVariables([x: contextVariable])
+        final EvaluationContext contextVariables = new EvaluationContext(decisionVariables)
 
         when:
         final boolean inputEntryResult = expressionEvaluationProvider.evaluateInput(input, contextVariables)
@@ -87,8 +86,8 @@ class GroovyExpressionEvaluationProviderSpec extends Specification {
         given:
         final String outputEntryValue = 'x'
         final Expression entryExpression = [value: outputEntryValue, type: ExpressionType.GROOVY]
-        final ContextVariables decisionContextVariables = new DecisionContextVariables([:])
-        final ModifiableContextVariables contextVariables = new ModifiableContextVariables(decisionContextVariables)
+        final DecisionVariables decisionVariables = new DecisionVariables([:])
+        final EvaluationContext contextVariables = new EvaluationContext(decisionVariables)
 
         when:
         expressionEvaluationProvider.evaluateEntry(entryExpression, contextVariables)
