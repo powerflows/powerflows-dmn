@@ -16,6 +16,8 @@
 
 package org.powerflows.dmn.engine.evaluator.expression.comparator
 
+import org.powerflows.dmn.engine.evaluator.type.value.IntegerValue
+import org.powerflows.dmn.engine.evaluator.type.value.SpecifiedTypeValue
 import spock.lang.Specification
 import spock.lang.Unroll
 
@@ -27,50 +29,71 @@ class DefaultObjectsComparatorSpec extends Specification {
     void 'should compare input entry value #inputEntryValue and input value #inputValue with result #expectedResult'(
             final Object inputEntryValue, final Object inputValue, final boolean expectedResult) {
         given:
+        final SpecifiedTypeValue<Integer> specifiedInputEntryValue
+        if (inputEntryValue instanceof List) {
+            specifiedInputEntryValue = new IntegerValue(inputEntryValue as List<Integer>)
+        } else {
+            specifiedInputEntryValue = new IntegerValue(inputEntryValue as Integer)
+        }
+
+        final SpecifiedTypeValue<Integer> specifiedInputValue
+        if (inputValue instanceof List) {
+            specifiedInputValue = new IntegerValue(inputValue as List<Integer>)
+        } else {
+            specifiedInputValue = new IntegerValue(inputValue as Integer)
+        }
 
         when:
-        final boolean result = defaultObjectsComparator.isInputEntryValueEqualInputValue(inputEntryValue, inputValue)
+        final boolean result = defaultObjectsComparator.isInputEntryValueEqualInputValue(specifiedInputEntryValue, specifiedInputValue)
 
         then:
         result == expectedResult
 
         where:
-        inputEntryValue  | inputValue       || expectedResult
-        4                | 4                || true
-        4                | 3                || false
-        null             | null             || true
-        null             | 4                || false
-        4                | null             || false
-        [1, 4] as Set    | [1, 4] as Set    || true
-        [1, 4] as Set    | [1, 3] as Set    || false
-        [] as Set        | [1, 3] as Set    || false
-        [1, 4] as Set    | [] as Set        || false
-        [] as Set        | [] as Set        || true
-        [null] as Set    | [null] as Set    || true
-        [4] as Set       | [null] as Set    || false
-        [null] as Set    | [4] as Set       || false
-        null as Set      | [4] as Set       || false
-        [4] as Set       | null as Set      || false
-        null as Set      | null as Set      || true
-        [1, 4] as Set    | [1, 4] as List   || true
-        [1, 4] as Set    | [1, 4].toArray() || true
-        [1, 4] as List   | [1, 4] as Set    || true
-        [1, 4] as List   | [1, 4].toArray() || true
-        [1, 4].toArray() | [1, 4] as List   || true
-        [1, 4].toArray() | [1, 4] as Set    || true
-        [1, 4].toArray() | [1, 4].toArray() || true
-        [1, 4] as List   | [1, 4] as List   || true
-        1                | [1] as List      || true
-        1                | [1] as Set       || true
-        1                | [1].toArray()    || true
-        [1] as List      | 1                || true
-        [1] as Set       | 1                || true
-        [1].toArray()    | 1                || true
-        1                | [1, 2] as List   || false
-        1                | [1, 2] as Set    || false
-        1                | [1, 2].toArray() || false
-        [1, 2] as List   | 1                || true
-        [1, 2] as Set    | 1                || true
-        [1, 2].toArray() | 1                || true
+        inputEntryValue | inputValue     || expectedResult
+        4               | 4              || true
+        4               | 3              || false
+        null            | null           || true
+        null            | 4              || false
+        4               | null           || false
+        [1, 4] as List  | [1, 4] as List || true
+        [1, 4] as List  | [1, 3] as List || false
+        [] as List      | [1, 3] as List || false
+        [1, 4] as List  | [] as List     || false
+        [] as List      | [] as List     || true
+        [null] as List  | [null] as List || true
+        [4] as List     | [null] as List || false
+        [null] as List  | [4] as List    || false
+        null as List    | [4] as List    || false
+        [4] as List     | null as List   || false
+        null as List    | null as List   || true
+    }
+
+    void 'should throw exception when input entry value is null'() {
+        given:
+        final SpecifiedTypeValue<Integer> specifiedInputEntryValue = null
+        final SpecifiedTypeValue<Integer> specifiedInputValue = new IntegerValue(4)
+
+        when:
+        defaultObjectsComparator.isInputEntryValueEqualInputValue(specifiedInputEntryValue, specifiedInputValue)
+
+        then:
+        final NullPointerException exception = thrown()
+        exception != null
+        exception.getMessage() == 'Input entry value can not be null'
+    }
+
+    void 'should throw exception when input value is null'() {
+        given:
+        final SpecifiedTypeValue<Integer> specifiedInputEntryValue = new IntegerValue(4)
+        final SpecifiedTypeValue<Integer> specifiedInputValue = null
+
+        when:
+        defaultObjectsComparator.isInputEntryValueEqualInputValue(specifiedInputEntryValue, specifiedInputValue)
+
+        then:
+        final NullPointerException exception = thrown()
+        exception != null
+        exception.getMessage() == 'Input value can not be null'
     }
 }

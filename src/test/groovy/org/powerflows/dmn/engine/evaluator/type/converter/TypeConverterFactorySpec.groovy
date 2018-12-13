@@ -14,15 +14,26 @@
  * limitations under the License.
  */
 
-package org.powerflows.dmn.engine.evaluator.expression.provider;
+package org.powerflows.dmn.engine.evaluator.type.converter
 
-import org.powerflows.dmn.engine.evaluator.context.ModifiableContextVariables;
-import org.powerflows.dmn.engine.model.decision.expression.Expression;
-import org.powerflows.dmn.engine.model.decision.field.Input;
+import org.powerflows.dmn.engine.model.decision.field.ValueType
+import spock.lang.Specification
 
-public interface ExpressionEvaluationProvider {
+class TypeConverterFactorySpec extends Specification {
 
-    Object evaluateInput(Input input, ModifiableContextVariables contextVariables);
+    private final TypeConverterFactory converterFactory = new TypeConverterFactory()
 
-    Object evaluateEntry(Expression entryExpression, ModifiableContextVariables contextVariables);
+
+    void 'should throw exception when unknown value type'() {
+        given:
+        final ValueType valueType = null
+
+        when:
+        converterFactory.getInstance(valueType)
+
+        then:
+        final IllegalArgumentException exception = thrown()
+        exception != null
+        exception.getMessage() == 'Unknown value type'
+    }
 }

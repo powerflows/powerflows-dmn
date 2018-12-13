@@ -23,27 +23,34 @@ import org.powerflows.dmn.engine.evaluator.decision.DecisionEvaluator;
 import org.powerflows.dmn.engine.evaluator.entry.EntryEvaluator;
 import org.powerflows.dmn.engine.evaluator.entry.InputEntryEvaluator;
 import org.powerflows.dmn.engine.evaluator.entry.OutputEntryEvaluator;
+import org.powerflows.dmn.engine.evaluator.expression.comparator.DefaultObjectsComparator;
+import org.powerflows.dmn.engine.evaluator.expression.comparator.ObjectsComparator;
 import org.powerflows.dmn.engine.evaluator.expression.provider.EvaluationProviderFactory;
 import org.powerflows.dmn.engine.evaluator.expression.script.DefaultScriptEngineProvider;
 import org.powerflows.dmn.engine.evaluator.expression.script.ScriptEngineProvider;
 import org.powerflows.dmn.engine.evaluator.rule.RuleEvaluator;
+import org.powerflows.dmn.engine.evaluator.type.converter.TypeConverterFactory;
 
 import javax.script.ScriptEngineManager;
 
-public class DefaultDecisionEngineConfiguration extends AbstractDecisionEngineConfiguration {
+public class DefaultDecisionEngineConfiguration implements DecisionEngineConfiguration {
 
     private DecisionEvaluator decisionEvaluator;
     private RuleEvaluator ruleEvaluator;
     private EntryEvaluator entryEvaluator;
+    private ObjectsComparator objectsComparator;
     private InputEntryEvaluator inputEntryEvaluator;
     private OutputEntryEvaluator outputEntryEvaluator;
     private ScriptEngineProvider scriptEngineProvider;
     private EvaluationProviderFactory evaluationProviderFactory;
+    private TypeConverterFactory typeConverterFactory;
 
     @Override
     public DecisionEngine configure() {
         initScriptEngineProvider();
         initEvaluationProviderFactory();
+        initTypeConverterFactory();
+        initObjectsComparator();
         initInputEntryEvaluator();
         initOutputEntryEvaluator();
         initEntryEvaluator();
@@ -57,16 +64,24 @@ public class DefaultDecisionEngineConfiguration extends AbstractDecisionEngineCo
         evaluationProviderFactory = new EvaluationProviderFactory(scriptEngineProvider);
     }
 
+    private void initTypeConverterFactory() {
+        typeConverterFactory = new TypeConverterFactory();
+    }
+
     private void initScriptEngineProvider() {
         scriptEngineProvider = new DefaultScriptEngineProvider(new ScriptEngineManager());
     }
 
+    private void initObjectsComparator() {
+        objectsComparator = new DefaultObjectsComparator();
+    }
+
     private void initInputEntryEvaluator() {
-        inputEntryEvaluator = new InputEntryEvaluator(evaluationProviderFactory);
+        inputEntryEvaluator = new InputEntryEvaluator(evaluationProviderFactory, typeConverterFactory, objectsComparator);
     }
 
     private void initOutputEntryEvaluator() {
-        outputEntryEvaluator = new OutputEntryEvaluator(evaluationProviderFactory);
+        outputEntryEvaluator = new OutputEntryEvaluator(evaluationProviderFactory, typeConverterFactory);
     }
 
     private void initEntryEvaluator() {

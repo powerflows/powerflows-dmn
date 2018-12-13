@@ -23,7 +23,9 @@ import org.powerflows.dmn.engine.evaluator.exception.EvaluationException;
 import org.powerflows.dmn.engine.evaluator.rule.RuleEvaluator;
 import org.powerflows.dmn.engine.model.decision.Decision;
 import org.powerflows.dmn.engine.model.decision.HitPolicy;
+import org.powerflows.dmn.engine.model.decision.expression.ExpressionType;
 import org.powerflows.dmn.engine.model.decision.field.Input;
+import org.powerflows.dmn.engine.model.decision.field.Output;
 import org.powerflows.dmn.engine.model.decision.rule.Rule;
 import org.powerflows.dmn.engine.model.evaluation.context.ContextVariables;
 import org.powerflows.dmn.engine.model.evaluation.result.DecisionResult;
@@ -65,10 +67,15 @@ public class DecisionEvaluator {
                 .stream()
                 .collect(Collectors.toMap(Input::getName, Function.identity()));
 
+        final Map<String, Output> outputs = decision
+                .getOutputs()
+                .stream()
+                .collect(Collectors.toMap(Output::getName, Function.identity()));
+
         final ModifiableContextVariables modifiableContextVariables = new ModifiableContextVariables(contextVariables);
 
         for (Rule rule : decision.getRules()) {
-            final RuleResult ruleResult = ruleEvaluator.evaluate(rule, inputs, modifiableContextVariables);
+            final RuleResult ruleResult = ruleEvaluator.evaluate(rule, inputs, outputs, modifiableContextVariables);
 
             if (ruleResult != null) {
                 ruleResults.add(ruleResult);
@@ -93,7 +100,7 @@ public class DecisionEvaluator {
     private void validateContextVariables(final List<Input> inputs, final ContextVariables contextVariables) {
         final String invalidInputNames = inputs
                 .stream()
-                .filter(input -> input.getExpression().getValue() != null)
+                .filter(input -> input.getExpression().getValue() != null && !ExpressionType.LITERAL.equals(input.getExpression().getType()))
                 .filter(input -> contextVariables.isPresent(input.getName()))
                 .map(Input::getName)
                 .collect(Collectors.joining(","));
@@ -111,12 +118,7 @@ public class DecisionEvaluator {
         return HitPolicy.UNIQUE.equals(decision.getHitPolicy());
     }
 
-    private boolean isCollectionRulesResultExpected(final Decision decision) {
-        return HitPolicy.COLLECT.equals(decision.getHitPolicy());
-    }
-
     private boolean isNonUniqueRuleResult(final List<RuleResult> ruleResults) {
         return ruleResults.size() > 1;
     }
-
 }

@@ -26,22 +26,36 @@ import org.powerflows.dmn.io.yaml.YamlDecisionReader
 import spock.lang.Shared
 import spock.lang.Specification
 
-class DefaultDecisionEngineConfigurationGroovySpec extends Specification {
+class DefaultDecisionEngineConfigurationReferenceSingleSpec extends Specification {
+
     @Shared
     private DecisionEngine decisionEngine
 
     @Shared
     private Decision decision
 
+    @Shared
+    private DecisionEngineConfiguration decisionEngineConfiguration
+
     void setupSpec() {
         final DecisionReader decisionReader = new YamlDecisionReader()
-        final DecisionEngineConfiguration decisionEngineConfiguration = new DefaultDecisionEngineConfiguration()
+        decisionEngineConfiguration = new DefaultDecisionEngineConfiguration()
 
         decisionEngine = decisionEngineConfiguration.configure()
 
-        final String decisionFileName = 'decision-with-groovy-expressions-only.yml'
+        final String decisionFileName = 'reference-single.yml'
         final InputStream decisionInputStream = this.class.getResourceAsStream(decisionFileName)
         decision = decisionReader.read(decisionInputStream)
+    }
+
+    void 'should configure default decision engine'() {
+        given:
+
+        when:
+        final DecisionEngine decisionEngine = decisionEngineConfiguration.configure()
+
+        then:
+        decisionEngine != null
     }
 
     void 'should evaluate empty collection rules result using default decision engine'() {
@@ -219,4 +233,39 @@ class DefaultDecisionEngineConfigurationGroovySpec extends Specification {
         }
     }
 
+    void 'should evaluate single rule on boolean input entry result basis using default decision engine'() {
+        given:
+        final Map<String, Object> variables = [:]
+        variables.put('x', 0)
+        variables.put('y', 0)
+        variables.put('p', 25)
+        variables.put('q', 26)
+        variables.put('arrayVar', '')
+        final DecisionContextVariables decisionContextVariables = new DecisionContextVariables(variables)
+
+        when:
+        final DecisionResult decisionResult = decisionEngine.evaluate(decision, decisionContextVariables)
+
+        then:
+        decisionResult != null
+
+        with(decisionResult) {
+            !isSingleEntryResult()
+            isSingleRuleResult()
+            !isCollectionRulesResult()
+            getSingleRuleResult().getEntryResults().size() == 2
+        }
+
+        final EntryResult entryResult1 = decisionResult.getSingleRuleResult().getEntryResults()[0]
+        with(entryResult1) {
+            getName() == 'outputOne'
+            getValue()
+        }
+
+        final EntryResult entryResult2 = decisionResult.getSingleRuleResult().getEntryResults()[1]
+        with(entryResult2) {
+            getName() == 'outputTwo'
+            getValue() == 'The output rule five'
+        }
+    }
 }

@@ -45,7 +45,7 @@ rules:
 - description: Some Rule 3 Description
   in:
     inputOne:
-      expression-type: GROOVY
+      expression-type: JAVASCRIPT
       expression: p * q
     inputTwo: false
   out:
@@ -63,3 +63,11 @@ rules:
   out:
     outputOne: true
     outputTwo: The output rule four
+- description: Some Rule 5 Description
+  in:
+    inputOne:
+      expression-type: JAVASCRIPT
+      expression: (p + q) > 50
+  out:
+    outputOne: true
+    outputTwo: The output rule five

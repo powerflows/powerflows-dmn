@@ -22,8 +22,8 @@ import java.util.Optional;
 public enum ValueType {
     STRING,
     INTEGER,
-    BOOLEAN,
-    COLLECTION;
+    DOUBLE,
+    BOOLEAN;
 
     public static Optional<ValueType> safeValueOf(final String name) {
         if (name == null) {

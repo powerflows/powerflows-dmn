@@ -51,7 +51,7 @@ public class Expression implements Serializable {
         return new Builder();
     }
 
-    private static abstract class ExpressionBuilder<B extends Expression.ExpressionBuilder<B>> extends AbstractBuilder<Expression> {
+    private abstract static class ExpressionBuilder<B extends Expression.ExpressionBuilder<B>> extends AbstractBuilder<Expression> {
 
         @Override
         protected void initProduct() {
@@ -75,7 +75,7 @@ public class Expression implements Serializable {
             if (product.type == null) {
                 product.type = ExpressionType.LITERAL;
             }
-            
+
             return product;
         }
     }

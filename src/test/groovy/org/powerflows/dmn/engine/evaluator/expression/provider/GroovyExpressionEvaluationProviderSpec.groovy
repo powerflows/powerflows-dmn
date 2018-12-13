@@ -18,49 +18,42 @@ package org.powerflows.dmn.engine.evaluator.expression.provider
 
 import org.powerflows.dmn.engine.evaluator.context.ModifiableContextVariables
 import org.powerflows.dmn.engine.evaluator.exception.EvaluationException
-import org.powerflows.dmn.engine.evaluator.expression.comparator.DefaultObjectsComparator
 import org.powerflows.dmn.engine.evaluator.expression.script.DefaultScriptEngineProvider
 import org.powerflows.dmn.engine.evaluator.expression.script.ScriptEngineProvider
 import org.powerflows.dmn.engine.model.decision.expression.Expression
 import org.powerflows.dmn.engine.model.decision.expression.ExpressionType
 import org.powerflows.dmn.engine.model.decision.field.Input
-import org.powerflows.dmn.engine.model.decision.rule.entry.InputEntry
-import org.powerflows.dmn.engine.model.decision.rule.entry.OutputEntry
 import org.powerflows.dmn.engine.model.evaluation.context.ContextVariables
 import org.powerflows.dmn.engine.model.evaluation.context.DecisionContextVariables
-import org.powerflows.dmn.engine.model.evaluation.result.EntryResult
 import spock.lang.Specification
 import spock.lang.Unroll
 
 import javax.script.ScriptEngineManager
 
-class ScriptExpressionEvaluationProviderSpec extends Specification {
+class GroovyExpressionEvaluationProviderSpec extends Specification {
 
     private final ScriptEngineProvider scriptEngineProvider = new DefaultScriptEngineProvider(new ScriptEngineManager())
-    private final DefaultObjectsComparator defaultObjectsComparator = Mock()
     private final ExpressionEvaluationProvider expressionEvaluationProvider =
-            new ScriptExpressionEvaluationProvider(scriptEngineProvider, defaultObjectsComparator)
+            new ScriptExpressionEvaluationProvider(scriptEngineProvider)
 
     @Unroll
-    void 'should evaluate input entry groovy expression value #inputEntryExpression and variables #contextVariable with #expectedInputEntryResult'(
-            final Object inputEntryExpression, final Object contextVariable, final boolean expectedInputEntryResult) {
+    void 'should evaluate entry groovy expression value #entryExpressionValue and variables #contextVariable with #expectedEntryResult'(
+            final Object entryExpressionValue, final Object contextVariable, final boolean expectedEntryResult) {
         given:
-        final Expression expression = [value: inputEntryExpression, type: ExpressionType.GROOVY]
-        final InputEntry inputEntry = [name: 'TestInputName', expression: expression]
+        final Expression entryExpression = [value: entryExpressionValue, type: ExpressionType.GROOVY]
 
         final ContextVariables decisionContextVariables = new DecisionContextVariables([x: contextVariable, TestInputName: true])
         final ModifiableContextVariables contextVariables = new ModifiableContextVariables(decisionContextVariables)
 
         when:
-        final boolean inputEntryResult = expressionEvaluationProvider.evaluateInputEntry(inputEntry, contextVariables)
+        final boolean inputEntryResult = expressionEvaluationProvider.evaluateEntry(entryExpression, contextVariables)
 
         then:
-        inputEntryResult == expectedInputEntryResult
-        1 * defaultObjectsComparator.isInputEntryValueEqualInputValue(expectedInputEntryResult, true) >> expectedInputEntryResult
+        inputEntryResult == expectedEntryResult
         0 * _
 
         where:
-        inputEntryExpression | contextVariable || expectedInputEntryResult
+        entryExpressionValue | contextVariable || expectedEntryResult
         '2 < x'              | 4               || true
         '2 == x'             | 2               || true
         '2 == x'             | 3               || false
@@ -90,35 +83,15 @@ class ScriptExpressionEvaluationProviderSpec extends Specification {
         '"a" + 4'       | null            || 'a4'
     }
 
-    void 'should evaluate output entry groovy expression value'() {
-        given:
-        final String outputEntryValue = 'x + 7'
-        final String outputEntryName = 'TestOutputName'
-        final Expression expression = [value: outputEntryValue, type: ExpressionType.GROOVY]
-        final OutputEntry outputEntry = [name: outputEntryName, expression: expression]
-        final ContextVariables decisionContextVariables = new DecisionContextVariables([x: 2])
-        final ModifiableContextVariables contextVariables = new ModifiableContextVariables(decisionContextVariables)
-
-        when:
-        final EntryResult outputEntryResult = expressionEvaluationProvider.evaluateOutputEntry(outputEntry, contextVariables)
-
-        then:
-        outputEntryResult != null
-        outputEntryResult.getValue() == 9
-        outputEntryResult.getName() == outputEntryName
-    }
-
     void 'should throw exception when missing variable evaluating groovy expression'() {
         given:
         final String outputEntryValue = 'x'
-        final String outputEntryName = 'TestOutputName'
-        final Expression expression = [value: outputEntryValue, type: ExpressionType.GROOVY]
-        final OutputEntry outputEntry = [name: outputEntryName, expression: expression]
+        final Expression entryExpression = [value: outputEntryValue, type: ExpressionType.GROOVY]
         final ContextVariables decisionContextVariables = new DecisionContextVariables([:])
         final ModifiableContextVariables contextVariables = new ModifiableContextVariables(decisionContextVariables)
 
         when:
-        expressionEvaluationProvider.evaluateOutputEntry(outputEntry, contextVariables)
+        expressionEvaluationProvider.evaluateEntry(entryExpression, contextVariables)
 
         then:
         final EvaluationException exception = thrown()

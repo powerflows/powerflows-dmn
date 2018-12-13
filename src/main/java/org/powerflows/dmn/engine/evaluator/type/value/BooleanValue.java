@@ -14,12 +14,17 @@
  * limitations under the License.
  */
 
-package org.powerflows.dmn.engine.configuration;
+package org.powerflows.dmn.engine.evaluator.type.value;
 
+import java.util.List;
 
-import org.powerflows.dmn.engine.DecisionEngine;
+public class BooleanValue extends AbstractSpecifiedTypeValues<Boolean> {
 
-public abstract class AbstractDecisionEngineConfiguration implements DecisionEngineConfiguration {
+    public BooleanValue(final Boolean value) {
+        super(value);
+    }
 
-    public abstract DecisionEngine configure();
+    public BooleanValue(final List<Boolean> values) {
+        super(values);
+    }
 }

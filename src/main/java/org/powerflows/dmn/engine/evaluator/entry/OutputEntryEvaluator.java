@@ -17,24 +17,42 @@
 package org.powerflows.dmn.engine.evaluator.entry;
 
 
+import lombok.extern.slf4j.Slf4j;
 import org.powerflows.dmn.engine.evaluator.context.ModifiableContextVariables;
 import org.powerflows.dmn.engine.evaluator.expression.provider.EvaluationProviderFactory;
 import org.powerflows.dmn.engine.evaluator.expression.provider.ExpressionEvaluationProvider;
+import org.powerflows.dmn.engine.evaluator.type.converter.TypeConverter;
+import org.powerflows.dmn.engine.evaluator.type.converter.TypeConverterFactory;
+import org.powerflows.dmn.engine.model.decision.field.Output;
 import org.powerflows.dmn.engine.model.decision.rule.entry.OutputEntry;
 import org.powerflows.dmn.engine.model.evaluation.result.EntryResult;
 
+@Slf4j
 public class OutputEntryEvaluator {
 
     private final EvaluationProviderFactory evaluationProviderFactory;
+    private final TypeConverterFactory typeConverterFactory;
 
-    public OutputEntryEvaluator(EvaluationProviderFactory evaluationProviderFactory) {
+    public OutputEntryEvaluator(EvaluationProviderFactory evaluationProviderFactory,
+                                final TypeConverterFactory typeConverterFactory) {
         this.evaluationProviderFactory = evaluationProviderFactory;
+        this.typeConverterFactory = typeConverterFactory;
     }
 
-    EntryResult evaluate(final OutputEntry outputEntry, final ModifiableContextVariables contextVariables) {
+    public EntryResult evaluate(final OutputEntry outputEntry, final Output output, final ModifiableContextVariables contextVariables) {
         final ExpressionEvaluationProvider expressionEvaluator = evaluationProviderFactory.getInstance(outputEntry.getExpression().getType());
+        final TypeConverter typeConverter = typeConverterFactory.getInstance(output.getType());
 
-        return expressionEvaluator.evaluateOutputEntry(outputEntry, contextVariables);
+        final Object outputEntryValue = expressionEvaluator.evaluateEntry(outputEntry.getExpression(), contextVariables);
+
+        //Needed for the output entry value validation.
+        //Correct build means the output entry value has a type compatible with the output definition.
+        typeConverter.convert(outputEntryValue);
+
+        final EntryResult outputEntryResult = EntryResult.builder().name(outputEntry.getName()).value(outputEntryValue).build();
+
+        log.debug("Evaluated output entry result: {}", outputEntryResult);
+
+        return outputEntryResult;
     }
-
 }
