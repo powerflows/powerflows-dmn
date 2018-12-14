@@ -16,19 +16,19 @@
 
 package org.powerflows.dmn.engine.evaluator.expression.provider;
 
-import org.powerflows.dmn.engine.evaluator.context.ModifiableContextVariables;
+import org.powerflows.dmn.engine.evaluator.context.EvaluationContext;
 import org.powerflows.dmn.engine.model.decision.expression.Expression;
 import org.powerflows.dmn.engine.model.decision.field.Input;
 
 class JuelExpressionEvaluationProvider implements ExpressionEvaluationProvider {
 
     @Override
-    public Object evaluateEntry(final Expression expression, final ModifiableContextVariables contextVariables) {
+    public Object evaluateEntry(final Expression expression, final EvaluationContext evaluationContext) {
         throw new UnsupportedOperationException();
     }
 
     @Override
-    public Object evaluateInput(final Input input, final ModifiableContextVariables contextVariables) {
+    public Object evaluateInput(final Input input, final EvaluationContext evaluationContext) {
         throw new UnsupportedOperationException();
     }
 }

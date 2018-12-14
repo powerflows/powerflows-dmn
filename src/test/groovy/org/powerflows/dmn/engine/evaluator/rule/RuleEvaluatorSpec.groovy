@@ -16,12 +16,12 @@
 
 package org.powerflows.dmn.engine.evaluator.rule
 
-import org.powerflows.dmn.engine.evaluator.context.ModifiableContextVariables
+import org.powerflows.dmn.engine.evaluator.context.EvaluationContext
 import org.powerflows.dmn.engine.evaluator.entry.EntryEvaluator
 import org.powerflows.dmn.engine.model.decision.field.Input
 import org.powerflows.dmn.engine.model.decision.field.Output
 import org.powerflows.dmn.engine.model.decision.rule.Rule
-import org.powerflows.dmn.engine.model.evaluation.context.DecisionContextVariables
+import org.powerflows.dmn.engine.model.evaluation.variable.DecisionVariables
 import org.powerflows.dmn.engine.model.evaluation.result.EntryResult
 import org.powerflows.dmn.engine.model.evaluation.result.RuleResult
 import spock.lang.Specification
@@ -34,19 +34,19 @@ class RuleEvaluatorSpec extends Specification {
     final Rule rule = [inputEntries: [], outputEntries: []]
     final Map<String, Input> inputs = [:]
     final Map<String, Output> outputs = [:]
-    final DecisionContextVariables decisionContextVariables = new DecisionContextVariables([:])
-    final ModifiableContextVariables contextVariables = new ModifiableContextVariables(decisionContextVariables)
+    final DecisionVariables decisionVariables = new DecisionVariables([:])
+    final EvaluationContext evaluationContext = new EvaluationContext(decisionVariables)
 
     void 'should evaluate null rule result'() {
         given:
 
         when:
-        final RuleResult ruleResult = ruleEvaluator.evaluate(rule, inputs, outputs, contextVariables)
+        final RuleResult ruleResult = ruleEvaluator.evaluate(rule, inputs, outputs, evaluationContext)
 
         then:
         ruleResult == null
 
-        1 * entryEvaluator.evaluate(rule.getInputEntries(), rule.getOutputEntries(), inputs, outputs, contextVariables) >> []
+        1 * entryEvaluator.evaluate(rule.getInputEntries(), rule.getOutputEntries(), inputs, outputs, evaluationContext) >> []
         0 * _
     }
 
@@ -60,7 +60,7 @@ class RuleEvaluatorSpec extends Specification {
         final List<EntryResult> someEntryResults = [someEntryResult]
 
         when:
-        final RuleResult ruleResult = ruleEvaluator.evaluate(rule, inputs, outputs, contextVariables)
+        final RuleResult ruleResult = ruleEvaluator.evaluate(rule, inputs, outputs, evaluationContext)
 
         then:
         ruleResult != null
@@ -71,7 +71,7 @@ class RuleEvaluatorSpec extends Specification {
             getEntryResults()[0].getName() == someEntryResultName
         }
 
-        1 * entryEvaluator.evaluate(rule.getInputEntries(), rule.getOutputEntries(), inputs, outputs, contextVariables) >> someEntryResults
+        1 * entryEvaluator.evaluate(rule.getInputEntries(), rule.getOutputEntries(), inputs, outputs, evaluationContext) >> someEntryResults
         0 * _
     }
 }

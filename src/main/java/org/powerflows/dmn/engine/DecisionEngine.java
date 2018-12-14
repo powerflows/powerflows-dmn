@@ -18,11 +18,11 @@ package org.powerflows.dmn.engine;
 
 
 import org.powerflows.dmn.engine.model.decision.Decision;
-import org.powerflows.dmn.engine.model.evaluation.context.DecisionContextVariables;
+import org.powerflows.dmn.engine.model.evaluation.variable.DecisionVariables;
 import org.powerflows.dmn.engine.model.evaluation.result.DecisionResult;
 
 public interface DecisionEngine {
 
-    DecisionResult evaluate(Decision decision, DecisionContextVariables contextVariables);
+    DecisionResult evaluate(Decision decision, DecisionVariables decisionVariables);
 
 }

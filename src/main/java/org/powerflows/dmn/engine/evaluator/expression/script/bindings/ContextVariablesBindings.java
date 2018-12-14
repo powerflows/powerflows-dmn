@@ -16,7 +16,7 @@
 
 package org.powerflows.dmn.engine.evaluator.expression.script.bindings;
 
-import org.powerflows.dmn.engine.evaluator.context.ModifiableContextVariables;
+import org.powerflows.dmn.engine.evaluator.context.EvaluationContext;
 
 import javax.script.Bindings;
 import java.util.Collection;
@@ -27,17 +27,17 @@ public class ContextVariablesBindings implements Bindings {
 
     private final Bindings bindings;
 
-    private ContextVariablesBindings(final Bindings bindings, final ModifiableContextVariables contextVariables) {
+    private ContextVariablesBindings(final Bindings bindings, final EvaluationContext evaluationContext) {
         this.bindings = bindings;
 
-        contextVariables
+        evaluationContext
                 .getAll()
                 .keySet()
-                .forEach(variableName -> this.bindings.put(variableName, contextVariables.get(variableName)));
+                .forEach(variableName -> this.bindings.put(variableName, evaluationContext.get(variableName)));
     }
 
-    public static ContextVariablesBindings create(final Bindings bindings, final ModifiableContextVariables contextVariables) {
-        return new ContextVariablesBindings(bindings, contextVariables);
+    public static ContextVariablesBindings create(final Bindings bindings, final EvaluationContext evaluationContext) {
+        return new ContextVariablesBindings(bindings, evaluationContext);
     }
 
     @Override

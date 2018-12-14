@@ -18,7 +18,7 @@ package org.powerflows.dmn.engine.configuration
 
 import org.powerflows.dmn.engine.DecisionEngine
 import org.powerflows.dmn.engine.model.decision.Decision
-import org.powerflows.dmn.engine.model.evaluation.context.DecisionContextVariables
+import org.powerflows.dmn.engine.model.evaluation.variable.DecisionVariables
 import org.powerflows.dmn.engine.model.evaluation.result.DecisionResult
 import org.powerflows.dmn.engine.model.evaluation.result.EntryResult
 import org.powerflows.dmn.engine.reader.DecisionReader
@@ -66,10 +66,10 @@ class DefaultDecisionEngineConfigurationReferenceSingleSpec extends Specificatio
         variables.put('p', 0)
         variables.put('q', 0)
         variables.put('arrayVar', '')
-        final DecisionContextVariables decisionContextVariables = new DecisionContextVariables(variables)
+        final DecisionVariables decisionVariables = new DecisionVariables(variables)
 
         when:
-        final DecisionResult decisionResult = decisionEngine.evaluate(decision, decisionContextVariables)
+        final DecisionResult decisionResult = decisionEngine.evaluate(decision, decisionVariables)
 
         then:
         decisionResult != null
@@ -90,10 +90,10 @@ class DefaultDecisionEngineConfigurationReferenceSingleSpec extends Specificatio
         variables.put('p', 0)
         variables.put('q', 0)
         variables.put('arrayVar', '')
-        final DecisionContextVariables decisionContextVariables = new DecisionContextVariables(variables)
+        final DecisionVariables decisionVariables = new DecisionVariables(variables)
 
         when:
-        final DecisionResult decisionResult = decisionEngine.evaluate(decision, decisionContextVariables)
+        final DecisionResult decisionResult = decisionEngine.evaluate(decision, decisionVariables)
 
         then:
         decisionResult != null
@@ -120,10 +120,10 @@ class DefaultDecisionEngineConfigurationReferenceSingleSpec extends Specificatio
         variables.put('p', 0)
         variables.put('q', 0)
         variables.put('arrayVar', '')
-        final DecisionContextVariables decisionContextVariables = new DecisionContextVariables(variables)
+        final DecisionVariables decisionVariables = new DecisionVariables(variables)
 
         when:
-        final DecisionResult decisionResult = decisionEngine.evaluate(decision, decisionContextVariables)
+        final DecisionResult decisionResult = decisionEngine.evaluate(decision, decisionVariables)
 
         then:
         decisionResult != null
@@ -156,10 +156,10 @@ class DefaultDecisionEngineConfigurationReferenceSingleSpec extends Specificatio
         variables.put('p', 3)
         variables.put('q', 4)
         variables.put('arrayVar', '')
-        final DecisionContextVariables decisionContextVariables = new DecisionContextVariables(variables)
+        final DecisionVariables decisionVariables = new DecisionVariables(variables)
 
         when:
-        final DecisionResult decisionResult = decisionEngine.evaluate(decision, decisionContextVariables)
+        final DecisionResult decisionResult = decisionEngine.evaluate(decision, decisionVariables)
 
         then:
         decisionResult != null
@@ -205,10 +205,10 @@ class DefaultDecisionEngineConfigurationReferenceSingleSpec extends Specificatio
         variables.put('p', 0)
         variables.put('q', 0)
         variables.put('arrayVar', 'a,e,c')
-        final DecisionContextVariables decisionContextVariables = new DecisionContextVariables(variables)
+        final DecisionVariables decisionVariables = new DecisionVariables(variables)
 
         when:
-        final DecisionResult decisionResult = decisionEngine.evaluate(decision, decisionContextVariables)
+        final DecisionResult decisionResult = decisionEngine.evaluate(decision, decisionVariables)
 
         then:
         decisionResult != null
@@ -241,10 +241,10 @@ class DefaultDecisionEngineConfigurationReferenceSingleSpec extends Specificatio
         variables.put('p', 25)
         variables.put('q', 26)
         variables.put('arrayVar', '')
-        final DecisionContextVariables decisionContextVariables = new DecisionContextVariables(variables)
+        final DecisionVariables decisionVariables = new DecisionVariables(variables)
 
         when:
-        final DecisionResult decisionResult = decisionEngine.evaluate(decision, decisionContextVariables)
+        final DecisionResult decisionResult = decisionEngine.evaluate(decision, decisionVariables)
 
         then:
         decisionResult != null

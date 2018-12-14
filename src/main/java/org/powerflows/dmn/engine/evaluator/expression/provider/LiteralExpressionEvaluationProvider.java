@@ -17,7 +17,7 @@
 package org.powerflows.dmn.engine.evaluator.expression.provider;
 
 import lombok.extern.slf4j.Slf4j;
-import org.powerflows.dmn.engine.evaluator.context.ModifiableContextVariables;
+import org.powerflows.dmn.engine.evaluator.context.EvaluationContext;
 import org.powerflows.dmn.engine.model.decision.expression.Expression;
 import org.powerflows.dmn.engine.model.decision.field.Input;
 
@@ -26,10 +26,10 @@ import org.powerflows.dmn.engine.model.decision.field.Input;
 class LiteralExpressionEvaluationProvider implements ExpressionEvaluationProvider {
 
     @Override
-    public Object evaluateInput(final Input input, final ModifiableContextVariables contextVariables) {
-        log.debug("Starting evaluation of input: {} with context variables: {}", input, contextVariables);
+    public Object evaluateInput(final Input input, final EvaluationContext evaluationContext) {
+        log.debug("Starting evaluation of input: {} with evaluation context: {}", input, evaluationContext);
 
-        final Object value = contextVariables.get(input.getName());
+        final Object value = evaluationContext.get(input.getName());
 
         if (value == null) {
             log.warn("Input value is null");
@@ -41,8 +41,8 @@ class LiteralExpressionEvaluationProvider implements ExpressionEvaluationProvide
     }
 
     @Override
-    public Object evaluateEntry(final Expression entryExpression, final ModifiableContextVariables contextVariables) {
-        log.debug("Starting evaluation of entry with expression: {} and context variables: {}", entryExpression, contextVariables);
+    public Object evaluateEntry(final Expression entryExpression, final EvaluationContext evaluationContext) {
+        log.debug("Starting evaluation of entry with expression: {} and evaluation context: {}", entryExpression, evaluationContext);
 
         final Object result = entryExpression.getValue();
 

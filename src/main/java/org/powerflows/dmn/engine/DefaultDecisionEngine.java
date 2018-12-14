@@ -19,8 +19,8 @@ package org.powerflows.dmn.engine;
 
 import org.powerflows.dmn.engine.evaluator.decision.DecisionEvaluator;
 import org.powerflows.dmn.engine.model.decision.Decision;
-import org.powerflows.dmn.engine.model.evaluation.context.DecisionContextVariables;
 import org.powerflows.dmn.engine.model.evaluation.result.DecisionResult;
+import org.powerflows.dmn.engine.model.evaluation.variable.DecisionVariables;
 
 public class DefaultDecisionEngine implements DecisionEngine {
 
@@ -31,8 +31,8 @@ public class DefaultDecisionEngine implements DecisionEngine {
     }
 
     @Override
-    public DecisionResult evaluate(final Decision decision, final DecisionContextVariables contextVariables) {
-        return decisionEvaluator.evaluate(decision, contextVariables);
+    public DecisionResult evaluate(final Decision decision, final DecisionVariables decisionVariables) {
+        return decisionEvaluator.evaluate(decision, decisionVariables);
     }
 
 }
