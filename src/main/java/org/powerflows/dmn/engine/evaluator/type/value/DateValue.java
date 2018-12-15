@@ -14,27 +14,18 @@
  * limitations under the License.
  */
 
-package org.powerflows.dmn.engine.model.decision.field;
+package org.powerflows.dmn.engine.evaluator.type.value;
 
-import java.util.Arrays;
-import java.util.Optional;
+import java.util.Date;
+import java.util.List;
 
-public enum ValueType {
-    STRING,
-    INTEGER,
-    DOUBLE,
-    BOOLEAN,
-    DATE;
+public class DateValue extends AbstractSpecifiedTypeValues<Date> {
 
-    public static Optional<ValueType> safeValueOf(final String name) {
-        if (name == null) {
-            return Optional.empty();
-        }
+    public DateValue(final Date value) {
+        super(value);
+    }
 
-        return Arrays.stream(values())
-                .filter(v -> v.name()
-                        .equalsIgnoreCase(name))
-                .findFirst();
-
+    public DateValue(final List<Date> values) {
+        super(values);
     }
 }

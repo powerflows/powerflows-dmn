@@ -16,6 +16,8 @@ fields:
       type: STRING
       expression-type: GROOVY
       expression: "arrayVar.split(',')"
+    inputFour:
+      type: DATE
   out:
     outputOne:
       description: Some Output 1 Description
@@ -71,3 +73,35 @@ rules:
   out:
     outputOne: true
     outputTwo: The output rule five
+- description: Some Rule 6 Description
+  in:
+    inputFour:
+      expression-type: LITERAL
+      expression: 2018-12-14
+  out:
+    outputOne: true
+    outputTwo: The output rule six
+- description: Some Rule 7 Description
+  in:
+    inputFour:
+      expression-type: LITERAL
+      expression: 2018-12-14T19:38:26
+  out:
+    outputOne: true
+    outputTwo: The output rule seven
+- description: Some Rule 8 Description
+  in:
+    inputFour:
+      expression-type: GROOVY
+      expression: "((inputFour instanceof String) ? Date.parse('yyyy-MM-dd', '2018-12-24') : inputFour) < Date.parse('yyyy-MM-dd', '2018-12-14')"
+  out:
+    outputOne: true
+    outputTwo: The output rule eight
+- description: Some Rule 9 Description
+  in:
+    inputFour:
+      expression-type: JAVASCRIPT
+      expression: "((typeof inputFour == 'string') ? new Date(2018, 11, 14) : inputFour).getTime() == new Date(2018, 11, 13).getTime()"
+  out:
+    outputOne: true
+    outputTwo: The output rule nine
