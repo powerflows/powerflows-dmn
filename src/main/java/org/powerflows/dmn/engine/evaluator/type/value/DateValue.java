@@ -14,31 +14,18 @@
  * limitations under the License.
  */
 
-package org.powerflows.dmn.engine.model.evaluation.context;
+package org.powerflows.dmn.engine.evaluator.type.value;
 
+import java.util.Date;
+import java.util.List;
 
-import lombok.ToString;
+public class DateValue extends AbstractSpecifiedTypeValues<Date> {
 
-import java.util.HashMap;
-import java.util.Map;
-
-@ToString
-public class AbstractContextVariables implements ContextVariables {
-
-    protected Map<String, Object> variables = new HashMap<>();
-
-    @Override
-    public Object get(final String name) {
-        return variables.get(name);
+    public DateValue(final Date value) {
+        super(value);
     }
 
-    @Override
-    public Map<String, Object> getAll() {
-        return variables;
-    }
-
-    @Override
-    public boolean isPresent(final String name) {
-        return variables.get(name) != null;
+    public DateValue(final List<Date> values) {
+        super(values);
     }
 }

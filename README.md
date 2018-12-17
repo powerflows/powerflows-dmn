@@ -370,7 +370,7 @@ writer.write(decision, outputStream);
 
 # Decision Engine
 A decision engine is a service that allows evaluation of decision tables. Default decision engine instance can be created using
-DefaultDecisionEngineConfiguration class. Decision engine expects decision object and context variables.
+DefaultDecisionEngineConfiguration class. Decision engine expects decision object and decision variables.
 The result of an evaluation process is decision result object.
 ```java
 Decision decision = Decision.builder().build(); //here developer has to build a valid decision object
@@ -379,9 +379,9 @@ DecisionEngine decisionEngine = new DefaultDecisionEngineConfiguration().configu
 Map<String, Object> variables = new HashMap<>();
 variables.put("inputOne", 2);
 variables.put("inputTwo", "five");
-DecisionContextVariables contextVariables = new DecisionContextVariables(variables);
+DecisionVariables decisionVariables = new DecisionVariables(variables);
 
-DecisionResult decisionResult = decisionEngine.evaluate(decision, contextVariables);
+DecisionResult decisionResult = decisionEngine.evaluate(decision, decisionVariables);
 ```
 The decision result has methods like follows:
 ```java

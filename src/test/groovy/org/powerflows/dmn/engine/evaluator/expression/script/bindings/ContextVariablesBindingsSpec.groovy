@@ -16,12 +16,11 @@
 
 package org.powerflows.dmn.engine.evaluator.expression.script.bindings
 
-import org.powerflows.dmn.engine.evaluator.context.ModifiableContextVariables
+import org.powerflows.dmn.engine.evaluator.context.EvaluationContext
 import org.powerflows.dmn.engine.evaluator.expression.script.DefaultScriptEngineProvider
 import org.powerflows.dmn.engine.evaluator.expression.script.ScriptEngineProvider
 import org.powerflows.dmn.engine.model.decision.expression.ExpressionType
-import org.powerflows.dmn.engine.model.evaluation.context.ContextVariables
-import org.powerflows.dmn.engine.model.evaluation.context.DecisionContextVariables
+import org.powerflows.dmn.engine.model.evaluation.variable.DecisionVariables
 import spock.lang.Shared
 import spock.lang.Specification
 
@@ -50,11 +49,11 @@ class ContextVariablesBindingsSpec extends Specification {
         final Object contextVariablesVariableValue = 20
         final Map<String, Object> contextVariablesMap = [:]
         contextVariablesMap.put(contextVariablesVariableName, contextVariablesVariableValue)
-        final ContextVariables decisionContextVariables = new DecisionContextVariables(contextVariablesMap)
-        final ModifiableContextVariables contextVariables = new ModifiableContextVariables(decisionContextVariables)
+        final DecisionVariables decisionVariables = new DecisionVariables(contextVariablesMap)
+        final EvaluationContext evaluationContext = new EvaluationContext(decisionVariables)
 
         when:
-        final ContextVariablesBindings contextVariablesBindings = ContextVariablesBindings.create(bindings, contextVariables)
+        final ContextVariablesBindings contextVariablesBindings = ContextVariablesBindings.create(bindings, evaluationContext)
 
         then:
         with(contextVariablesBindings) {
@@ -77,8 +76,8 @@ class ContextVariablesBindingsSpec extends Specification {
         final Bindings bindings = scriptEngine.createBindings()
 
         final Map<String, Object> contextVariablesMap = [:]
-        final ContextVariables decisionContextVariables = new DecisionContextVariables(contextVariablesMap)
-        final ModifiableContextVariables contextVariables = new ModifiableContextVariables(decisionContextVariables)
+        final DecisionVariables decisionVariables = new DecisionVariables(contextVariablesMap)
+        final EvaluationContext contextVariables = new EvaluationContext(decisionVariables)
 
         final ContextVariablesBindings contextVariablesBindings = ContextVariablesBindings.create(bindings, contextVariables)
 
@@ -103,8 +102,8 @@ class ContextVariablesBindingsSpec extends Specification {
         final Bindings bindings = scriptEngine.createBindings()
 
         final Map<String, Object> contextVariablesMap = [:]
-        final ContextVariables decisionContextVariables = new DecisionContextVariables(contextVariablesMap)
-        final ModifiableContextVariables contextVariables = new ModifiableContextVariables(decisionContextVariables)
+        final DecisionVariables decisionVariables = new DecisionVariables(contextVariablesMap)
+        final EvaluationContext contextVariables = new EvaluationContext(decisionVariables)
 
         final ContextVariablesBindings contextVariablesBindings = ContextVariablesBindings.create(bindings, contextVariables)
 
@@ -134,8 +133,8 @@ class ContextVariablesBindingsSpec extends Specification {
 
         final Map<String, Object> contextVariablesMap = [:]
         contextVariablesMap.put(variableName, variableValue)
-        final ContextVariables decisionContextVariables = new DecisionContextVariables(contextVariablesMap)
-        final ModifiableContextVariables contextVariables = new ModifiableContextVariables(decisionContextVariables)
+        final DecisionVariables decisionVariables = new DecisionVariables(contextVariablesMap)
+        final EvaluationContext contextVariables = new EvaluationContext(decisionVariables)
 
         final ContextVariablesBindings contextVariablesBindings = ContextVariablesBindings.create(bindings, contextVariables)
 

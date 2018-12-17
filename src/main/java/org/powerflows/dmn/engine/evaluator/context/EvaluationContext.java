@@ -14,23 +14,27 @@
  * limitations under the License.
  */
 
-package org.powerflows.dmn.engine.model.evaluation.context;
+package org.powerflows.dmn.engine.evaluator.context;
 
 
 import lombok.ToString;
+import org.powerflows.dmn.engine.model.evaluation.variable.AbstractDecisionVariables;
+import org.powerflows.dmn.engine.model.evaluation.variable.DecisionVariables;
 
 import java.io.Serializable;
-import java.util.Map;
-
-import static java.util.Collections.unmodifiableMap;
+import java.util.HashMap;
 
 @ToString(callSuper = true)
-public class DecisionContextVariables extends AbstractContextVariables implements Serializable {
+public class EvaluationContext extends AbstractDecisionVariables implements Serializable {
 
     private static final long serialVersionUID = 1;
 
-    public DecisionContextVariables(Map<String, Object> variables) {
-        super.variables = unmodifiableMap(variables);
+    public EvaluationContext(final DecisionVariables decisionVariables) {
+        this.variables = new HashMap<>();
+        this.variables.putAll(decisionVariables.getAll());
     }
 
+    public synchronized void addVariable(final String key, Object value) {
+        variables.put(key, value);
+    }
 }

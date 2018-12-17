@@ -14,16 +14,28 @@
  * limitations under the License.
  */
 
-package org.powerflows.dmn.engine.model.evaluation.context;
+package org.powerflows.dmn.engine.model.evaluation.variable;
 
 
+import lombok.ToString;
+
+import java.util.HashMap;
 import java.util.Map;
 
-public interface ContextVariables {
+@ToString
+public class AbstractDecisionVariables {
 
-    Object get(final String name);
+    protected Map<String, Object> variables = new HashMap<>();
 
-    Map<String, Object> getAll();
+    public Object get(final String name) {
+        return variables.get(name);
+    }
 
-    boolean isPresent(final String name);
+    public Map<String, Object> getAll() {
+        return variables;
+    }
+
+    public boolean isPresent(final String name) {
+        return variables.get(name) != null;
+    }
 }

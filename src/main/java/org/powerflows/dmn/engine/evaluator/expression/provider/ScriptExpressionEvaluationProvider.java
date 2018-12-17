@@ -17,7 +17,7 @@
 package org.powerflows.dmn.engine.evaluator.expression.provider;
 
 import lombok.extern.slf4j.Slf4j;
-import org.powerflows.dmn.engine.evaluator.context.ModifiableContextVariables;
+import org.powerflows.dmn.engine.evaluator.context.EvaluationContext;
 import org.powerflows.dmn.engine.evaluator.exception.EvaluationException;
 import org.powerflows.dmn.engine.evaluator.expression.script.ScriptEngineProvider;
 import org.powerflows.dmn.engine.evaluator.expression.script.bindings.ContextVariablesBindings;
@@ -39,10 +39,10 @@ class ScriptExpressionEvaluationProvider implements ExpressionEvaluationProvider
     }
 
     @Override
-    public Object evaluateInput(final Input input, final ModifiableContextVariables contextVariables) {
-        log.debug("Starting evaluation of input: {} with context variables: {}", input, contextVariables);
+    public Object evaluateInput(final Input input, final EvaluationContext evaluationContext) {
+        log.debug("Starting evaluation of input: {} with evaluation context: {}", input, evaluationContext);
 
-        final Object result = evaluate(input.getExpression(), contextVariables);
+        final Object result = evaluate(input.getExpression(), evaluationContext);
 
         log.debug("Evaluated result: {}", result);
 
@@ -50,19 +50,19 @@ class ScriptExpressionEvaluationProvider implements ExpressionEvaluationProvider
     }
 
     @Override
-    public Object evaluateEntry(final Expression entryExpression, final ModifiableContextVariables contextVariables) {
-        log.debug("Starting evaluation of entry with expression: {} and context variables: {}", entryExpression, contextVariables);
+    public Object evaluateEntry(final Expression entryExpression, final EvaluationContext evaluationContext) {
+        log.debug("Starting evaluation of entry with expression: {} and evaluation context: {}", entryExpression, evaluationContext);
 
-        final Object result = evaluate(entryExpression, contextVariables);
+        final Object result = evaluate(entryExpression, evaluationContext);
 
         log.debug("Evaluated entry result: {}", result);
 
         return result;
     }
 
-    private Object evaluate(final Expression expression, final ModifiableContextVariables contextVariables) {
+    private Object evaluate(final Expression expression, final EvaluationContext evaluationContext) {
         final ScriptEngine scriptEngine = scriptEngineProvider.getScriptEngine(expression.getType());
-        final Bindings bindings = ContextVariablesBindings.create(scriptEngine.createBindings(), contextVariables);
+        final Bindings bindings = ContextVariablesBindings.create(scriptEngine.createBindings(), evaluationContext);
 
         final Object result;
 

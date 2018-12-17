@@ -23,7 +23,8 @@ public enum ValueType {
     STRING,
     INTEGER,
     DOUBLE,
-    BOOLEAN;
+    BOOLEAN,
+    DATE;
 
     public static Optional<ValueType> safeValueOf(final String name) {
         if (name == null) {

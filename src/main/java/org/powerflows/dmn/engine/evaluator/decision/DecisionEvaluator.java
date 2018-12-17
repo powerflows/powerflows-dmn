@@ -18,7 +18,7 @@ package org.powerflows.dmn.engine.evaluator.decision;
 
 
 import lombok.extern.slf4j.Slf4j;
-import org.powerflows.dmn.engine.evaluator.context.ModifiableContextVariables;
+import org.powerflows.dmn.engine.evaluator.context.EvaluationContext;
 import org.powerflows.dmn.engine.evaluator.exception.EvaluationException;
 import org.powerflows.dmn.engine.evaluator.rule.RuleEvaluator;
 import org.powerflows.dmn.engine.model.decision.Decision;
@@ -27,9 +27,9 @@ import org.powerflows.dmn.engine.model.decision.expression.ExpressionType;
 import org.powerflows.dmn.engine.model.decision.field.Input;
 import org.powerflows.dmn.engine.model.decision.field.Output;
 import org.powerflows.dmn.engine.model.decision.rule.Rule;
-import org.powerflows.dmn.engine.model.evaluation.context.ContextVariables;
 import org.powerflows.dmn.engine.model.evaluation.result.DecisionResult;
 import org.powerflows.dmn.engine.model.evaluation.result.RuleResult;
+import org.powerflows.dmn.engine.model.evaluation.variable.DecisionVariables;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -46,18 +46,18 @@ public class DecisionEvaluator {
         this.ruleEvaluator = ruleEvaluator;
     }
 
-    public DecisionResult evaluate(final Decision decision, final ContextVariables contextVariables) {
+    public DecisionResult evaluate(final Decision decision, final DecisionVariables decisionVariables) {
         if (decision == null) {
             throw new NullPointerException("Decision can not be null");
         }
 
-        if (contextVariables == null) {
-            throw new NullPointerException("Context variables can not be null");
+        if (decisionVariables == null) {
+            throw new NullPointerException("Decision variables can not be null");
         }
 
-        log.info("Starting evaluation of decision: {} with context variables: {}", decision, contextVariables);
+        log.info("Starting evaluation of decision: {} with decision variables: {}", decision, decisionVariables);
 
-        validateContextVariables(decision.getInputs(), contextVariables);
+        validateDecisionVariables(decision.getInputs(), decisionVariables);
 
         final List<RuleResult> ruleResults = new ArrayList<>();
         final boolean singleNonUniqueRuleResultExpected = isSingleNonUniqueRuleResultExpected(decision);
@@ -72,10 +72,10 @@ public class DecisionEvaluator {
                 .stream()
                 .collect(Collectors.toMap(Output::getName, Function.identity()));
 
-        final ModifiableContextVariables modifiableContextVariables = new ModifiableContextVariables(contextVariables);
+        final EvaluationContext evaluationContext = new EvaluationContext(decisionVariables);
 
         for (Rule rule : decision.getRules()) {
-            final RuleResult ruleResult = ruleEvaluator.evaluate(rule, inputs, outputs, modifiableContextVariables);
+            final RuleResult ruleResult = ruleEvaluator.evaluate(rule, inputs, outputs, evaluationContext);
 
             if (ruleResult != null) {
                 ruleResults.add(ruleResult);
@@ -97,16 +97,16 @@ public class DecisionEvaluator {
         return decisionResult;
     }
 
-    private void validateContextVariables(final List<Input> inputs, final ContextVariables contextVariables) {
+    private void validateDecisionVariables(final List<Input> inputs, final DecisionVariables decisionVariables) {
         final String invalidInputNames = inputs
                 .stream()
                 .filter(input -> input.getExpression().getValue() != null && !ExpressionType.LITERAL.equals(input.getExpression().getType()))
-                .filter(input -> contextVariables.isPresent(input.getName()))
+                .filter(input -> decisionVariables.isPresent(input.getName()))
                 .map(Input::getName)
                 .collect(Collectors.joining(","));
 
         if (!invalidInputNames.isEmpty()) {
-            throw new EvaluationException("Can not apply context variables to inputs '" + invalidInputNames + "'. Only to inputs with literal expression possible.");
+            throw new EvaluationException("Can not apply decision variables to inputs '" + invalidInputNames + "'. Only to inputs with literal expression possible.");
         }
     }
 
