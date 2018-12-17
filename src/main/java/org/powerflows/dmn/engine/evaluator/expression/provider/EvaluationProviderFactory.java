@@ -39,7 +39,7 @@ public class EvaluationProviderFactory {
         final ExpressionEvaluationProvider expressionEvaluationProvider = factories.get(expressionType);
 
         if (expressionEvaluationProvider == null) {
-            throw new IllegalArgumentException("Unknown expression type.");
+            throw new IllegalArgumentException("Unknown expression type");
         }
 
         return expressionEvaluationProvider;

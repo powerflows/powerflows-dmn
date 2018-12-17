@@ -29,6 +29,7 @@ public class TypeConverterFactory {
         factories.put(ValueType.INTEGER, new IntegerConverter());
         factories.put(ValueType.DOUBLE, new DoubleConverter());
         factories.put(ValueType.BOOLEAN, new BooleanConverter());
+        factories.put(ValueType.DATE, new DateConverter());
     }
 
     public TypeConverter getInstance(final ValueType valueType) {

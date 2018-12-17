@@ -66,6 +66,7 @@ class DefaultDecisionEngineConfigurationReferenceSingleSpec extends Specificatio
         variables.put('p', 0)
         variables.put('q', 0)
         variables.put('arrayVar', '')
+        variables.put('inputFour', Date.parse('yyyy-MM-dd', '2018-12-18'))
         final DecisionVariables decisionVariables = new DecisionVariables(variables)
 
         when:
@@ -90,6 +91,7 @@ class DefaultDecisionEngineConfigurationReferenceSingleSpec extends Specificatio
         variables.put('p', 0)
         variables.put('q', 0)
         variables.put('arrayVar', '')
+        variables.put('inputFour', Date.parse('yyyy-MM-dd', '2018-12-18'))
         final DecisionVariables decisionVariables = new DecisionVariables(variables)
 
         when:
@@ -120,6 +122,7 @@ class DefaultDecisionEngineConfigurationReferenceSingleSpec extends Specificatio
         variables.put('p', 0)
         variables.put('q', 0)
         variables.put('arrayVar', '')
+        variables.put('inputFour', Date.parse('yyyy-MM-dd', '2018-12-18'))
         final DecisionVariables decisionVariables = new DecisionVariables(variables)
 
         when:
@@ -156,6 +159,7 @@ class DefaultDecisionEngineConfigurationReferenceSingleSpec extends Specificatio
         variables.put('p', 3)
         variables.put('q', 4)
         variables.put('arrayVar', '')
+        variables.put('inputFour', Date.parse('yyyy-MM-dd', '2018-12-18'))
         final DecisionVariables decisionVariables = new DecisionVariables(variables)
 
         when:
@@ -205,6 +209,7 @@ class DefaultDecisionEngineConfigurationReferenceSingleSpec extends Specificatio
         variables.put('p', 0)
         variables.put('q', 0)
         variables.put('arrayVar', 'a,e,c')
+        variables.put('inputFour', Date.parse('yyyy-MM-dd', '2018-12-18'))
         final DecisionVariables decisionVariables = new DecisionVariables(variables)
 
         when:
@@ -241,6 +246,7 @@ class DefaultDecisionEngineConfigurationReferenceSingleSpec extends Specificatio
         variables.put('p', 25)
         variables.put('q', 26)
         variables.put('arrayVar', '')
+        variables.put('inputFour', Date.parse('yyyy-MM-dd', '2018-12-18'))
         final DecisionVariables decisionVariables = new DecisionVariables(variables)
 
         when:
@@ -266,6 +272,130 @@ class DefaultDecisionEngineConfigurationReferenceSingleSpec extends Specificatio
         with(entryResult2) {
             getName() == 'outputTwo'
             getValue() == 'The output rule five'
+        }
+    }
+
+    void 'should evaluate single rule when date input entry is matching using default decision engine'() {
+        given:
+        final Map<String, Object> variables = [:]
+        variables.put('x', 0)
+        variables.put('y', 0)
+        variables.put('p', 7)
+        variables.put('q', 7)
+        variables.put('arrayVar', '')
+        variables.put('inputFour', '2018-12-14')
+        final DecisionVariables decisionVariables = new DecisionVariables(variables)
+
+        when:
+        final DecisionResult decisionResult = decisionEngine.evaluate(decision, decisionVariables)
+
+        then:
+        decisionResult != null
+
+        with(decisionResult) {
+            !isSingleEntryResult()
+            isSingleRuleResult()
+            !isCollectionRulesResult()
+            getSingleRuleResult().getEntryResults().size() == 2
+        }
+
+        final EntryResult entryResult1 = decisionResult.getSingleRuleResult().getEntryResults()[0]
+        with(entryResult1) {
+            getName() == 'outputOne'
+            getValue()
+        }
+
+        final EntryResult entryResult2 = decisionResult.getSingleRuleResult().getEntryResults()[1]
+        with(entryResult2) {
+            getName() == 'outputTwo'
+            getValue() == 'The output rule six'
+        }
+    }
+
+    void 'should evaluate single rule when date with time input entry is matching using default decision engine'() {
+        given:
+        final Map<String, Object> variables = [:]
+        variables.put('x', 0)
+        variables.put('y', 0)
+        variables.put('p', 7)
+        variables.put('q', 7)
+        variables.put('arrayVar', '')
+        variables.put('inputFour', '2018-12-14T19:38:26')
+        final DecisionVariables decisionVariables = new DecisionVariables(variables)
+
+        when:
+        final DecisionResult decisionResult = decisionEngine.evaluate(decision, decisionVariables)
+
+        then:
+        decisionResult != null
+
+        with(decisionResult) {
+            !isSingleEntryResult()
+            isSingleRuleResult()
+            !isCollectionRulesResult()
+            getSingleRuleResult().getEntryResults().size() == 2
+        }
+
+        final EntryResult entryResult1 = decisionResult.getSingleRuleResult().getEntryResults()[0]
+        with(entryResult1) {
+            getName() == 'outputOne'
+            getValue()
+        }
+
+        final EntryResult entryResult2 = decisionResult.getSingleRuleResult().getEntryResults()[1]
+        with(entryResult2) {
+            getName() == 'outputTwo'
+            getValue() == 'The output rule seven'
+        }
+    }
+
+    void 'should evaluate multiple rule when date with time input entry is matching using default decision engine'() {
+        given:
+        final Map<String, Object> variables = [:]
+        variables.put('x', 0)
+        variables.put('y', 0)
+        variables.put('p', 7)
+        variables.put('q', 7)
+        variables.put('arrayVar', '')
+        variables.put('inputFour', Date.parse('yyyy-MM-dd', '2018-12-13'))
+        final DecisionVariables decisionVariables = new DecisionVariables(variables)
+
+        when:
+        final DecisionResult decisionResult = decisionEngine.evaluate(decision, decisionVariables)
+
+        then:
+        decisionResult != null
+
+        with(decisionResult) {
+            !isSingleEntryResult()
+            !isSingleRuleResult()
+            isCollectionRulesResult()
+            getCollectionRulesResult().get(0).getEntryResults().size() == 2
+            getCollectionRulesResult().get(1).getEntryResults().size() == 2
+        }
+
+        final EntryResult entryResult11 = decisionResult.getCollectionRulesResult().get(0).getEntryResults()[0]
+        with(entryResult11) {
+            getName() == 'outputOne'
+            getValue()
+        }
+
+        final EntryResult entryResult12 = decisionResult.getCollectionRulesResult().get(0).getEntryResults()[1]
+        with(entryResult12) {
+            getName() == 'outputTwo'
+            getValue() == 'The output rule eight'
+        }
+
+        final EntryResult entryResult21 = decisionResult.getCollectionRulesResult().get(1).getEntryResults()[0]
+        with(entryResult21) {
+            getName() == 'outputOne'
+            getValue()
+        }
+
+        final EntryResult entryResult22 = decisionResult.getCollectionRulesResult().get(1).getEntryResults()[1]
+        with(entryResult22) {
+            getName() == 'outputTwo'
+            getValue() == 'The output rule nine'
         }
     }
 }
