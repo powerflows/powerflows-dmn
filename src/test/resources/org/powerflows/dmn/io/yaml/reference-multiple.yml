@@ -2,6 +2,7 @@ id: some_table_id_1
 name: Some Table Name
 hit-policy: UNIQUE
 expression-type: GROOVY
+evaluation-mode: INPUT_COMPARISON
 fields:
   in:
     inputOne:
@@ -44,6 +45,7 @@ id: some_table_id_2
 name: Some Table Name
 hit-policy: UNIQUE
 expression-type: GROOVY
+evaluation-mode: INPUT_COMPARISON
 fields:
   in:
     inputOne:

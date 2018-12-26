@@ -15,9 +15,11 @@
  */
 package org.powerflows.dmn.io.yaml;
 
+import org.powerflows.dmn.engine.model.decision.EvaluationMode;
 import org.powerflows.dmn.engine.model.decision.expression.ExpressionType;
 import org.powerflows.dmn.io.yaml.model.YamlDecision;
-import org.powerflows.dmn.io.yaml.model.rule.YamlRuleEntry;
+import org.powerflows.dmn.io.yaml.model.rule.entry.YamlInputEntry;
+import org.powerflows.dmn.io.yaml.model.rule.entry.YamlOutputEntry;
 import org.yaml.snakeyaml.introspector.Property;
 import org.yaml.snakeyaml.nodes.Node;
 import org.yaml.snakeyaml.nodes.NodeTuple;
@@ -32,15 +34,28 @@ public class CustomRepresenter extends Representer {
     CustomRepresenter() {
         this.setPropertyUtils(new CustomPropertyUtils());
         this.addClassTag(YamlDecision.class, Tag.MAP);
-        this.representers.put(YamlRuleEntry.class, new RepresentYamlRuleEntry());
+        this.representers.put(YamlInputEntry.class, new RepresentYamlInputEntry());
+        this.representers.put(YamlOutputEntry.class, new RepresentYamlOutputEntry());
     }
 
-    class RepresentYamlRuleEntry implements Represent {
+    class RepresentYamlInputEntry implements Represent {
 
         @Override
         public Node representData(Object data) {
-            if (data instanceof YamlRuleEntry && ((YamlRuleEntry) data).getExpressionType() == ExpressionType.LITERAL) {
-                return represent(((YamlRuleEntry) data).getExpression());
+            if (data instanceof YamlInputEntry && ((YamlInputEntry) data).getExpressionType() == ExpressionType.LITERAL && ((YamlInputEntry) data).getEvaluationMode() == EvaluationMode.BOOLEAN) {
+                return represent(((YamlInputEntry) data).getExpression());
+            }
+
+            return representJavaBean(getProperties(data.getClass()), data);
+        }
+    }
+
+    class RepresentYamlOutputEntry implements Represent {
+
+        @Override
+        public Node representData(Object data) {
+            if (data instanceof YamlOutputEntry && ((YamlOutputEntry) data).getExpressionType() == ExpressionType.LITERAL) {
+                return represent(((YamlOutputEntry) data).getExpression());
             }
 
             return representJavaBean(getProperties(data.getClass()), data);
@@ -57,14 +72,18 @@ public class CustomRepresenter extends Representer {
     }
 
     private boolean isEmpty(final Object propertyValue) {
+        final boolean empty;
+
         if (propertyValue instanceof Collection) {
-            return ((Collection) propertyValue).isEmpty();
+            empty = ((Collection) propertyValue).isEmpty();
         } else if (propertyValue instanceof Map) {
-            return ((Map) propertyValue).isEmpty();
+            empty = ((Map) propertyValue).isEmpty();
         } else if (propertyValue instanceof String) {
-            return ((String) propertyValue).isEmpty();
+            empty = ((String) propertyValue).isEmpty();
+        } else {
+            empty = propertyValue == ExpressionType.LITERAL || propertyValue == EvaluationMode.BOOLEAN;
         }
 
-        return propertyValue == ExpressionType.LITERAL;
+        return empty;
     }
 }

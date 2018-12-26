@@ -19,6 +19,7 @@ package org.powerflows.dmn.engine.model.decision.rule.entry;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import org.powerflows.dmn.engine.model.builder.AbstractBuilder;
+import org.powerflows.dmn.engine.model.decision.EvaluationMode;
 import org.powerflows.dmn.engine.model.decision.expression.Expression;
 import org.powerflows.dmn.engine.model.decision.expression.ExpressionType;
 
@@ -34,6 +35,7 @@ public class InputEntry implements Serializable {
 
     private String name;
     private Expression expression;
+    private EvaluationMode evaluationMode;
 
     private InputEntry() {
     }
@@ -44,6 +46,10 @@ public class InputEntry implements Serializable {
 
     public Expression getExpression() {
         return expression;
+    }
+
+    public EvaluationMode getEvaluationMode() {
+        return evaluationMode;
     }
 
     public static <P extends AbstractBuilder> FluentBuilder<P> fluentBuilder(final P parentBuilder, final Consumer<InputEntry> inputEntryConsumer) {
@@ -63,6 +69,12 @@ public class InputEntry implements Serializable {
 
         public B name(String name) {
             this.product.name = name;
+
+            return (B) this;
+        }
+
+        public B evaluationMode(EvaluationMode evaluationMode) {
+            this.product.evaluationMode = evaluationMode;
 
             return (B) this;
         }

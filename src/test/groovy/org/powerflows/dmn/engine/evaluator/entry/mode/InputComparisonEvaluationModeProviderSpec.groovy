@@ -14,23 +14,38 @@
  * limitations under the License.
  */
 
-package org.powerflows.dmn.engine.evaluator.expression.comparator
+package org.powerflows.dmn.engine.evaluator.entry.mode
 
+import org.powerflows.dmn.engine.evaluator.entry.mode.provider.EvaluationModeProvider
+import org.powerflows.dmn.engine.evaluator.entry.mode.provider.EvaluationModeProviderFactory
+import org.powerflows.dmn.engine.evaluator.type.value.BooleanValue
 import org.powerflows.dmn.engine.evaluator.type.value.IntegerValue
 import org.powerflows.dmn.engine.evaluator.type.value.SpecifiedTypeValue
+import org.powerflows.dmn.engine.model.decision.EvaluationMode
+import org.powerflows.dmn.engine.model.decision.field.ValueType
+import spock.lang.Shared
 import spock.lang.Specification
 import spock.lang.Unroll
 
-class DefaultObjectsComparatorSpec extends Specification {
+class InputComparisonEvaluationModeProviderSpec extends Specification {
 
-    private final ObjectsComparator defaultObjectsComparator = new DefaultObjectsComparator()
+    @Shared
+    private EvaluationModeProvider inputComparisonEvaluationModeProvider
+
+    void setup() {
+        final EvaluationModeProviderFactory evaluationModeProviderFactory = new EvaluationModeProviderFactory()
+        inputComparisonEvaluationModeProvider = evaluationModeProviderFactory.getInstance(EvaluationMode.INPUT_COMPARISON)
+    }
 
     @Unroll
     void 'should compare input entry value #inputEntryValue and input value #inputValue with result #expectedResult'(
             final Object inputEntryValue, final Object inputValue, final boolean expectedResult) {
         given:
-        final SpecifiedTypeValue<Integer> specifiedInputEntryValue
-        if (inputEntryValue instanceof List) {
+        final SpecifiedTypeValue<?> specifiedInputEntryValue
+
+        if (Boolean.TRUE.equals(inputEntryValue) || Boolean.FALSE.equals(inputEntryValue)) {
+            specifiedInputEntryValue = new BooleanValue(inputEntryValue)
+        } else if (inputEntryValue instanceof List) {
             specifiedInputEntryValue = new IntegerValue(inputEntryValue as List<Integer>)
         } else {
             specifiedInputEntryValue = new IntegerValue(inputEntryValue as Integer)
@@ -44,7 +59,7 @@ class DefaultObjectsComparatorSpec extends Specification {
         }
 
         when:
-        final boolean result = defaultObjectsComparator.isInputEntryValueEqualInputValue(specifiedInputEntryValue, specifiedInputValue)
+        final boolean result = inputComparisonEvaluationModeProvider.isPositive(ValueType.INTEGER, specifiedInputEntryValue, specifiedInputValue)
 
         then:
         result == expectedResult
@@ -67,6 +82,8 @@ class DefaultObjectsComparatorSpec extends Specification {
         null as List    | [4] as List    || false
         [4] as List     | null as List   || false
         null as List    | null as List   || true
+        true            | 1              || true
+        false           | 1              || false
     }
 
     void 'should throw exception when input entry value is null'() {
@@ -75,7 +92,7 @@ class DefaultObjectsComparatorSpec extends Specification {
         final SpecifiedTypeValue<Integer> specifiedInputValue = new IntegerValue(4)
 
         when:
-        defaultObjectsComparator.isInputEntryValueEqualInputValue(specifiedInputEntryValue, specifiedInputValue)
+        inputComparisonEvaluationModeProvider.isPositive(ValueType.INTEGER, specifiedInputEntryValue, specifiedInputValue)
 
         then:
         final NullPointerException exception = thrown()
@@ -89,7 +106,7 @@ class DefaultObjectsComparatorSpec extends Specification {
         final SpecifiedTypeValue<Integer> specifiedInputValue = null
 
         when:
-        defaultObjectsComparator.isInputEntryValueEqualInputValue(specifiedInputEntryValue, specifiedInputValue)
+        inputComparisonEvaluationModeProvider.isPositive(ValueType.INTEGER, specifiedInputEntryValue, specifiedInputValue)
 
         then:
         final NullPointerException exception = thrown()

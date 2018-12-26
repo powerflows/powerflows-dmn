@@ -142,8 +142,27 @@ class ContextVariablesBindingsSpec extends Specification {
         contextVariablesBindings.remove(variableName)
 
         then:
-        with(contextVariablesBindings) {
-            isEmpty()
-        }
+        !contextVariablesBindings.containsKey(variableName)
+
+    }
+
+    void 'should clear ContextVariablesBindings instance'() {
+        given:
+        final String variableName = 'x'
+        final Object variableValue = 10
+        final Bindings bindings = scriptEngine.createBindings()
+
+        final Map<String, Object> contextVariablesMap = [:]
+        contextVariablesMap.put(variableName, variableValue)
+        final DecisionVariables decisionVariables = new DecisionVariables(contextVariablesMap)
+        final EvaluationContext contextVariables = new EvaluationContext(decisionVariables)
+
+        final ContextVariablesBindings contextVariablesBindings = ContextVariablesBindings.create(bindings, contextVariables)
+
+        when:
+        contextVariablesBindings.clear()
+
+        then:
+        contextVariablesBindings.isEmpty()
     }
 }

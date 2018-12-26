@@ -14,17 +14,9 @@
  * limitations under the License.
  */
 
-package org.powerflows.dmn.io.yaml.model.rule;
+package org.powerflows.dmn.engine.model.decision;
 
-import lombok.Data;
-import org.powerflows.dmn.io.yaml.model.rule.entry.YamlInputEntry;
-import org.powerflows.dmn.io.yaml.model.rule.entry.YamlOutputEntry;
-
-import java.util.LinkedHashMap;
-
-@Data
-public final class YamlRule {
-    private String description;
-    private LinkedHashMap<String, YamlInputEntry> in;
-    private LinkedHashMap<String, YamlOutputEntry> out;
+public enum EvaluationMode {
+    BOOLEAN,
+    INPUT_COMPARISON
 }

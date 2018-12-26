@@ -42,6 +42,7 @@ public class Decision implements Serializable {
     private String name;
     private HitPolicy hitPolicy;
     private ExpressionType expressionType;
+    private EvaluationMode evaluationMode;
     private List<Input> inputs = new ArrayList<>();
     private List<Output> outputs = new ArrayList<>();
     private List<Rule> rules = new ArrayList<>();
@@ -63,6 +64,10 @@ public class Decision implements Serializable {
 
     public ExpressionType getExpressionType() {
         return expressionType;
+    }
+
+    public EvaluationMode getEvaluationMode() {
+        return evaluationMode;
     }
 
     public List<Input> getInputs() {
@@ -111,6 +116,12 @@ public class Decision implements Serializable {
 
         public B expressionType(ExpressionType expressionType) {
             this.product.expressionType = expressionType;
+
+            return (B) this;
+        }
+
+        public B evaluationMode(EvaluationMode evaluationMode) {
+            this.product.evaluationMode = evaluationMode;
 
             return (B) this;
         }
