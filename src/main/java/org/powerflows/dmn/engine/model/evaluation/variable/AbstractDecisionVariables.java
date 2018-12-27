@@ -19,19 +19,20 @@ package org.powerflows.dmn.engine.model.evaluation.variable;
 
 import lombok.ToString;
 
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
 @ToString
 public class AbstractDecisionVariables {
 
-    protected Map<String, Object> variables = new HashMap<>();
+    protected Map<String, Serializable> variables = new HashMap<>();
 
-    public Object get(final String name) {
+    public Serializable get(final String name) {
         return variables.get(name);
     }
 
-    public Map<String, Object> getAll() {
+    public Map<String, Serializable> getAll() {
         return variables;
     }
 

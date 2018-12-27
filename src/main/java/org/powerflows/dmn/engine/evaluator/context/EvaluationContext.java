@@ -34,7 +34,7 @@ public class EvaluationContext extends AbstractDecisionVariables implements Seri
         this.variables.putAll(decisionVariables.getAll());
     }
 
-    public synchronized void addVariable(final String key, Object value) {
+    public synchronized void addVariable(final String key, final Serializable value) {
         variables.put(key, value);
     }
 }

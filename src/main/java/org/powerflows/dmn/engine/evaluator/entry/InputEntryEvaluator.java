@@ -31,6 +31,8 @@ import org.powerflows.dmn.engine.model.decision.field.Input;
 import org.powerflows.dmn.engine.model.decision.field.ValueType;
 import org.powerflows.dmn.engine.model.decision.rule.entry.InputEntry;
 
+import java.io.Serializable;
+
 @Slf4j
 public class InputEntryEvaluator {
 
@@ -56,7 +58,7 @@ public class InputEntryEvaluator {
 
         if (!isInputEvaluated(input, evaluationContext)) {
             final ExpressionEvaluationProvider inputExpressionEvaluator = expressionEvaluationProviderFactory.getInstance(input.getExpression().getType());
-            final Object evaluatedInputValue = inputExpressionEvaluator.evaluateInput(input, evaluationContext);
+            final Serializable evaluatedInputValue = inputExpressionEvaluator.evaluateInput(input, evaluationContext);
 
             evaluationContext.addVariable(input.getName(), evaluatedInputValue);
         }

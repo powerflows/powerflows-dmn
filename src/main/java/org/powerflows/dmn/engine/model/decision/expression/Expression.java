@@ -29,13 +29,13 @@ public class Expression implements Serializable {
 
     private static final long serialVersionUID = 1;
 
-    private Object value;
+    private Serializable value;
     private ExpressionType type;
 
     private Expression() {
     }
 
-    public Object getValue() {
+    public Serializable getValue() {
         return value;
     }
 
@@ -58,7 +58,7 @@ public class Expression implements Serializable {
             this.product = new Expression();
         }
 
-        public B value(Object value) {
+        public B value(Serializable value) {
             this.product.value = value;
 
             return (B) this;
