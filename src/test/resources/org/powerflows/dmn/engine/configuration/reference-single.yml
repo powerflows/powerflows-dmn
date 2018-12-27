@@ -1,6 +1,7 @@
 id: some_table_id_1
 name: Some Table Name
 hit-policy: COLLECT
+evaluation-mode: INPUT_COMPARISON
 fields:
   in:
     inputOne:
@@ -70,6 +71,7 @@ rules:
     inputOne:
       expression-type: JAVASCRIPT
       expression: (p + q) > 50
+      evaluation-mode: BOOLEAN
   out:
     outputOne: true
     outputTwo: The output rule five
@@ -94,6 +96,7 @@ rules:
     inputFour:
       expression-type: GROOVY
       expression: "((inputFour instanceof String) ? Date.parse('yyyy-MM-dd', '2018-12-24') : inputFour) < Date.parse('yyyy-MM-dd', '2018-12-14')"
+      evaluation-mode: BOOLEAN
   out:
     outputOne: true
     outputTwo: The output rule eight
@@ -102,6 +105,7 @@ rules:
     inputFour:
       expression-type: JAVASCRIPT
       expression: "((typeof inputFour == 'string') ? new Date(2018, 11, 14) : inputFour).getTime() == new Date(2018, 11, 13).getTime()"
+      evaluation-mode: BOOLEAN
   out:
     outputOne: true
     outputTwo: The output rule nine

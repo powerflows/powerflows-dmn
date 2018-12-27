@@ -75,7 +75,7 @@ public class DecisionEvaluator {
         final EvaluationContext evaluationContext = new EvaluationContext(decisionVariables);
 
         for (Rule rule : decision.getRules()) {
-            final RuleResult ruleResult = ruleEvaluator.evaluate(rule, inputs, outputs, evaluationContext);
+            final RuleResult ruleResult = ruleEvaluator.evaluate(rule, decision.getEvaluationMode(), inputs, outputs, evaluationContext);
 
             if (ruleResult != null) {
                 ruleResults.add(ruleResult);

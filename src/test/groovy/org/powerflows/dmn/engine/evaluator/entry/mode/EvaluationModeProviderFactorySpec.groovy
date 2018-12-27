@@ -14,26 +14,27 @@
  * limitations under the License.
  */
 
-package org.powerflows.dmn.engine.evaluator.expression.provider
+package org.powerflows.dmn.engine.evaluator.entry.mode
 
-import org.powerflows.dmn.engine.model.decision.expression.ExpressionType
+import org.powerflows.dmn.engine.evaluator.entry.mode.provider.EvaluationModeProviderFactory
+import org.powerflows.dmn.engine.model.decision.EvaluationMode
 import spock.lang.Specification
 
-class EvaluationProviderFactorySpec extends Specification {
+class EvaluationModeProviderFactorySpec extends Specification {
 
-    private final EvaluationProviderFactory evaluationProviderFactory = new EvaluationProviderFactory()
+    private final EvaluationModeProviderFactory evaluationModeProviderFactory = new EvaluationModeProviderFactory()
 
 
-    void 'should throw exception when unknown expression type'() {
+    void 'should throw exception when unknown evaluation mode'() {
         given:
-        final ExpressionType expressionType = null
+        final EvaluationMode evaluationMode = null
 
         when:
-        evaluationProviderFactory.getInstance(expressionType)
+        evaluationModeProviderFactory.getInstance(evaluationMode)
 
         then:
         final IllegalArgumentException exception = thrown()
         exception != null
-        exception.getMessage() == 'Unknown expression type'
+        exception.getMessage() == 'Unknown evaluation mode null'
     }
 }

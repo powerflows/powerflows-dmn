@@ -19,15 +19,17 @@ package org.powerflows.dmn.engine.evaluator.decision
 import org.powerflows.dmn.engine.evaluator.exception.EvaluationException
 import org.powerflows.dmn.engine.evaluator.rule.RuleEvaluator
 import org.powerflows.dmn.engine.model.decision.Decision
+import org.powerflows.dmn.engine.model.decision.EvaluationMode
 import org.powerflows.dmn.engine.model.decision.HitPolicy
 import org.powerflows.dmn.engine.model.decision.expression.Expression
 import org.powerflows.dmn.engine.model.decision.expression.ExpressionType
 import org.powerflows.dmn.engine.model.decision.field.Input
 import org.powerflows.dmn.engine.model.decision.rule.Rule
-import org.powerflows.dmn.engine.model.evaluation.variable.DecisionVariables
 import org.powerflows.dmn.engine.model.evaluation.result.DecisionResult
 import org.powerflows.dmn.engine.model.evaluation.result.RuleResult
+import org.powerflows.dmn.engine.model.evaluation.variable.DecisionVariables
 import spock.lang.Specification
+import spock.lang.Unroll
 
 class DecisionEvaluatorSpec extends Specification {
 
@@ -70,9 +72,10 @@ class DecisionEvaluatorSpec extends Specification {
         final List<Rule> rules = [rule1, rule2]
         final DecisionVariables decisionContextVariables = new DecisionVariables([:])
 
-        final Decision decision = [hitPolicy: HitPolicy.UNIQUE,
-                                   inputs   : inputs,
-                                   rules    : rules] as Decision
+        final Decision decision = [hitPolicy     : HitPolicy.UNIQUE,
+                                   evaluationMode: EvaluationMode.INPUT_COMPARISON,
+                                   inputs        : inputs,
+                                   rules         : rules] as Decision
 
         when:
         decisionEvaluator.evaluate(decision, decisionContextVariables)
@@ -82,8 +85,8 @@ class DecisionEvaluatorSpec extends Specification {
         exception != null
         exception.getMessage() == 'Unique result is expected'
 
-        1 * ruleEvaluator.evaluate(rule1, [:], [:], _) >> RuleResult.builder().entryResults([]).build()
-        1 * ruleEvaluator.evaluate(rule2, [:], [:], _) >> RuleResult.builder().entryResults([]).build()
+        1 * ruleEvaluator.evaluate(rule1, decision.evaluationMode, [:], [:], _) >> RuleResult.builder().entryResults([]).build()
+        1 * ruleEvaluator.evaluate(rule2, decision.evaluationMode, [:], [:], _) >> RuleResult.builder().entryResults([]).build()
         0 * _
     }
 
@@ -120,9 +123,10 @@ class DecisionEvaluatorSpec extends Specification {
         final List<Rule> rules = [rule]
         final DecisionVariables decisionContextVariables = new DecisionVariables([:])
 
-        final Decision decision = [hitPolicy: HitPolicy.UNIQUE,
-                                   inputs   : inputs,
-                                   rules    : rules] as Decision
+        final Decision decision = [hitPolicy     : HitPolicy.UNIQUE,
+                                   evaluationMode: EvaluationMode.INPUT_COMPARISON,
+                                   inputs        : inputs,
+                                   rules         : rules] as Decision
 
         final expectedRuleResult = RuleResult.builder().entryResults([]).build()
 
@@ -141,7 +145,7 @@ class DecisionEvaluatorSpec extends Specification {
         final RuleResult ruleResult = decisionResult.getSingleRuleResult()
         ruleResult == expectedRuleResult
 
-        1 * ruleEvaluator.evaluate(rule, [:], [:], _) >> expectedRuleResult
+        1 * ruleEvaluator.evaluate(rule, decision.evaluationMode, [:], [:], _) >> expectedRuleResult
         0 * _
     }
 
@@ -153,9 +157,10 @@ class DecisionEvaluatorSpec extends Specification {
         final List<Rule> rules = [rule1, rule2]
         final DecisionVariables decisionContextVariables = new DecisionVariables([:])
 
-        final Decision decision = [hitPolicy: HitPolicy.COLLECT,
-                                   inputs   : inputs,
-                                   rules    : rules] as Decision
+        final Decision decision = [hitPolicy     : HitPolicy.COLLECT,
+                                   evaluationMode: EvaluationMode.INPUT_COMPARISON,
+                                   inputs        : inputs,
+                                   rules         : rules] as Decision
 
         final expectedRuleResult1 = RuleResult.builder().entryResults([]).build()
         final expectedRuleResult2 = RuleResult.builder().entryResults([]).build()
@@ -177,12 +182,14 @@ class DecisionEvaluatorSpec extends Specification {
         ruleResults[0] == expectedRuleResult1
         ruleResults[1] == expectedRuleResult2
 
-        1 * ruleEvaluator.evaluate(rule1, [:], [:], _) >> expectedRuleResult1
-        1 * ruleEvaluator.evaluate(rule2, [:], [:], _) >> expectedRuleResult2
+        1 * ruleEvaluator.evaluate(rule1, decision.evaluationMode, [:], [:], _) >> expectedRuleResult1
+        1 * ruleEvaluator.evaluate(rule2, decision.evaluationMode, [:], [:], _) >> expectedRuleResult2
         0 * _
     }
 
-    void 'should return decision result when single non-unique result is expected and single non-unique evaluated'() {
+    @Unroll
+    void 'should return decision result when single non-unique result is expected and single non-unique evaluated for hit policy #hitPolicy'(
+            final HitPolicy hitPolicy) {
         given:
         final List<Input> inputs = [];
         final Rule rule1 = [] as Rule
@@ -190,11 +197,12 @@ class DecisionEvaluatorSpec extends Specification {
         final List<Rule> rules = [rule1, rule2]
         final DecisionVariables decisionContextVariables = new DecisionVariables([:])
 
-        final Decision decision = [hitPolicy: HitPolicy.FIRST,
-                                   inputs   : inputs,
-                                   rules    : rules] as Decision
+        final Decision decision = [hitPolicy     : hitPolicy,
+                                   evaluationMode: EvaluationMode.INPUT_COMPARISON,
+                                   inputs        : inputs,
+                                   rules         : rules] as Decision
 
-        final expectedRuleResult = RuleResult.builder().entryResults([]).build()
+        final RuleResult expectedRuleResult = RuleResult.builder().entryResults([]).build()
 
         when:
         final DecisionResult decisionResult = decisionEvaluator.evaluate(decision, decisionContextVariables)
@@ -211,7 +219,10 @@ class DecisionEvaluatorSpec extends Specification {
         final RuleResult ruleResult = decisionResult.getSingleRuleResult()
         ruleResult == expectedRuleResult
 
-        1 * ruleEvaluator.evaluate(rule1, [:], [:], _) >> expectedRuleResult
+        1 * ruleEvaluator.evaluate(rule1, decision.evaluationMode, [:], [:], _) >> expectedRuleResult
         0 * _
+
+        where:
+        hitPolicy << [HitPolicy.FIRST, HitPolicy.ANY]
     }
 }

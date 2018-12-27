@@ -14,26 +14,27 @@
  * limitations under the License.
  */
 
-package org.powerflows.dmn.engine.evaluator.type.converter
+package org.powerflows.dmn.engine.evaluator.expression.provider
 
-import org.powerflows.dmn.engine.model.decision.field.ValueType
+import org.powerflows.dmn.engine.model.decision.expression.ExpressionType
 import spock.lang.Specification
 
-class TypeConverterFactorySpec extends Specification {
+class ExpressionEvaluationProviderFactorySpec extends Specification {
 
-    private final TypeConverterFactory converterFactory = new TypeConverterFactory()
+    private
+    final ExpressionEvaluationProviderFactory evaluationProviderFactory = new ExpressionEvaluationProviderFactory()
 
 
-    void 'should throw exception when unknown value type'() {
+    void 'should throw exception when unknown expression type'() {
         given:
-        final ValueType valueType = null
+        final ExpressionType expressionType = null
 
         when:
-        converterFactory.getInstance(valueType)
+        evaluationProviderFactory.getInstance(expressionType)
 
         then:
         final IllegalArgumentException exception = thrown()
         exception != null
-        exception.getMessage() == 'Unknown value type null'
+        exception.getMessage() == 'Unknown expression type null'
     }
 }

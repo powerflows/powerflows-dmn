@@ -14,20 +14,12 @@
  * limitations under the License.
  */
 
-package org.powerflows.dmn.io.yaml.model.rule;
+package org.powerflows.dmn.engine.evaluator.entry.mode.provider;
 
-import lombok.Data;
-import org.powerflows.dmn.engine.model.decision.expression.ExpressionType;
+import org.powerflows.dmn.engine.evaluator.type.value.SpecifiedTypeValue;
+import org.powerflows.dmn.engine.model.decision.field.ValueType;
 
-@Data
-public final class YamlRuleEntry {
-    public YamlRuleEntry(final Object value) {
-        this.expression = value;
-    }
+public interface EvaluationModeProvider {
 
-    public YamlRuleEntry() {
-    }
-
-    private ExpressionType expressionType = ExpressionType.LITERAL;
-    private Object expression;
+    <T, P> boolean isPositive(ValueType inputType, SpecifiedTypeValue<T> inputEntryValue, SpecifiedTypeValue<P> inputValue);
 }

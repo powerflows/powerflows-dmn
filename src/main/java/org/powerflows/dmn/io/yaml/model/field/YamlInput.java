@@ -17,6 +17,7 @@
 package org.powerflows.dmn.io.yaml.model.field;
 
 import lombok.Data;
+import org.powerflows.dmn.engine.model.decision.EvaluationMode;
 import org.powerflows.dmn.engine.model.decision.expression.ExpressionType;
 import org.powerflows.dmn.engine.model.decision.field.ValueType;
 
@@ -26,5 +27,6 @@ public final class YamlInput {
     private ValueType type;
     private ExpressionType expressionType = ExpressionType.LITERAL;
     private Object expression;
+    private EvaluationMode evaluationMode;
 
 }

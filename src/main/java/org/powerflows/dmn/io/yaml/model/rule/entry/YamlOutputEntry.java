@@ -14,26 +14,20 @@
  * limitations under the License.
  */
 
-package org.powerflows.dmn.engine.evaluator.type.converter
+package org.powerflows.dmn.io.yaml.model.rule.entry;
 
-import org.powerflows.dmn.engine.model.decision.field.ValueType
-import spock.lang.Specification
+import lombok.Data;
+import org.powerflows.dmn.engine.model.decision.expression.ExpressionType;
 
-class TypeConverterFactorySpec extends Specification {
-
-    private final TypeConverterFactory converterFactory = new TypeConverterFactory()
-
-
-    void 'should throw exception when unknown value type'() {
-        given:
-        final ValueType valueType = null
-
-        when:
-        converterFactory.getInstance(valueType)
-
-        then:
-        final IllegalArgumentException exception = thrown()
-        exception != null
-        exception.getMessage() == 'Unknown value type null'
+@Data
+public final class YamlOutputEntry {
+    public YamlOutputEntry(final Object value) {
+        this.expression = value;
     }
+
+    public YamlOutputEntry() {
+    }
+
+    private ExpressionType expressionType = ExpressionType.LITERAL;
+    private Object expression;
 }
