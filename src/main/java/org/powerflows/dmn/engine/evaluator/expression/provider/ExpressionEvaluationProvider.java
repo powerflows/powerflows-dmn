@@ -20,9 +20,11 @@ import org.powerflows.dmn.engine.evaluator.context.EvaluationContext;
 import org.powerflows.dmn.engine.model.decision.expression.Expression;
 import org.powerflows.dmn.engine.model.decision.field.Input;
 
+import java.io.Serializable;
+
 public interface ExpressionEvaluationProvider {
 
-    Object evaluateInput(Input input, EvaluationContext evaluationContext);
+    Serializable evaluateInput(Input input, EvaluationContext evaluationContext);
 
-    Object evaluateEntry(Expression entryExpression, EvaluationContext evaluationContext);
+    Serializable evaluateEntry(Expression entryExpression, EvaluationContext evaluationContext);
 }

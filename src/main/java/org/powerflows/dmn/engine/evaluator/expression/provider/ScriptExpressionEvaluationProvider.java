@@ -27,6 +27,7 @@ import org.powerflows.dmn.engine.model.decision.field.Input;
 import javax.script.Bindings;
 import javax.script.ScriptEngine;
 import javax.script.ScriptException;
+import java.io.Serializable;
 
 
 @Slf4j
@@ -39,10 +40,10 @@ class ScriptExpressionEvaluationProvider implements ExpressionEvaluationProvider
     }
 
     @Override
-    public Object evaluateInput(final Input input, final EvaluationContext evaluationContext) {
+    public Serializable evaluateInput(final Input input, final EvaluationContext evaluationContext) {
         log.debug("Starting evaluation of input: {} with evaluation context: {}", input, evaluationContext);
 
-        final Object result = evaluate(input.getExpression(), evaluationContext);
+        final Serializable result = evaluate(input.getExpression(), evaluationContext);
 
         log.debug("Evaluated result: {}", result);
 
@@ -50,24 +51,24 @@ class ScriptExpressionEvaluationProvider implements ExpressionEvaluationProvider
     }
 
     @Override
-    public Object evaluateEntry(final Expression entryExpression, final EvaluationContext evaluationContext) {
+    public Serializable evaluateEntry(final Expression entryExpression, final EvaluationContext evaluationContext) {
         log.debug("Starting evaluation of entry with expression: {} and evaluation context: {}", entryExpression, evaluationContext);
 
-        final Object result = evaluate(entryExpression, evaluationContext);
+        final Serializable result = evaluate(entryExpression, evaluationContext);
 
         log.debug("Evaluated entry result: {}", result);
 
         return result;
     }
 
-    private Object evaluate(final Expression expression, final EvaluationContext evaluationContext) {
+    private Serializable evaluate(final Expression expression, final EvaluationContext evaluationContext) {
         final ScriptEngine scriptEngine = scriptEngineProvider.getScriptEngine(expression.getType());
         final Bindings bindings = ContextVariablesBindings.create(scriptEngine.createBindings(), evaluationContext);
 
-        final Object result;
+        final Serializable result;
 
         try {
-            result = scriptEngine.eval((String) expression.getValue(), bindings);
+            result = (Serializable) scriptEngine.eval((String) expression.getValue(), bindings);
         } catch (ScriptException e) {
             throw new EvaluationException("Script evaluation exception", e);
         }

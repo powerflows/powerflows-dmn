@@ -29,7 +29,7 @@ public class DecisionVariables extends AbstractDecisionVariables implements Seri
 
     private static final long serialVersionUID = 1;
 
-    public DecisionVariables(Map<String, Object> variables) {
+    public DecisionVariables(Map<String, Serializable> variables) {
         super.variables = unmodifiableMap(variables);
     }
 

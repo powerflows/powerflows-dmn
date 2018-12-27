@@ -30,6 +30,7 @@ import org.powerflows.dmn.io.yaml.model.rule.YamlRule;
 import org.powerflows.dmn.io.yaml.model.rule.entry.YamlInputEntry;
 import org.powerflows.dmn.io.yaml.model.rule.entry.YamlOutputEntry;
 
+import java.io.Serializable;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -132,7 +133,7 @@ public class YamlDecisionConverter implements DecisionToExternalModelConverter<Y
                         .description(input.getDescription())
                         .withExpression(expressionBuilder -> expressionBuilder
                                 .type(input.getExpressionType())
-                                .value(input.getExpression())
+                                .value((Serializable) input.getExpression())
                                 .build())
                         .build()));
 
@@ -150,7 +151,7 @@ public class YamlDecisionConverter implements DecisionToExternalModelConverter<Y
                             .evaluationMode(input.getEvaluationMode())
                             .withExpression(expressionBuilder -> expressionBuilder
                                     .type(input.getExpressionType())
-                                    .value(input.getExpression())
+                                    .value((Serializable) input.getExpression())
                                     .build())
                             .build()));
 
@@ -159,7 +160,7 @@ public class YamlDecisionConverter implements DecisionToExternalModelConverter<Y
                             .name(name)
                             .withExpression(expressionBuilder -> expressionBuilder
                                     .type(output.getExpressionType())
-                                    .value(output.getExpression())
+                                    .value((Serializable) output.getExpression())
                                     .build())
                             .build()));
 

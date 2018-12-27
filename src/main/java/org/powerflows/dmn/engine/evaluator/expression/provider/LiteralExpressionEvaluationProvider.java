@@ -21,15 +21,17 @@ import org.powerflows.dmn.engine.evaluator.context.EvaluationContext;
 import org.powerflows.dmn.engine.model.decision.expression.Expression;
 import org.powerflows.dmn.engine.model.decision.field.Input;
 
+import java.io.Serializable;
+
 
 @Slf4j
 class LiteralExpressionEvaluationProvider implements ExpressionEvaluationProvider {
 
     @Override
-    public Object evaluateInput(final Input input, final EvaluationContext evaluationContext) {
+    public Serializable evaluateInput(final Input input, final EvaluationContext evaluationContext) {
         log.debug("Starting evaluation of input: {} with evaluation context: {}", input, evaluationContext);
 
-        final Object value = evaluationContext.get(input.getName());
+        final Serializable value = evaluationContext.get(input.getName());
 
         if (value == null) {
             log.warn("Input value is null");
@@ -41,10 +43,10 @@ class LiteralExpressionEvaluationProvider implements ExpressionEvaluationProvide
     }
 
     @Override
-    public Object evaluateEntry(final Expression entryExpression, final EvaluationContext evaluationContext) {
+    public Serializable evaluateEntry(final Expression entryExpression, final EvaluationContext evaluationContext) {
         log.debug("Starting evaluation of entry with expression: {} and evaluation context: {}", entryExpression, evaluationContext);
 
-        final Object result = entryExpression.getValue();
+        final Serializable result = entryExpression.getValue();
 
         log.debug("Evaluated entry result: {}", result);
 

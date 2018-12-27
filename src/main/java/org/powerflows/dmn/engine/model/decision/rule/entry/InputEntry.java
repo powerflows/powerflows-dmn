@@ -79,7 +79,7 @@ public class InputEntry implements Serializable {
             return (B) this;
         }
 
-        public B withLiteralValue(final Object literalValue) {
+        public B withLiteralValue(final Serializable literalValue) {
             this.product.expression = Expression.builder()
                     .type(ExpressionType.LITERAL)
                     .value(literalValue)
