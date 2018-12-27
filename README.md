@@ -2,6 +2,7 @@
 [![Quality Gate](https://sonarcloud.io/api/project_badges/measure?project=org.powerflows%3Admn&metric=alert_status)](https://sonarcloud.io/dashboard?id=org.powerflows%3Admn)
 [![Coverage](https://sonarcloud.io/api/project_badges/measure?project=org.powerflows%3Admn&metric=coverage)](https://sonarcloud.io/component_measures?id=org.powerflows%3Admn&metric=coverage)
 [![Maven Central](https://maven-badges.herokuapp.com/maven-central/org.powerflows/dmn/badge.svg)](https://maven-badges.herokuapp.com/maven-central/org.powerflows/dmn)
+[![Java Doc](http://www.javadoc.io/badge/org.powerflows/dmn.svg?color=brightgreen)](http://www.javadoc.io/doc/org.powerflows/dmn)
 # About Power Flows DMN
 Power Flows DMN - a powerful decision engine.
 
