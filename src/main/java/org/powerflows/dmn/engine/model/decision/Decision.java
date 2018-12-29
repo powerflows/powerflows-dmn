@@ -31,6 +31,7 @@ import java.util.function.Consumer;
 import java.util.function.Function;
 
 import static java.util.Collections.unmodifiableList;
+import static org.powerflows.dmn.engine.model.decision.DecisionUtil.assignDefaults;
 
 @EqualsAndHashCode
 @ToString
@@ -40,9 +41,9 @@ public class Decision implements Serializable {
 
     private String id;
     private String name;
-    private HitPolicy hitPolicy;
-    private ExpressionType expressionType;
-    private EvaluationMode evaluationMode;
+    private HitPolicy hitPolicy = HitPolicy.UNIQUE;
+    private ExpressionType expressionType = ExpressionType.LITERAL;
+    private EvaluationMode evaluationMode = EvaluationMode.BOOLEAN;
     private List<Input> inputs = new ArrayList<>();
     private List<Output> outputs = new ArrayList<>();
     private List<Rule> rules = new ArrayList<>();
@@ -128,6 +129,8 @@ public class Decision implements Serializable {
 
         @Override
         protected Decision assembleProduct() {
+            assignDefaults(this.product.inputs, this.product.rules, this.product.expressionType, this.product.evaluationMode);
+
             this.product.inputs = unmodifiableList(this.product.inputs);
             this.product.outputs = unmodifiableList(this.product.outputs);
             this.product.rules = unmodifiableList(this.product.rules);
