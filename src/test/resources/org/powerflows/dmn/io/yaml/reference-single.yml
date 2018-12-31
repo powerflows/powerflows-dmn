@@ -39,4 +39,6 @@ rules:
     - two
   out:
     outputOne: true
-    outputTwo: The output
+    outputTwo:
+    - The output value 1
+    - The output value 2

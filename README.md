@@ -377,7 +377,7 @@ The result of an evaluation process is decision result object.
 Decision decision = Decision.builder().build(); //here developer has to build a valid decision object
 DecisionEngine decisionEngine = new DefaultDecisionEngineConfiguration().configure();
 
-Map<String, Object> variables = new HashMap<>();
+Map<String, Serializable> variables = new HashMap<>();
 variables.put("inputOne", 2);
 variables.put("inputTwo", "five");
 DecisionVariables decisionVariables = new DecisionVariables(variables);

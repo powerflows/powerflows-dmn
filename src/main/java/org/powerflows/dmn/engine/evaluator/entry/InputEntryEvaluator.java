@@ -50,9 +50,10 @@ public class InputEntryEvaluator {
     }
 
     public boolean evaluate(final InputEntry inputEntry,
-                            final EvaluationMode decisionEvaluationMode,
                             final Input input,
                             final EvaluationContext evaluationContext) {
+        log.debug("Starting evaluation of input entry: {} with input: {} and evaluation context: {}", inputEntry, input, evaluationContext);
+
         final ExpressionEvaluationProvider inputEntryExpressionEvaluator = expressionEvaluationProviderFactory.getInstance(inputEntry.getExpression().getType());
         final TypeConverter typeConverter = typeConverterFactory.getInstance(input.getType());
 
@@ -81,7 +82,7 @@ public class InputEntryEvaluator {
             typedInputEntryValue = typeConverter.convert(inputEntryValue);
         }
 
-        final EvaluationMode evaluationMode = calculateInputEntryEvaluationMode(decisionEvaluationMode, input.getEvaluationMode(), inputEntry.getEvaluationMode());
+        final EvaluationMode evaluationMode = inputEntry.getEvaluationMode();
         final EvaluationModeProvider evaluationModeProvider = evaluationModeProviderFactory.getInstance(evaluationMode);
         final boolean result = evaluationModeProvider.isPositive(input.getType(), typedInputEntryValue, typedInputValue);
 
@@ -96,22 +97,6 @@ public class InputEntryEvaluator {
 
     private boolean isInputEvaluated(final Input input, final EvaluationContext evaluationContext) {
         return evaluationContext.isPresent(input.getName());
-    }
-
-    private EvaluationMode calculateInputEntryEvaluationMode(final EvaluationMode decisionEvaluationMode,
-                                                             final EvaluationMode inputEvaluationMode,
-                                                             final EvaluationMode inputEntryEvaluationMode) {
-        final EvaluationMode evaluationMode;
-
-        if (inputEntryEvaluationMode != null) {
-            evaluationMode = inputEntryEvaluationMode;
-        } else if (inputEvaluationMode != null) {
-            evaluationMode = inputEvaluationMode;
-        } else {
-            evaluationMode = decisionEvaluationMode;
-        }
-
-        return evaluationMode;
     }
 
 }

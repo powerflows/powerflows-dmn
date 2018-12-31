@@ -60,7 +60,7 @@ class DefaultDecisionEngineConfigurationReferenceSingleSpec extends Specificatio
 
     void 'should evaluate empty collection rules result using default decision engine'() {
         given:
-        final Map<String, Object> variables = [:]
+        final Map<String, Serializable> variables = [:]
         variables.put('x', 2)
         variables.put('y', 3)
         variables.put('p', 0)
@@ -85,7 +85,7 @@ class DefaultDecisionEngineConfigurationReferenceSingleSpec extends Specificatio
 
     void 'should evaluate single rule and single entry result using default decision engine'() {
         given:
-        final Map<String, Object> variables = [:]
+        final Map<String, Serializable> variables = [:]
         variables.put('x', 1)
         variables.put('y', 1)
         variables.put('p', 0)
@@ -116,7 +116,7 @@ class DefaultDecisionEngineConfigurationReferenceSingleSpec extends Specificatio
 
     void 'should evaluate single rule result using default decision engine'() {
         given:
-        final Map<String, Object> variables = [:]
+        final Map<String, Serializable> variables = [:]
         variables.put('x', 5)
         variables.put('y', 7)
         variables.put('p', 0)
@@ -153,7 +153,7 @@ class DefaultDecisionEngineConfigurationReferenceSingleSpec extends Specificatio
 
     void 'should evaluate multiple rule result using default decision engine'() {
         given:
-        final Map<String, Object> variables = [:]
+        final Map<String, Serializable> variables = [:]
         variables.put('x', 5)
         variables.put('y', 7)
         variables.put('p', 3)
@@ -203,7 +203,7 @@ class DefaultDecisionEngineConfigurationReferenceSingleSpec extends Specificatio
 
     void 'should evaluate single rule on collection operations basis result using default decision engine'() {
         given:
-        final Map<String, Object> variables = [:]
+        final Map<String, Serializable> variables = [:]
         variables.put('x', 10)
         variables.put('y', 20)
         variables.put('p', 0)
@@ -240,7 +240,7 @@ class DefaultDecisionEngineConfigurationReferenceSingleSpec extends Specificatio
 
     void 'should evaluate single rule on boolean input entry result basis using default decision engine'() {
         given:
-        final Map<String, Object> variables = [:]
+        final Map<String, Serializable> variables = [:]
         variables.put('x', 0)
         variables.put('y', 0)
         variables.put('p', 25)
@@ -277,7 +277,7 @@ class DefaultDecisionEngineConfigurationReferenceSingleSpec extends Specificatio
 
     void 'should evaluate single rule when date input entry is matching using default decision engine'() {
         given:
-        final Map<String, Object> variables = [:]
+        final Map<String, Serializable> variables = [:]
         variables.put('x', 0)
         variables.put('y', 0)
         variables.put('p', 7)
@@ -314,7 +314,7 @@ class DefaultDecisionEngineConfigurationReferenceSingleSpec extends Specificatio
 
     void 'should evaluate single rule when date with time input entry is matching using default decision engine'() {
         given:
-        final Map<String, Object> variables = [:]
+        final Map<String, Serializable> variables = [:]
         variables.put('x', 0)
         variables.put('y', 0)
         variables.put('p', 7)
@@ -351,7 +351,7 @@ class DefaultDecisionEngineConfigurationReferenceSingleSpec extends Specificatio
 
     void 'should evaluate multiple rule when date with time input entry is matching using default decision engine'() {
         given:
-        final Map<String, Object> variables = [:]
+        final Map<String, Serializable> variables = [:]
         variables.put('x', 0)
         variables.put('y', 0)
         variables.put('p', 7)

@@ -39,7 +39,9 @@ rules:
     - two
   out:
     outputOne: true
-    outputTwo: The output
+    outputTwo:
+    - The output value 1
+    - The output value 2
 ---
 id: some_table_id_2
 name: Some Table Name
@@ -82,4 +84,6 @@ rules:
     - two
   out:
     outputOne: true
-    outputTwo: The output
+    outputTwo:
+    - The output value 1
+    - The output value 2
