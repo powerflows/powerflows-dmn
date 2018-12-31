@@ -51,7 +51,7 @@ class LiteralExpressionEvaluationProviderSpec extends Specification {
         final String inputName = 'TestInputName'
         final Input input = [name: inputName]
 
-        final Map<String, Object> contextVariablesMap = [:]
+        final Map<String, Serializable> contextVariablesMap = [:]
         contextVariablesMap.put(inputName, inputValue)
         contextVariablesMap.put('x', 'y')
         final DecisionVariables decisionVariables = new DecisionVariables(contextVariablesMap)
@@ -68,7 +68,7 @@ class LiteralExpressionEvaluationProviderSpec extends Specification {
         given:
         final Input input = [name: 'nonMatchingName']
 
-        final Map<String, Object> contextVariablesMap = [:]
+        final Map<String, Serializable> contextVariablesMap = [:]
         contextVariablesMap.put('q', 5)
         contextVariablesMap.put('x', 'y')
         final DecisionVariables decisionVariables = new DecisionVariables(contextVariablesMap)

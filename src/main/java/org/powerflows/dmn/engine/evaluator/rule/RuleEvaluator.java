@@ -21,7 +21,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.powerflows.dmn.engine.evaluator.context.EvaluationContext;
 import org.powerflows.dmn.engine.evaluator.entry.InputEntryEvaluator;
 import org.powerflows.dmn.engine.evaluator.entry.OutputEntryEvaluator;
-import org.powerflows.dmn.engine.model.decision.EvaluationMode;
 import org.powerflows.dmn.engine.model.decision.field.Input;
 import org.powerflows.dmn.engine.model.decision.field.Output;
 import org.powerflows.dmn.engine.model.decision.rule.Rule;
@@ -49,15 +48,14 @@ public class RuleEvaluator {
     }
 
     public RuleResult evaluate(final Rule rule,
-                               final EvaluationMode decisionEvaluationMode,
                                final Map<String, Input> inputs,
                                final Map<String, Output> outputs,
                                final EvaluationContext evaluationContext) {
-        log.debug("Starting evaluation of rule: {} with evaluationMode: {}, inputs: {}, outputs: {} and decision evaluation variable: {}", rule, decisionEvaluationMode, inputs, outputs, evaluationContext);
+        log.debug("Starting evaluation of rule: {} with inputs: {}, outputs: {} and evaluation context: {}", rule, inputs, outputs, evaluationContext);
 
         final RuleResult ruleResult;
 
-        final List<EntryResult> entryResults = evaluateRule(rule, decisionEvaluationMode, inputs, outputs, evaluationContext);
+        final List<EntryResult> entryResults = evaluateRule(rule, inputs, outputs, evaluationContext);
 
         if (entryResults.isEmpty()) {
             ruleResult = null;
@@ -71,7 +69,6 @@ public class RuleEvaluator {
     }
 
     private List<EntryResult> evaluateRule(final Rule rule,
-                                           final EvaluationMode evaluationMode,
                                            final Map<String, Input> inputs,
                                            final Map<String, Output> outputs,
                                            final EvaluationContext evaluationContext) {
@@ -81,7 +78,7 @@ public class RuleEvaluator {
         for (InputEntry inputEntry : rule.getInputEntries()) {
             final Input input = inputs.get(inputEntry.getName());
 
-            if (!inputEntryEvaluator.evaluate(inputEntry, evaluationMode, input, evaluationContext)) {
+            if (!inputEntryEvaluator.evaluate(inputEntry, input, evaluationContext)) {
                 positive = false;
                 break;
             }

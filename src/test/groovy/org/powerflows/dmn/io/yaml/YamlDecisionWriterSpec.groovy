@@ -55,7 +55,7 @@ class YamlDecisionWriterSpec extends Specification {
     final int someInput1LiteralValue = 5
     final List<String> someInput2LiteralValue = ['one', 'two']
     final boolean someOutput1LiteralValue = true
-    final String someOutput2LiteralValue = "The output"
+    final List<String> someOutput2LiteralValue = ['The output value 1', 'The output value 2']
 
     void 'should write single model'() {
         given:
@@ -142,8 +142,6 @@ class YamlDecisionWriterSpec extends Specification {
         final ByteArrayInputStream inputStream = new ByteArrayInputStream(outputStream.toByteArray())
         final Decision result = reader.read(inputStream)
 
-        println result.inputs
-        println decision.inputs
         then:
         result.id == decision.id
         result.evaluationMode == decision.evaluationMode

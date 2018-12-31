@@ -46,9 +46,9 @@ class RuleEvaluatorSpec extends Specification {
     final String input2Name = 'y'
 
     final Expression expression1 = [value: inputEntry1Value, type: ExpressionType.LITERAL]
-    final InputEntry inputEntry1 = [name: input1Name, expression: expression1]
+    final InputEntry inputEntry1 = [name: input1Name, expression: expression1, evaluationMode: decisionEvaluationMode]
     final Expression expression2 = [value: inputEntry2Value, type: ExpressionType.LITERAL]
-    final InputEntry inputEntry2 = [name: input2Name, expression: expression2]
+    final InputEntry inputEntry2 = [name: input2Name, expression: expression2, evaluationMode: decisionEvaluationMode]
 
     final Boolean outputEntry1Value = true
     final String outputEntry2Value = 'test'
@@ -73,7 +73,7 @@ class RuleEvaluatorSpec extends Specification {
 
     void 'should evaluate nonempty list of entry result'() {
         given:
-        final Map<String, Object> variables = [:]
+        final Map<String, Serializable> variables = [:]
         variables.put(input1Name, inputEntry1Value)
         variables.put(input2Name, inputEntry2Value)
         final DecisionVariables decisionVariables = new DecisionVariables(variables)
@@ -89,7 +89,7 @@ class RuleEvaluatorSpec extends Specification {
 
 
         when:
-        final RuleResult ruleResult = ruleEvaluator.evaluate(rule, decisionEvaluationMode, inputsMap, outputsMap, evaluationContext)
+        final RuleResult ruleResult = ruleEvaluator.evaluate(rule, inputsMap, outputsMap, evaluationContext)
 
         then:
         ruleResult != null
@@ -106,8 +106,8 @@ class RuleEvaluatorSpec extends Specification {
             getValue() == outputEntry2Value
         }
 
-        1 * inputEntryEvaluator.evaluate(inputEntry1, decisionEvaluationMode, input1, evaluationContext) >> true
-        1 * inputEntryEvaluator.evaluate(inputEntry2, decisionEvaluationMode, input2, evaluationContext) >> true
+        1 * inputEntryEvaluator.evaluate(inputEntry1, input1, evaluationContext) >> true
+        1 * inputEntryEvaluator.evaluate(inputEntry2, input2, evaluationContext) >> true
         1 * outputEntryEvaluator.evaluate(outputEntry1, output1, evaluationContext) >> EntryResult.builder().value(outputEntry1Value).name(output1Name).build()
         1 * outputEntryEvaluator.evaluate(outputEntry2, output2, evaluationContext) >> EntryResult.builder().value(outputEntry2Value).name(output2Name).build()
         0 * _
@@ -116,7 +116,7 @@ class RuleEvaluatorSpec extends Specification {
     void 'should evaluate null rule result'() {
         given:
         final nonMatchingInputEntry2Value = 3
-        final Map<String, Object> variables = [:]
+        final Map<String, Serializable> variables = [:]
         variables.put(input1Name, inputEntry1Value)
         variables.put(input2Name, nonMatchingInputEntry2Value)
         final DecisionVariables decisionVariables = new DecisionVariables(variables)
@@ -129,13 +129,13 @@ class RuleEvaluatorSpec extends Specification {
         final Map<String, Output> outputsMap = [:]
 
         when:
-        final RuleResult ruleResult = ruleEvaluator.evaluate(rule, decisionEvaluationMode, inputsMap, outputsMap, contextVariables)
+        final RuleResult ruleResult = ruleEvaluator.evaluate(rule, inputsMap, outputsMap, contextVariables)
 
         then:
         ruleResult == null
 
-        1 * inputEntryEvaluator.evaluate(inputEntry1, decisionEvaluationMode, input1, contextVariables) >> true
-        1 * inputEntryEvaluator.evaluate(inputEntry2, decisionEvaluationMode, input2, contextVariables) >> false
+        1 * inputEntryEvaluator.evaluate(inputEntry1, input1, contextVariables) >> true
+        1 * inputEntryEvaluator.evaluate(inputEntry2, input2, contextVariables) >> false
         0 * _
     }
 }
