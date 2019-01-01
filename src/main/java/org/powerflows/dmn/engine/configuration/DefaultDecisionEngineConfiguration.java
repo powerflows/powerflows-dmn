@@ -20,12 +20,10 @@ package org.powerflows.dmn.engine.configuration;
 import org.powerflows.dmn.engine.DecisionEngine;
 import org.powerflows.dmn.engine.DefaultDecisionEngine;
 import org.powerflows.dmn.engine.evaluator.decision.DecisionEvaluator;
-import org.powerflows.dmn.engine.evaluator.entry.EntryEvaluator;
 import org.powerflows.dmn.engine.evaluator.entry.InputEntryEvaluator;
 import org.powerflows.dmn.engine.evaluator.entry.OutputEntryEvaluator;
-import org.powerflows.dmn.engine.evaluator.expression.comparator.DefaultObjectsComparator;
-import org.powerflows.dmn.engine.evaluator.expression.comparator.ObjectsComparator;
-import org.powerflows.dmn.engine.evaluator.expression.provider.EvaluationProviderFactory;
+import org.powerflows.dmn.engine.evaluator.entry.mode.provider.EvaluationModeProviderFactory;
+import org.powerflows.dmn.engine.evaluator.expression.provider.ExpressionEvaluationProviderFactory;
 import org.powerflows.dmn.engine.evaluator.expression.script.DefaultScriptEngineProvider;
 import org.powerflows.dmn.engine.evaluator.expression.script.ScriptEngineProvider;
 import org.powerflows.dmn.engine.evaluator.rule.RuleEvaluator;
@@ -37,12 +35,11 @@ public class DefaultDecisionEngineConfiguration implements DecisionEngineConfigu
 
     private DecisionEvaluator decisionEvaluator;
     private RuleEvaluator ruleEvaluator;
-    private EntryEvaluator entryEvaluator;
-    private ObjectsComparator objectsComparator;
+    private EvaluationModeProviderFactory evaluationModeProviderFactory;
     private InputEntryEvaluator inputEntryEvaluator;
     private OutputEntryEvaluator outputEntryEvaluator;
     private ScriptEngineProvider scriptEngineProvider;
-    private EvaluationProviderFactory evaluationProviderFactory;
+    private ExpressionEvaluationProviderFactory expressionEvaluationProviderFactory;
     private TypeConverterFactory typeConverterFactory;
 
     @Override
@@ -50,10 +47,9 @@ public class DefaultDecisionEngineConfiguration implements DecisionEngineConfigu
         initScriptEngineProvider();
         initEvaluationProviderFactory();
         initTypeConverterFactory();
-        initObjectsComparator();
+        initEvaluationModeProviderFactory();
         initInputEntryEvaluator();
         initOutputEntryEvaluator();
-        initEntryEvaluator();
         initRuleEvaluator();
         initDecisionEvaluator();
 
@@ -61,7 +57,7 @@ public class DefaultDecisionEngineConfiguration implements DecisionEngineConfigu
     }
 
     private void initEvaluationProviderFactory() {
-        evaluationProviderFactory = new EvaluationProviderFactory(scriptEngineProvider);
+        expressionEvaluationProviderFactory = new ExpressionEvaluationProviderFactory(scriptEngineProvider);
     }
 
     private void initTypeConverterFactory() {
@@ -72,24 +68,20 @@ public class DefaultDecisionEngineConfiguration implements DecisionEngineConfigu
         scriptEngineProvider = new DefaultScriptEngineProvider(new ScriptEngineManager());
     }
 
-    private void initObjectsComparator() {
-        objectsComparator = new DefaultObjectsComparator();
+    private void initEvaluationModeProviderFactory() {
+        evaluationModeProviderFactory = new EvaluationModeProviderFactory();
     }
 
     private void initInputEntryEvaluator() {
-        inputEntryEvaluator = new InputEntryEvaluator(evaluationProviderFactory, typeConverterFactory, objectsComparator);
+        inputEntryEvaluator = new InputEntryEvaluator(expressionEvaluationProviderFactory, typeConverterFactory, evaluationModeProviderFactory);
     }
 
     private void initOutputEntryEvaluator() {
-        outputEntryEvaluator = new OutputEntryEvaluator(evaluationProviderFactory, typeConverterFactory);
-    }
-
-    private void initEntryEvaluator() {
-        entryEvaluator = new EntryEvaluator(inputEntryEvaluator, outputEntryEvaluator);
+        outputEntryEvaluator = new OutputEntryEvaluator(expressionEvaluationProviderFactory, typeConverterFactory);
     }
 
     private void initRuleEvaluator() {
-        ruleEvaluator = new RuleEvaluator(entryEvaluator);
+        ruleEvaluator = new RuleEvaluator(inputEntryEvaluator, outputEntryEvaluator);
     }
 
     private void initDecisionEvaluator() {

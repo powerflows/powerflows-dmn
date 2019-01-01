@@ -17,7 +17,8 @@
 package org.powerflows.dmn.io.yaml;
 
 import org.powerflows.dmn.io.yaml.model.YamlDecision;
-import org.powerflows.dmn.io.yaml.model.rule.YamlRuleEntry;
+import org.powerflows.dmn.io.yaml.model.rule.entry.YamlInputEntry;
+import org.powerflows.dmn.io.yaml.model.rule.entry.YamlOutputEntry;
 import org.yaml.snakeyaml.constructor.Constructor;
 import org.yaml.snakeyaml.nodes.Node;
 import org.yaml.snakeyaml.nodes.NodeId;
@@ -33,15 +34,26 @@ public class CustomConstructor extends Constructor {
     }
 
     class ImprovedScalarConstruct extends ConstructSequence {
+
         @Override
         public Object construct(final Node node) {
-            if (node.getType() == YamlRuleEntry.class) {
+            final Object scalar;
+
+            if (node.getType() == YamlInputEntry.class) {
                 final SequenceNode sequenceNode = (SequenceNode) node;
                 sequenceNode.setType(ArrayList.class);
 
-                return new YamlRuleEntry(super.construct(sequenceNode));
+                scalar = new YamlInputEntry(super.construct(sequenceNode));
+            } else if (node.getType() == YamlOutputEntry.class) {
+                final SequenceNode sequenceNode = (SequenceNode) node;
+                sequenceNode.setType(ArrayList.class);
+
+                scalar = new YamlOutputEntry(super.construct(sequenceNode));
+            } else {
+                scalar = super.construct(node);
             }
-            return super.construct(node);
+
+            return scalar;
         }
     }
 }

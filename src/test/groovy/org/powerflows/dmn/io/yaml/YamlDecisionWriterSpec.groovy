@@ -16,6 +16,7 @@
 package org.powerflows.dmn.io.yaml
 
 import org.powerflows.dmn.engine.model.decision.Decision
+import org.powerflows.dmn.engine.model.decision.EvaluationMode
 import org.powerflows.dmn.engine.model.decision.HitPolicy
 import org.powerflows.dmn.engine.model.decision.expression.ExpressionType
 import org.powerflows.dmn.engine.model.decision.field.ValueType
@@ -28,6 +29,8 @@ class YamlDecisionWriterSpec extends Specification {
     final String someTableName = 'Some Table Name'
     final HitPolicy someHitPolicy = HitPolicy.UNIQUE
     final ExpressionType someExpressionType = ExpressionType.GROOVY
+    final EvaluationMode someEvaluationMode1 = EvaluationMode.BOOLEAN
+    final EvaluationMode someEvaluationMode2 = EvaluationMode.INPUT_COMPARISON
     final ValueType someInput1Type = ValueType.INTEGER
     final String someInput1Name = 'inputOne'
     final String someInput1Description = 'Some Input 1 Description'
@@ -52,7 +55,7 @@ class YamlDecisionWriterSpec extends Specification {
     final int someInput1LiteralValue = 5
     final List<String> someInput2LiteralValue = ['one', 'two']
     final boolean someOutput1LiteralValue = true
-    final String someOutput2LiteralValue = "The output"
+    final List<String> someOutput2LiteralValue = ['The output value 1', 'The output value 2']
 
     void 'should write single model'() {
         given:
@@ -140,7 +143,53 @@ class YamlDecisionWriterSpec extends Specification {
         final Decision result = reader.read(inputStream)
 
         then:
-        result == decision
+        result.id == decision.id
+        result.evaluationMode == decision.evaluationMode
+        result.expressionType == decision.expressionType
+        result.hitPolicy == decision.hitPolicy
+        result.name == decision.name
+        result.inputs[0].name == decision.inputs[0].name
+        result.inputs[0].evaluationMode == decision.evaluationMode
+        result.inputs[0].type == decision.inputs[0].type
+        result.inputs[0].description == decision.inputs[0].description
+        result.inputs[0].expression == decision.inputs[0].expression
+        result.inputs[1].name == decision.inputs[1].name
+        result.inputs[1].evaluationMode == decision.evaluationMode
+        result.inputs[1].type == decision.inputs[1].type
+        result.inputs[1].description == decision.inputs[1].description
+        result.inputs[1].expression == decision.inputs[1].expression
+        result.outputs[0].name == decision.outputs[0].name
+        result.outputs[0].type == decision.outputs[0].type
+        result.outputs[0].description == decision.outputs[0].description
+        result.outputs[1].name == decision.outputs[1].name
+        result.outputs[1].type == decision.outputs[1].type
+        result.outputs[1].description == decision.outputs[1].description
+
+        result.rules[0].description == decision.rules[0].description
+        result.rules[0].inputEntries.size() == 2
+        result.rules[0].inputEntries[0].expression == decision.rules[0].inputEntries[0].expression
+        result.rules[0].inputEntries[0].evaluationMode == decision.evaluationMode
+        result.rules[0].inputEntries[0].name == decision.rules[0].inputEntries[0].name
+        result.rules[0].inputEntries[1].expression == decision.rules[0].inputEntries[1].expression
+        result.rules[0].inputEntries[1].evaluationMode == decision.evaluationMode
+        result.rules[0].inputEntries[1].name == decision.rules[0].inputEntries[1].name
+        result.rules[0].outputEntries.size() == 1
+        result.rules[0].outputEntries[0].expression == decision.rules[0].outputEntries[0].expression
+        result.rules[0].outputEntries[0].name == decision.rules[0].outputEntries[0].name
+
+        result.rules[1].description == decision.rules[1].description
+        result.rules[1].inputEntries.size() == 2
+        result.rules[1].inputEntries[0].expression == decision.rules[1].inputEntries[0].expression
+        result.rules[1].inputEntries[0].evaluationMode == decision.evaluationMode
+        result.rules[1].inputEntries[0].name == decision.rules[1].inputEntries[0].name
+        result.rules[1].inputEntries[1].expression == decision.rules[1].inputEntries[1].expression
+        result.rules[1].inputEntries[1].evaluationMode == decision.evaluationMode
+        result.rules[1].inputEntries[1].name == decision.rules[1].inputEntries[1].name
+        result.rules[1].outputEntries.size() == 2
+        result.rules[1].outputEntries[0].expression == decision.rules[1].outputEntries[0].expression
+        result.rules[1].outputEntries[0].name == decision.rules[1].outputEntries[0].name
+        result.rules[1].outputEntries[1].expression == decision.rules[1].outputEntries[1].expression
+        result.rules[1].outputEntries[1].name == decision.rules[1].outputEntries[1].name
     }
 
     List<String> loadFileLines(final String filename) {
@@ -156,11 +205,13 @@ class YamlDecisionWriterSpec extends Specification {
                 .name(someTableName)
                 .hitPolicy(someHitPolicy)
                 .expressionType(someExpressionType)
+                .evaluationMode(someEvaluationMode2)
                 .withInput(
                 { inputsBuilder ->
                     inputsBuilder.name(someInput1Name)
                             .description(someInput1Description)
                             .type(someInput1Type)
+                            .evaluationMode(someEvaluationMode1)
                             .withExpression(
                             { expressionBuilder ->
                                 expressionBuilder
@@ -175,6 +226,7 @@ class YamlDecisionWriterSpec extends Specification {
                     inputsBuilder
                             .name(someInput2Name)
                             .type(someInput2Type)
+                            .evaluationMode(someEvaluationMode1)
                             .build()
                 })
                 .withOutput(
@@ -199,6 +251,7 @@ class YamlDecisionWriterSpec extends Specification {
                             { inputEntryBuilder ->
                                 inputEntryBuilder
                                         .name(someInput1Name)
+                                        .evaluationMode(someEvaluationMode1)
                                         .withExpression(
                                         { expressionBuilder ->
                                             expressionBuilder
@@ -210,7 +263,9 @@ class YamlDecisionWriterSpec extends Specification {
                             })
                             .withInputEntry(
                             { inputEntryBuilder ->
-                                inputEntryBuilder.name(someInput2Name)
+                                inputEntryBuilder
+                                        .name(someInput2Name)
+                                        .evaluationMode(someEvaluationMode1)
                                         .withExpression(
                                         { expressionBuilder ->
                                             expressionBuilder
@@ -242,6 +297,7 @@ class YamlDecisionWriterSpec extends Specification {
                             { inputEntryBuilder ->
                                 inputEntryBuilder
                                         .name(someInput1Name)
+                                        .evaluationMode(someEvaluationMode1)
                                         .withLiteralValue(someInput1LiteralValue)
                                         .build()
                             })
@@ -249,6 +305,7 @@ class YamlDecisionWriterSpec extends Specification {
                             { inputEntryBuilder ->
                                 inputEntryBuilder
                                         .name(someInput2Name)
+                                        .evaluationMode(someEvaluationMode1)
                                         .withLiteralValue(someInput2LiteralValue)
                                         .build()
                             })

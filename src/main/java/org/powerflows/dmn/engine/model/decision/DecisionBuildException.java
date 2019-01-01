@@ -14,20 +14,16 @@
  * limitations under the License.
  */
 
-package org.powerflows.dmn.io.yaml.model.rule;
+package org.powerflows.dmn.engine.model.decision;
 
-import lombok.Data;
-import org.powerflows.dmn.engine.model.decision.expression.ExpressionType;
 
-@Data
-public final class YamlRuleEntry {
-    public YamlRuleEntry(final Object value) {
-        this.expression = value;
+public class DecisionBuildException extends RuntimeException {
+
+    public DecisionBuildException(String message) {
+        super(message);
     }
 
-    public YamlRuleEntry() {
+    public DecisionBuildException(String message, Throwable cause) {
+        super(message, cause);
     }
-
-    private ExpressionType expressionType = ExpressionType.LITERAL;
-    private Object expression;
 }

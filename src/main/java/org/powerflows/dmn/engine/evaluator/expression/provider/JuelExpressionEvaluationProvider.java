@@ -20,15 +20,17 @@ import org.powerflows.dmn.engine.evaluator.context.EvaluationContext;
 import org.powerflows.dmn.engine.model.decision.expression.Expression;
 import org.powerflows.dmn.engine.model.decision.field.Input;
 
+import java.io.Serializable;
+
 class JuelExpressionEvaluationProvider implements ExpressionEvaluationProvider {
 
     @Override
-    public Object evaluateEntry(final Expression expression, final EvaluationContext evaluationContext) {
+    public Serializable evaluateEntry(final Expression expression, final EvaluationContext evaluationContext) {
         throw new UnsupportedOperationException();
     }
 
     @Override
-    public Object evaluateInput(final Input input, final EvaluationContext evaluationContext) {
+    public Serializable evaluateInput(final Input input, final EvaluationContext evaluationContext) {
         throw new UnsupportedOperationException();
     }
 }

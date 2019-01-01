@@ -17,6 +17,7 @@
 package org.powerflows.dmn.io.yaml.model;
 
 import lombok.Data;
+import org.powerflows.dmn.engine.model.decision.EvaluationMode;
 import org.powerflows.dmn.engine.model.decision.HitPolicy;
 import org.powerflows.dmn.engine.model.decision.expression.ExpressionType;
 import org.powerflows.dmn.io.yaml.model.field.YamlFields;
@@ -30,6 +31,7 @@ public final class YamlDecision {
     private String name;
     private HitPolicy hitPolicy;
     private ExpressionType expressionType;
+    private EvaluationMode evaluationMode = EvaluationMode.BOOLEAN;
     private YamlFields fields;
     private List<YamlRule> rules;
 }

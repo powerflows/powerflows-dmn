@@ -21,11 +21,11 @@ import org.powerflows.dmn.engine.model.decision.expression.ExpressionType;
 
 import java.util.EnumMap;
 
-public class EvaluationProviderFactory {
+public class ExpressionEvaluationProviderFactory {
 
     private final EnumMap<ExpressionType, ExpressionEvaluationProvider> factories = new EnumMap<>(ExpressionType.class);
 
-    public EvaluationProviderFactory(final ScriptEngineProvider scriptEngineProvider) {
+    public ExpressionEvaluationProviderFactory(final ScriptEngineProvider scriptEngineProvider) {
         final ExpressionEvaluationProvider scriptExpressionEvaluationProvider = new ScriptExpressionEvaluationProvider(scriptEngineProvider);
 
         factories.put(ExpressionType.LITERAL, new LiteralExpressionEvaluationProvider());
@@ -39,7 +39,7 @@ public class EvaluationProviderFactory {
         final ExpressionEvaluationProvider expressionEvaluationProvider = factories.get(expressionType);
 
         if (expressionEvaluationProvider == null) {
-            throw new IllegalArgumentException("Unknown expression type");
+            throw new IllegalArgumentException("Unknown expression type " + expressionType);
         }
 
         return expressionEvaluationProvider;

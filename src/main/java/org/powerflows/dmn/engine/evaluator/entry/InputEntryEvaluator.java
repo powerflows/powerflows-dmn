@@ -19,67 +19,80 @@ package org.powerflows.dmn.engine.evaluator.entry;
 
 import lombok.extern.slf4j.Slf4j;
 import org.powerflows.dmn.engine.evaluator.context.EvaluationContext;
-import org.powerflows.dmn.engine.evaluator.expression.comparator.ObjectsComparator;
-import org.powerflows.dmn.engine.evaluator.expression.provider.EvaluationProviderFactory;
+import org.powerflows.dmn.engine.evaluator.entry.mode.provider.EvaluationModeProvider;
+import org.powerflows.dmn.engine.evaluator.entry.mode.provider.EvaluationModeProviderFactory;
 import org.powerflows.dmn.engine.evaluator.expression.provider.ExpressionEvaluationProvider;
+import org.powerflows.dmn.engine.evaluator.expression.provider.ExpressionEvaluationProviderFactory;
 import org.powerflows.dmn.engine.evaluator.type.converter.TypeConverter;
 import org.powerflows.dmn.engine.evaluator.type.converter.TypeConverterFactory;
 import org.powerflows.dmn.engine.evaluator.type.value.SpecifiedTypeValue;
+import org.powerflows.dmn.engine.model.decision.EvaluationMode;
 import org.powerflows.dmn.engine.model.decision.field.Input;
 import org.powerflows.dmn.engine.model.decision.field.ValueType;
 import org.powerflows.dmn.engine.model.decision.rule.entry.InputEntry;
 
+import java.io.Serializable;
+
 @Slf4j
 public class InputEntryEvaluator {
 
-    private final EvaluationProviderFactory evaluationProviderFactory;
+    private final ExpressionEvaluationProviderFactory expressionEvaluationProviderFactory;
     private final TypeConverterFactory typeConverterFactory;
-    private final ObjectsComparator objectsComparator;
+    private final EvaluationModeProviderFactory evaluationModeProviderFactory;
 
 
-    public InputEntryEvaluator(final EvaluationProviderFactory evaluationProviderFactory,
+    public InputEntryEvaluator(final ExpressionEvaluationProviderFactory expressionEvaluationProviderFactory,
                                final TypeConverterFactory typeConverterFactory,
-                               final ObjectsComparator objectsComparator) {
-        this.evaluationProviderFactory = evaluationProviderFactory;
+                               final EvaluationModeProviderFactory evaluationModeProviderFactory) {
+        this.expressionEvaluationProviderFactory = expressionEvaluationProviderFactory;
         this.typeConverterFactory = typeConverterFactory;
-        this.objectsComparator = objectsComparator;
+        this.evaluationModeProviderFactory = evaluationModeProviderFactory;
     }
 
-    public boolean evaluate(final InputEntry inputEntry, final Input input, final EvaluationContext evaluationContext) {
-        final ExpressionEvaluationProvider inputEntryExpressionEvaluator = evaluationProviderFactory.getInstance(inputEntry.getExpression().getType());
+    public boolean evaluate(final InputEntry inputEntry,
+                            final Input input,
+                            final EvaluationContext evaluationContext) {
+        log.debug("Starting evaluation of input entry: {} with input: {} and evaluation context: {}", inputEntry, input, evaluationContext);
+
+        final ExpressionEvaluationProvider inputEntryExpressionEvaluator = expressionEvaluationProviderFactory.getInstance(inputEntry.getExpression().getType());
         final TypeConverter typeConverter = typeConverterFactory.getInstance(input.getType());
 
         if (!isInputEvaluated(input, evaluationContext)) {
-            final ExpressionEvaluationProvider inputExpressionEvaluator = evaluationProviderFactory.getInstance(input.getExpression().getType());
-            final Object evaluatedInputValue = inputExpressionEvaluator.evaluateInput(input, evaluationContext);
+            final ExpressionEvaluationProvider inputExpressionEvaluator = expressionEvaluationProviderFactory.getInstance(input.getExpression().getType());
+            final Serializable evaluatedInputValue = inputExpressionEvaluator.evaluateInput(input, evaluationContext);
 
             evaluationContext.addVariable(input.getName(), evaluatedInputValue);
         }
 
         final Object inputValue = evaluationContext.get(inputEntry.getName());
         final SpecifiedTypeValue<?> typedInputValue = typeConverter.convert(inputValue);
-
         final Object inputEntryValue = inputEntryExpressionEvaluator.evaluateEntry(inputEntry.getExpression(), evaluationContext);
 
-        final boolean result;
-
-        if (!ValueType.BOOLEAN.equals(input.getType())) {
-            if (inputEntryValue.equals(Boolean.TRUE)) {
-                result = true;
-            } else if (inputEntryValue.equals(Boolean.FALSE)) {
-                result = false;
+        final SpecifiedTypeValue<?> typedInputEntryValue;
+        if (isBoolean(inputEntryValue)) {
+            final TypeConverter booleanTypeConverter;
+            if (ValueType.BOOLEAN == input.getType()) {
+                booleanTypeConverter = typeConverter;
             } else {
-                final SpecifiedTypeValue<?> typedInputEntryValue = typeConverter.convert(inputEntryValue);
-                result = objectsComparator.isInputEntryValueEqualInputValue(typedInputEntryValue, typedInputValue);
+                booleanTypeConverter = typeConverterFactory.getInstance(ValueType.BOOLEAN);
             }
+
+            typedInputEntryValue = booleanTypeConverter.convert(inputEntryValue);
         } else {
-            final SpecifiedTypeValue<?> typedInputEntryValue = typeConverter.convert(inputEntryValue);
-            result = objectsComparator.isInputEntryValueEqualInputValue(typedInputEntryValue, typedInputValue);
+            typedInputEntryValue = typeConverter.convert(inputEntryValue);
         }
+
+        final EvaluationMode evaluationMode = inputEntry.getEvaluationMode();
+        final EvaluationModeProvider evaluationModeProvider = evaluationModeProviderFactory.getInstance(evaluationMode);
+        final boolean result = evaluationModeProvider.isPositive(input.getType(), typedInputEntryValue, typedInputValue);
 
         log.debug("Evaluated input entry result: {}", result);
 
         return result;
+    }
+
+    private boolean isBoolean(final Object value) {
+        return Boolean.TRUE.equals(value) || Boolean.FALSE.equals(value);
     }
 
     private boolean isInputEvaluated(final Input input, final EvaluationContext evaluationContext) {

@@ -14,29 +14,9 @@
  * limitations under the License.
  */
 
-package org.powerflows.dmn.engine.model.evaluation.variable;
+package org.powerflows.dmn.engine.model.decision;
 
-
-import lombok.ToString;
-
-import java.io.Serializable;
-import java.util.HashMap;
-import java.util.Map;
-
-@ToString
-public class AbstractDecisionVariables {
-
-    protected Map<String, Serializable> variables = new HashMap<>();
-
-    public Serializable get(final String name) {
-        return variables.get(name);
-    }
-
-    public Map<String, Serializable> getAll() {
-        return variables;
-    }
-
-    public boolean isPresent(final String name) {
-        return variables.get(name) != null;
-    }
+public enum EvaluationMode {
+    BOOLEAN,
+    INPUT_COMPARISON
 }

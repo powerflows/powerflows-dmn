@@ -36,7 +36,7 @@ public class TypeConverterFactory {
         final TypeConverter typeConverter = factories.get(valueType);
 
         if (typeConverter == null) {
-            throw new IllegalArgumentException("Unknown value type");
+            throw new IllegalArgumentException("Unknown value type " + valueType);
         }
 
         return typeConverter;

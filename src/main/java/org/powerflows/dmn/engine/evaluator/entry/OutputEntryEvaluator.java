@@ -19,7 +19,7 @@ package org.powerflows.dmn.engine.evaluator.entry;
 
 import lombok.extern.slf4j.Slf4j;
 import org.powerflows.dmn.engine.evaluator.context.EvaluationContext;
-import org.powerflows.dmn.engine.evaluator.expression.provider.EvaluationProviderFactory;
+import org.powerflows.dmn.engine.evaluator.expression.provider.ExpressionEvaluationProviderFactory;
 import org.powerflows.dmn.engine.evaluator.expression.provider.ExpressionEvaluationProvider;
 import org.powerflows.dmn.engine.evaluator.type.converter.TypeConverter;
 import org.powerflows.dmn.engine.evaluator.type.converter.TypeConverterFactory;
@@ -27,23 +27,25 @@ import org.powerflows.dmn.engine.model.decision.field.Output;
 import org.powerflows.dmn.engine.model.decision.rule.entry.OutputEntry;
 import org.powerflows.dmn.engine.model.evaluation.result.EntryResult;
 
+import java.io.Serializable;
+
 @Slf4j
 public class OutputEntryEvaluator {
 
-    private final EvaluationProviderFactory evaluationProviderFactory;
+    private final ExpressionEvaluationProviderFactory expressionEvaluationProviderFactory;
     private final TypeConverterFactory typeConverterFactory;
 
-    public OutputEntryEvaluator(EvaluationProviderFactory evaluationProviderFactory,
+    public OutputEntryEvaluator(ExpressionEvaluationProviderFactory expressionEvaluationProviderFactory,
                                 final TypeConverterFactory typeConverterFactory) {
-        this.evaluationProviderFactory = evaluationProviderFactory;
+        this.expressionEvaluationProviderFactory = expressionEvaluationProviderFactory;
         this.typeConverterFactory = typeConverterFactory;
     }
 
     public EntryResult evaluate(final OutputEntry outputEntry, final Output output, final EvaluationContext evaluationContext) {
-        final ExpressionEvaluationProvider expressionEvaluator = evaluationProviderFactory.getInstance(outputEntry.getExpression().getType());
+        final ExpressionEvaluationProvider expressionEvaluator = expressionEvaluationProviderFactory.getInstance(outputEntry.getExpression().getType());
         final TypeConverter typeConverter = typeConverterFactory.getInstance(output.getType());
 
-        final Object outputEntryValue = expressionEvaluator.evaluateEntry(outputEntry.getExpression(), evaluationContext);
+        final Serializable outputEntryValue = expressionEvaluator.evaluateEntry(outputEntry.getExpression(), evaluationContext);
 
         //Needed for the output entry value validation.
         //Correct build means the output entry value has a type compatible with the output definition.

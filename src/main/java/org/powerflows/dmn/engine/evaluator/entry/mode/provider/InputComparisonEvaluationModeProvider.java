@@ -14,17 +14,18 @@
  * limitations under the License.
  */
 
-package org.powerflows.dmn.engine.evaluator.expression.comparator;
+package org.powerflows.dmn.engine.evaluator.entry.mode.provider;
 
 import org.powerflows.dmn.engine.evaluator.type.value.SpecifiedTypeValue;
+import org.powerflows.dmn.engine.model.decision.field.ValueType;
 
 import java.util.Collection;
 import java.util.Collections;
 
-public class DefaultObjectsComparator implements ObjectsComparator {
+class InputComparisonEvaluationModeProvider implements EvaluationModeProvider {
 
     @Override
-    public <T, P> boolean isInputEntryValueEqualInputValue(final SpecifiedTypeValue<T> inputEntryValue, final SpecifiedTypeValue<P> inputValue) {
+    public <T, P> boolean isPositive(final ValueType inputType, final SpecifiedTypeValue<T> inputEntryValue, final SpecifiedTypeValue<P> inputValue) {
         if (inputEntryValue == null) {
             throw new NullPointerException("Input entry value can not be null");
         }
@@ -33,6 +34,24 @@ public class DefaultObjectsComparator implements ObjectsComparator {
             throw new NullPointerException("Input value can not be null");
         }
 
+        final boolean result;
+
+        if (!ValueType.BOOLEAN.equals(inputType) && inputEntryValue.isSingleValue()) {
+            if (Boolean.TRUE.equals(inputEntryValue.getValue())) {
+                result = true;
+            } else if (Boolean.FALSE.equals(inputEntryValue.getValue())) {
+                result = false;
+            } else {
+                result = isPositive(inputEntryValue, inputValue);
+            }
+        } else {
+            result = isPositive(inputEntryValue, inputValue);
+        }
+
+        return result;
+    }
+
+    private <T, P> boolean isPositive(final SpecifiedTypeValue<T> inputEntryValue, final SpecifiedTypeValue<P> inputValue) {
         final Collection<T> inputEntryValues = convertObjectToCollection(inputEntryValue);
         final Collection<P> inputValues = convertObjectToCollection(inputValue);
 

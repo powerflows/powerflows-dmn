@@ -49,20 +49,22 @@ class DecisionSpec extends Specification {
     final String someOutput2Name = 'Some Input 2 Name'
     final String someOutput2Description = 'Some Output 2 Description'
     final String someRule1Description = 'Some Rule 1 Description'
-    final String someRule1InputEntry1Name = 'Some Rule 1 Input Entry 1 Name'
+    final String someRule1InputEntry1Name = someInput1Name
     final ExpressionType someRule1InputEntry1ExpressionType = ExpressionType.GROOVY
     final String someRule1InputEntry1ExpressionValue = '> 20'
-    final String someRule1InputEntry2Name = 'Some Rule 1 Input Entry 2 Name'
+    final String someRule1InputEntry2Name = someInput2Name
     final ExpressionType someRule1InputEntry2ExpressionType = ExpressionType.FEEL
     final String someRule1InputEntry2ExpressionValue = 'not("blue", "purple")'
     final String someRule1OutputEntry1Name = 'Some Rule 1 Output Entry 1 Name'
     final ExpressionType someRule1OutputEntry1ExpressionType = ExpressionType.GROOVY
     final String someRule1OutputEntry1ExpressionValue = 'someVariable1 || someVariable2'
     final String someRule2Description = 'Some Rule 2 Description'
-    final String someRule2InputEntry1Name = 'Some Rule 2 Input Entry 1 Name'
-    final String someRule2InputEntry2Name = 'Some Rule 2 Input Entry 2 Name'
+    final String someRule2InputEntry1Name = someInput1Name
+    final String someRule2InputEntry2Name = someInput2Name
     final String someRule2OutputEntry1Name = 'Some Rule 2 Output Entry 1 Name'
     final String someRule2OutputEntry2Name = 'Some Rule 2 Output Entry 2 Name'
+    final Integer someRule2OutputEntry1ExpressionValue = 1
+    final Integer someRule2OutputEntry2ExpressionValue = 2
 
     void 'should build decision with fluent API'() {
         given:
@@ -128,8 +130,10 @@ class DecisionSpec extends Specification {
                         .end()
                     .withOutputEntries()
                         .name(someRule2OutputEntry1Name)
+                        .withLiteralValue(someRule2OutputEntry1ExpressionValue)
                         .next()
                         .name(someRule2OutputEntry2Name)
+                        .withLiteralValue(someRule2OutputEntry2ExpressionValue)
                         .end()
                     .end()
                 .build()
@@ -355,11 +359,13 @@ class DecisionSpec extends Specification {
                             { outputEntryBuilder ->
                                 outputEntryBuilder
                                         .name(someRule2OutputEntry1Name)
+                                        .withLiteralValue(someRule2OutputEntry1ExpressionValue)
                                         .build()
                             }).withOutputEntry(
                             { outputEntryBuilder ->
                                 outputEntryBuilder
                                         .name(someRule2OutputEntry2Name)
+                                        .withLiteralValue(someRule2OutputEntry2ExpressionValue)
                                         .build()
                             })
                             .build()
@@ -464,7 +470,19 @@ class DecisionSpec extends Specification {
         final OutputEntry rule2OutputEntry1 = rule2.getOutputEntries().get(0)
         rule2OutputEntry1.getName() == someRule2OutputEntry1Name
 
+        final Expression rule2OutputEntry1Expression = rule2OutputEntry1.getExpression()
+        with(rule2OutputEntry1Expression) {
+            getType() == ExpressionType.LITERAL
+            getValue() == someRule2OutputEntry1ExpressionValue
+        }
+
         final OutputEntry rule2OutputEntry2 = rule2.getOutputEntries().get(1)
         rule2OutputEntry2.getName() == someRule2OutputEntry2Name
+
+        final Expression rule2OutputEntry2Expression = rule2OutputEntry2.getExpression()
+        with(rule2OutputEntry2Expression) {
+            getType() == ExpressionType.LITERAL
+            getValue() == someRule2OutputEntry2ExpressionValue
+        }
     }
 }

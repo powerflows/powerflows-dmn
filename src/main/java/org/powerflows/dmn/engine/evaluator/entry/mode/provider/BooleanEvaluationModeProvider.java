@@ -14,11 +14,19 @@
  * limitations under the License.
  */
 
-package org.powerflows.dmn.engine.evaluator.expression.comparator;
+package org.powerflows.dmn.engine.evaluator.entry.mode.provider;
 
 import org.powerflows.dmn.engine.evaluator.type.value.SpecifiedTypeValue;
+import org.powerflows.dmn.engine.model.decision.field.ValueType;
 
-public interface ObjectsComparator {
+class BooleanEvaluationModeProvider implements EvaluationModeProvider {
 
-    <T, P> boolean isInputEntryValueEqualInputValue(final SpecifiedTypeValue<T> inputEntryValue, final SpecifiedTypeValue<P> inputValue);
+    @Override
+    public <T, P> boolean isPositive(final ValueType inputType, final SpecifiedTypeValue<T> inputEntryValue, final SpecifiedTypeValue<P> inputValue) {
+        if (inputEntryValue == null) {
+            throw new NullPointerException("Input entry value can not be null");
+        }
+
+        return inputEntryValue.isSingleValue() && Boolean.TRUE.equals(inputEntryValue.getValue());
+    }
 }

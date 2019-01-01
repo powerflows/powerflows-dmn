@@ -27,8 +27,10 @@ import org.powerflows.dmn.io.yaml.model.field.YamlFields;
 import org.powerflows.dmn.io.yaml.model.field.YamlInput;
 import org.powerflows.dmn.io.yaml.model.field.YamlOutput;
 import org.powerflows.dmn.io.yaml.model.rule.YamlRule;
-import org.powerflows.dmn.io.yaml.model.rule.YamlRuleEntry;
+import org.powerflows.dmn.io.yaml.model.rule.entry.YamlInputEntry;
+import org.powerflows.dmn.io.yaml.model.rule.entry.YamlOutputEntry;
 
+import java.io.Serializable;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -40,6 +42,7 @@ public class YamlDecisionConverter implements DecisionToExternalModelConverter<Y
         yamlDecision.setId(decision.getId());
         yamlDecision.setName(decision.getName());
         yamlDecision.setExpressionType(decision.getExpressionType());
+        yamlDecision.setEvaluationMode(decision.getEvaluationMode());
         yamlDecision.setHitPolicy(decision.getHitPolicy());
         yamlDecision.setFields(createFields(decision.getInputs(), decision.getOutputs()));
         yamlDecision.setRules(decision.getRules()
@@ -61,6 +64,7 @@ public class YamlDecisionConverter implements DecisionToExternalModelConverter<Y
             final YamlInput yamlInput = new YamlInput();
             yamlInput.setDescription(input.getDescription());
             yamlInput.setType(input.getType());
+            yamlInput.setEvaluationMode(input.getEvaluationMode());
             if (input.getExpression() != null && input.getExpression().getValue() != null) {
                 yamlInput.setExpression(input.getExpression().getValue());
                 yamlInput.setExpressionType(
@@ -87,25 +91,26 @@ public class YamlDecisionConverter implements DecisionToExternalModelConverter<Y
     private YamlRule ruleToYamlRule(final Rule rule) {
         final YamlRule yamlRule = new YamlRule();
         yamlRule.setDescription(rule.getDescription());
-        final LinkedHashMap<String, YamlRuleEntry> in = new LinkedHashMap<>();
+        final LinkedHashMap<String, YamlInputEntry> in = new LinkedHashMap<>();
         yamlRule.setIn(in);
-        final LinkedHashMap<String, YamlRuleEntry> out = new LinkedHashMap<>();
+        final LinkedHashMap<String, YamlOutputEntry> out = new LinkedHashMap<>();
         yamlRule.setOut(out);
 
         rule.getInputEntries().forEach(inputEntry -> {
-            final YamlRuleEntry yamlRuleEntry = new YamlRuleEntry();
-            yamlRuleEntry.setExpressionType(inputEntry.getExpression().getType());
-            yamlRuleEntry.setExpression(inputEntry.getExpression().getValue());
+            final YamlInputEntry yamlInputEntry = new YamlInputEntry();
+            yamlInputEntry.setExpressionType(inputEntry.getExpression().getType());
+            yamlInputEntry.setExpression(inputEntry.getExpression().getValue());
+            yamlInputEntry.setEvaluationMode(inputEntry.getEvaluationMode());
 
-            in.put(inputEntry.getName(), yamlRuleEntry);
+            in.put(inputEntry.getName(), yamlInputEntry);
         });
 
         rule.getOutputEntries().forEach(outputEntry -> {
-            final YamlRuleEntry yamlRuleOutput = new YamlRuleEntry();
-            yamlRuleOutput.setExpressionType(outputEntry.getExpression().getType());
-            yamlRuleOutput.setExpression(outputEntry.getExpression().getValue());
+            final YamlOutputEntry yamlOutputEntry = new YamlOutputEntry();
+            yamlOutputEntry.setExpressionType(outputEntry.getExpression().getType());
+            yamlOutputEntry.setExpression(outputEntry.getExpression().getValue());
 
-            out.put(outputEntry.getName(), yamlRuleOutput);
+            out.put(outputEntry.getName(), yamlOutputEntry);
         });
 
         return yamlRule;
@@ -117,16 +122,18 @@ public class YamlDecisionConverter implements DecisionToExternalModelConverter<Y
         builder.id(model.getId())
                 .name(model.getName())
                 .expressionType(model.getExpressionType())
+                .evaluationMode(model.getEvaluationMode())
                 .hitPolicy(model.getHitPolicy());
 
         model.getFields().getIn().forEach((name, input) -> builder
                 .withInput(inputBuilder -> inputBuilder
                         .name(name)
                         .type(input.getType())
+                        .evaluationMode(input.getEvaluationMode())
                         .description(input.getDescription())
                         .withExpression(expressionBuilder -> expressionBuilder
                                 .type(input.getExpressionType())
-                                .value(input.getExpression())
+                                .value((Serializable) input.getExpression())
                                 .build())
                         .build()));
 
@@ -141,9 +148,10 @@ public class YamlDecisionConverter implements DecisionToExternalModelConverter<Y
             rule.getIn().forEach((name, input) -> ruleBuilder
                     .withInputEntry(inputEntryBuilder -> inputEntryBuilder
                             .name(name)
+                            .evaluationMode(input.getEvaluationMode())
                             .withExpression(expressionBuilder -> expressionBuilder
                                     .type(input.getExpressionType())
-                                    .value(input.getExpression())
+                                    .value((Serializable) input.getExpression())
                                     .build())
                             .build()));
 
@@ -152,7 +160,7 @@ public class YamlDecisionConverter implements DecisionToExternalModelConverter<Y
                             .name(name)
                             .withExpression(expressionBuilder -> expressionBuilder
                                     .type(output.getExpressionType())
-                                    .value(output.getExpression())
+                                    .value((Serializable) output.getExpression())
                                     .build())
                             .build()));
 

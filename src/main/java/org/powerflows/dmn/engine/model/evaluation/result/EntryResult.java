@@ -28,7 +28,7 @@ public class EntryResult implements Serializable {
     private static final long serialVersionUID = 1;
 
     private String name;
-    private Object value;
+    private Serializable value;
 
     private EntryResult() {
     }
@@ -37,7 +37,7 @@ public class EntryResult implements Serializable {
         return name;
     }
 
-    public Object getValue() {
+    public Serializable getValue() {
         return value;
     }
 
@@ -61,7 +61,7 @@ public class EntryResult implements Serializable {
             return this;
         }
 
-        public Builder value(Object value) {
+        public Builder value(Serializable value) {
             this.product.value = value;
 
             return this;

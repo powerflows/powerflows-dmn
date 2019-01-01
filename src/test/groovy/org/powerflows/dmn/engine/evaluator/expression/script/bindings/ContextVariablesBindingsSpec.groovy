@@ -47,7 +47,7 @@ class ContextVariablesBindingsSpec extends Specification {
 
         final String contextVariablesVariableName = 'y'
         final Object contextVariablesVariableValue = 20
-        final Map<String, Object> contextVariablesMap = [:]
+        final Map<String, Serializable> contextVariablesMap = [:]
         contextVariablesMap.put(contextVariablesVariableName, contextVariablesVariableValue)
         final DecisionVariables decisionVariables = new DecisionVariables(contextVariablesMap)
         final EvaluationContext evaluationContext = new EvaluationContext(decisionVariables)
@@ -75,7 +75,7 @@ class ContextVariablesBindingsSpec extends Specification {
         final Object variableValue = 10
         final Bindings bindings = scriptEngine.createBindings()
 
-        final Map<String, Object> contextVariablesMap = [:]
+        final Map<String, Serializable> contextVariablesMap = [:]
         final DecisionVariables decisionVariables = new DecisionVariables(contextVariablesMap)
         final EvaluationContext contextVariables = new EvaluationContext(decisionVariables)
 
@@ -101,13 +101,13 @@ class ContextVariablesBindingsSpec extends Specification {
         final Object variableValue2 = 20
         final Bindings bindings = scriptEngine.createBindings()
 
-        final Map<String, Object> contextVariablesMap = [:]
+        final Map<String, Serializable> contextVariablesMap = [:]
         final DecisionVariables decisionVariables = new DecisionVariables(contextVariablesMap)
         final EvaluationContext contextVariables = new EvaluationContext(decisionVariables)
 
         final ContextVariablesBindings contextVariablesBindings = ContextVariablesBindings.create(bindings, contextVariables)
 
-        final Map<String, Object> variablesMapToPutAll = [:]
+        final Map<String, Serializable> variablesMapToPutAll = [:]
         variablesMapToPutAll.put(variableName1, variableValue1)
         variablesMapToPutAll.put(variableName2, variableValue2)
 
@@ -131,7 +131,7 @@ class ContextVariablesBindingsSpec extends Specification {
         final Object variableValue = 10
         final Bindings bindings = scriptEngine.createBindings()
 
-        final Map<String, Object> contextVariablesMap = [:]
+        final Map<String, Serializable> contextVariablesMap = [:]
         contextVariablesMap.put(variableName, variableValue)
         final DecisionVariables decisionVariables = new DecisionVariables(contextVariablesMap)
         final EvaluationContext contextVariables = new EvaluationContext(decisionVariables)
@@ -142,8 +142,27 @@ class ContextVariablesBindingsSpec extends Specification {
         contextVariablesBindings.remove(variableName)
 
         then:
-        with(contextVariablesBindings) {
-            isEmpty()
-        }
+        !contextVariablesBindings.containsKey(variableName)
+
+    }
+
+    void 'should clear ContextVariablesBindings instance'() {
+        given:
+        final String variableName = 'x'
+        final Object variableValue = 10
+        final Bindings bindings = scriptEngine.createBindings()
+
+        final Map<String, Serializable> contextVariablesMap = [:]
+        contextVariablesMap.put(variableName, variableValue)
+        final DecisionVariables decisionVariables = new DecisionVariables(contextVariablesMap)
+        final EvaluationContext contextVariables = new EvaluationContext(decisionVariables)
+
+        final ContextVariablesBindings contextVariablesBindings = ContextVariablesBindings.create(bindings, contextVariables)
+
+        when:
+        contextVariablesBindings.clear()
+
+        then:
+        contextVariablesBindings.isEmpty()
     }
 }

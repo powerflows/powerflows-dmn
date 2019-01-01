@@ -14,29 +14,20 @@
  * limitations under the License.
  */
 
-package org.powerflows.dmn.engine.model.evaluation.variable;
+package org.powerflows.dmn.io.yaml.model.rule.entry;
 
+import lombok.Data;
+import org.powerflows.dmn.engine.model.decision.expression.ExpressionType;
 
-import lombok.ToString;
-
-import java.io.Serializable;
-import java.util.HashMap;
-import java.util.Map;
-
-@ToString
-public class AbstractDecisionVariables {
-
-    protected Map<String, Serializable> variables = new HashMap<>();
-
-    public Serializable get(final String name) {
-        return variables.get(name);
+@Data
+public final class YamlOutputEntry {
+    public YamlOutputEntry(final Object value) {
+        this.expression = value;
     }
 
-    public Map<String, Serializable> getAll() {
-        return variables;
+    public YamlOutputEntry() {
     }
 
-    public boolean isPresent(final String name) {
-        return variables.get(name) != null;
-    }
+    private ExpressionType expressionType = ExpressionType.LITERAL;
+    private Object expression;
 }
