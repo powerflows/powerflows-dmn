@@ -20,4 +20,8 @@ public class DecisionReadException extends RuntimeException {
     public DecisionReadException(final String message, final Throwable cause) {
         super(message, cause);
     }
+
+    public DecisionReadException(final String message) {
+        super(message);
+    }
 }

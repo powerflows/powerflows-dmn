@@ -13,22 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+@XmlSchema(
+        namespace = "http://www.omg.org/spec/DMN/20151101/dmn.xsd",
+        elementFormDefault = XmlNsForm.QUALIFIED)
+package org.powerflows.dmn.io.xml.model;
 
-package org.powerflows.dmn.engine.reader;
 
-
-import org.powerflows.dmn.engine.model.decision.Decision;
-
-import java.io.InputStream;
-import java.util.List;
-import java.util.Optional;
-
-public interface DecisionReader {
-
-    Optional<Decision> read(InputStream inputStream);
-
-    Optional<Decision> read(InputStream inputStream, String decisionId);
-
-    List<Decision> readAll(InputStream inputStream);
-
-}
+import javax.xml.bind.annotation.XmlNsForm;
+import javax.xml.bind.annotation.XmlSchema;

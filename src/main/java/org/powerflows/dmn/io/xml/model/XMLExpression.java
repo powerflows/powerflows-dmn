@@ -13,22 +13,27 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+package org.powerflows.dmn.io.xml.model;
 
-package org.powerflows.dmn.engine.reader;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlAttribute;
 
-import org.powerflows.dmn.engine.model.decision.Decision;
+@XmlAccessorType(XmlAccessType.FIELD)
+@Data
+@NoArgsConstructor
+public class XMLExpression {
+    @XmlAttribute
+    private String id;
 
-import java.io.InputStream;
-import java.util.List;
-import java.util.Optional;
+    @XmlAttribute
+    private String typeRef;
 
-public interface DecisionReader {
+    @XmlAttribute
+    private String expressionLanguage;
 
-    Optional<Decision> read(InputStream inputStream);
-
-    Optional<Decision> read(InputStream inputStream, String decisionId);
-
-    List<Decision> readAll(InputStream inputStream);
-
+    private String text;
 }

@@ -45,7 +45,7 @@ class DefaultDecisionEngineConfigurationReferenceSingleSpec extends Specificatio
 
         final String decisionFileName = 'reference-single.yml'
         final InputStream decisionInputStream = this.class.getResourceAsStream(decisionFileName)
-        decision = decisionReader.read(decisionInputStream)
+        decision = decisionReader.read(decisionInputStream).get()
     }
 
     void 'should configure default decision engine'() {
