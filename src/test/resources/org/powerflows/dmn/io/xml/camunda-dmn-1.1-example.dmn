@@ -79,7 +79,7 @@
     </informationRequirement>
     <decisionTable id="DecisionTable_0ioctrq">
       <input id="InputClause_0upyfo6" camunda:inputVariable="inputOne">
-        <inputExpression id="LiteralExpression_0hnred1" typeRef="badType">
+        <inputExpression id="LiteralExpression_0hnred1" typeRef="string">
           <text></text>
         </inputExpression>
       </input>

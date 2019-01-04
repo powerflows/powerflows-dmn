@@ -75,6 +75,17 @@ public class OutputEntry implements Serializable {
 
             return (B) this;
         }
+
+        @Override
+        protected OutputEntry assembleProduct() {
+            if (product.expression == null) {
+                product.expression = Expression.builder().build();
+            }
+
+            validateIsNonNull(product.name, "Name is required");
+
+            return product;
+        }
     }
 
     public static final class Builder extends OutputEntryBuilder<Builder> {

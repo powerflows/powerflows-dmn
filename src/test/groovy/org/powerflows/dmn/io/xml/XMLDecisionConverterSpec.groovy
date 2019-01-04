@@ -24,7 +24,7 @@ class XMLDecisionConverterSpec extends Specification {
         final XMLDecisionConverter converter = new XMLDecisionConverter()
 
         when:
-        converter.to(Decision.builder().build())
+        converter.to([] as Decision)
 
         then:
         thrown(UnsupportedOperationException)

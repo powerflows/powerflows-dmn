@@ -17,6 +17,7 @@
 package org.powerflows.dmn.io.xml
 
 import org.powerflows.dmn.engine.model.decision.Decision
+import org.powerflows.dmn.engine.model.decision.DecisionBuildException
 import org.powerflows.dmn.engine.model.decision.HitPolicy
 import org.powerflows.dmn.engine.model.decision.expression.ExpressionType
 import org.powerflows.dmn.engine.model.decision.field.ValueType
@@ -60,7 +61,7 @@ class XmlDecisionReaderSpec extends Specification {
         thrown(DecisionReadException)
     }
 
-    void 'should load minimal markup with empty data'() {
+    void 'should fail on minimal markup with empty data'() {
         given:
         final String xml = '''<?xml version="1.0" encoding="UTF-8"?>
             <definitions xmlns="http://www.omg.org/spec/DMN/20151101/dmn.xsd" id="Definitions_0ulq5ro" name="DRD" namespace="http://camunda.org/schema/1.0/dmn">
@@ -71,20 +72,10 @@ class XmlDecisionReaderSpec extends Specification {
             '''
 
         when:
-        final List<Decision> result = reader.readAll(new ByteArrayInputStream(xml.getBytes()))
+        reader.readAll(new ByteArrayInputStream(xml.getBytes()))
 
         then:
-        result?.size() == 1
-
-        and:
-        with(result[0]) {
-            getInputs().size() == 0
-            getOutputs().size() == 0
-            getRules().size() == 0
-            getName() == 'Some Table Name'
-            getId() == 'some_table_id_1'
-            getHitPolicy() == HitPolicy.UNIQUE
-        }
+        thrown(DecisionBuildException)
     }
 
     void 'should load minimal markup with empty data using strict mode and fail on unexpected element'() {
