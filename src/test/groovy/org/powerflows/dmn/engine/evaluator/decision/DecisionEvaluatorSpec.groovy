@@ -64,6 +64,25 @@ class DecisionEvaluatorSpec extends Specification {
         exception.getMessage() == 'Decision variables can not be null'
     }
 
+    @Unroll
+    void 'should throw exception for unsupported hitPolicy #hitPolicy'(final HitPolicy hitPolicy) {
+        given:
+        final Decision decision = [hitPolicy: hitPolicy] as Decision
+        final DecisionVariables decisionContextVariables = [:]
+
+        when:
+        decisionEvaluator.evaluate(decision, decisionContextVariables)
+
+        then:
+        final UnsupportedOperationException exception = thrown()
+        exception != null
+        exception.getMessage() == "HitPolicy $hitPolicy is not supported"
+
+        where:
+        hitPolicy << [HitPolicy.PRIORITY, HitPolicy.OUTPUT_ORDER, HitPolicy.RULE_ORDER]
+    }
+
+
     void 'should throw exception when unique result is expected but non-unique evaluated'() {
         given:
         final List<Input> inputs = [];

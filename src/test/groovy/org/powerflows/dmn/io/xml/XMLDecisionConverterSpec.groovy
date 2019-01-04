@@ -13,22 +13,20 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+package org.powerflows.dmn.io.xml
 
-package org.powerflows.dmn.engine.reader;
+import org.powerflows.dmn.engine.model.decision.Decision
+import spock.lang.Specification
 
+class XMLDecisionConverterSpec extends Specification {
+    void 'should fail on conversion to XML model'() {
+        given:
+        final XMLDecisionConverter converter = new XMLDecisionConverter()
 
-import org.powerflows.dmn.engine.model.decision.Decision;
+        when:
+        converter.to(Decision.builder().build())
 
-import java.io.InputStream;
-import java.util.List;
-import java.util.Optional;
-
-public interface DecisionReader {
-
-    Optional<Decision> read(InputStream inputStream);
-
-    Optional<Decision> read(InputStream inputStream, String decisionId);
-
-    List<Decision> readAll(InputStream inputStream);
-
+        then:
+        thrown(UnsupportedOperationException)
+    }
 }

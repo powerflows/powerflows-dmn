@@ -140,7 +140,7 @@ class YamlDecisionWriterSpec extends Specification {
         when:
         writer.write(decision, outputStream)
         final ByteArrayInputStream inputStream = new ByteArrayInputStream(outputStream.toByteArray())
-        final Decision result = reader.read(inputStream)
+        final Decision result = reader.read(inputStream).get()
 
         then:
         result.id == decision.id

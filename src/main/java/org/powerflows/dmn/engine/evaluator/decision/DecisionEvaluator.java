@@ -32,14 +32,18 @@ import org.powerflows.dmn.engine.model.evaluation.result.RuleResult;
 import org.powerflows.dmn.engine.model.evaluation.variable.DecisionVariables;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.EnumSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
 @Slf4j
 public class DecisionEvaluator {
 
+    private static final Set<HitPolicy> UNSUPPORTED_HIT_POLICIES = Collections.unmodifiableSet(EnumSet.of(HitPolicy.OUTPUT_ORDER, HitPolicy.RULE_ORDER, HitPolicy.PRIORITY));
     private final RuleEvaluator ruleEvaluator;
 
     public DecisionEvaluator(RuleEvaluator ruleEvaluator) {
@@ -53,6 +57,10 @@ public class DecisionEvaluator {
 
         if (decisionVariables == null) {
             throw new NullPointerException("Decision variables can not be null");
+        }
+
+        if (isUnsupportedSupportedHitPolicy(decision.getHitPolicy())) {
+            throw new UnsupportedOperationException("HitPolicy " + decision.getHitPolicy() + " is not supported");
         }
 
         log.info("Starting evaluation of decision: {} with decision variables: {}", decision, decisionVariables);
@@ -95,6 +103,10 @@ public class DecisionEvaluator {
         log.info("Evaluated decision result: {}", decisionResult);
 
         return decisionResult;
+    }
+
+    private boolean isUnsupportedSupportedHitPolicy(HitPolicy hitPolicy) {
+        return UNSUPPORTED_HIT_POLICIES.contains(hitPolicy);
     }
 
     private void validateDecisionVariables(final List<Input> inputs, final DecisionVariables decisionVariables) {

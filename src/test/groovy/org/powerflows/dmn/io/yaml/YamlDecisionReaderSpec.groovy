@@ -27,6 +27,7 @@ class YamlDecisionReaderSpec extends Specification {
     final String singleDecision = 'test-single-decision.yml'
     final String multipleDecisions = 'test-multiple-decisions.yml'
     final String decisionNamePrefix = 'sample_decision_'
+    final String decisionId = 'sample_decision_2'
 
     void 'should wrap exceptions in framework ones when reading single decision'() {
         given:
@@ -39,38 +40,30 @@ class YamlDecisionReaderSpec extends Specification {
         thrown(DecisionReadException)
     }
 
-    void 'should not support read by id yet'() {
-        given:
-        final String id = 'id'
-
-        when:
-        new YamlDecisionReader().read(id)
-
-        then:
-        thrown(UnsupportedOperationException)
-    }
-
-    void 'should not support readAll by ids yet'() {
-        given:
-        final String id = 'id'
-
-        when:
-        new YamlDecisionReader().readAll([id])
-
-        then:
-        thrown(UnsupportedOperationException)
-    }
-
     void 'should read decision using InputStream'() {
         given:
         final InputStream inputStream = this.class.getResourceAsStream(singleDecision)
 
         when:
-        final Decision result = new YamlDecisionReader().read(inputStream)
+        final Optional<Decision> result = new YamlDecisionReader().read(inputStream)
 
         then:
         result != null
-        assertDecision(result, decisionNamePrefix + 1)
+        result.isPresent()
+        assertDecision(result.get(), decisionNamePrefix + 1)
+    }
+
+    void 'should read decision by id using InputStream'() {
+        given:
+        final InputStream inputStream = this.class.getResourceAsStream(multipleDecisions)
+
+        when:
+        final Optional<Decision> result = new YamlDecisionReader().read(inputStream, decisionId)
+
+        then:
+        result != null
+        result.isPresent()
+        assertDecision(result.get(), decisionNamePrefix + 2)
     }
 
     void 'should wrap exceptions in framework ones when reading multiple decisions'() {

@@ -345,7 +345,8 @@ Decision decision = Decision.builder()
 
 # IO
 Thanks to IO module there is a possibility to:
-* Read decisions from *.yml files;
+* Read decisions from _powerflows_ *.yml files;
+* Read decisions from DMN 1.1 *.xml files;
 * Write decisions to *.yml files.
 
 ## Reading
@@ -354,8 +355,15 @@ First of all input stream is needed. Then, using YamlDecisionReader class a deve
 
 ```java
 InputStream inputStream = this.class.getResourceAsStream("sample-decision.yml");
-Decision result = new YamlDecisionReader().read(inputStream);
+Optional<Decision> result = new YamlDecisionReader().read(inputStream);
 ```
+Another source of Decision may be OMG defined DMN 1.1 compatible XML file.
+
+```java
+InputStream inputStream = this.class.getResourceAsStream("sample-decision.xml");
+List<Decision> result = new XMLDecisionReader.readAll(inputStream);
+```
+Currently only reading of decision tables from _decision_ tags is supported.
 
 ## Writing
 The IO module can be used to conversion between different formats. For now the only one supported is *.yml.
