@@ -257,13 +257,13 @@ public class XMLDecisionConverter implements DecisionToExternalModelConverter<XM
 
     private ValueType resolveType(final String typeRef) {
         if (typeRef == null) {
-            return null;
+            return ValueType.STRING;
         } else {
             return Arrays.stream(ValueType.values())
                     .filter(v -> v.name().equalsIgnoreCase(typeRef))
                     .findFirst()
                     .orElseGet(() -> {
-                        log.debug("Unable to resolve typeRef: {} to Powerflows Type", typeRef);
+                        log.debug("Unable to resolve typeRef: {} to PowerFlows Type", typeRef);
 
                         return null;
                     });

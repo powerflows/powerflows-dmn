@@ -94,6 +94,8 @@ public class InputEntry implements Serializable {
                 product.expression = Expression.builder().build();
             }
 
+            validateIsNonNull(product.name, "Name is required");
+
             return product;
         }
     }

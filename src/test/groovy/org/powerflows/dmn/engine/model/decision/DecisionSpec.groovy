@@ -41,30 +41,29 @@ class DecisionSpec extends Specification {
     final String someInput2Name = 'Some Input 2 Name'
     final String someInput2Description = 'Some Input 2 Description'
     final ValueType someOutput1Type = ValueType.BOOLEAN
-    final ValueType someInput3Type = ValueType.STRING
-    final String someInput3Name = 'Some Input 3 Name'
-    final String someOutput1Name = 'Some Input 1 Name'
+    final String someOutput1Name = 'Some Output 1 Name'
     final String someOutput1Description = 'Some Output 1 Description'
     final ValueType someOutput2Type = ValueType.STRING
-    final String someOutput2Name = 'Some Input 2 Name'
+    final String someOutput2Name = 'Some Output 2 Name'
     final String someOutput2Description = 'Some Output 2 Description'
     final String someRule1Description = 'Some Rule 1 Description'
     final String someRule1InputEntry1Name = someInput1Name
+    final String someRule1InputEntry1NonMatchName = someInput1Name + 'NonMatch'
     final ExpressionType someRule1InputEntry1ExpressionType = ExpressionType.GROOVY
     final String someRule1InputEntry1ExpressionValue = '> 20'
     final String someRule1InputEntry2Name = someInput2Name
     final ExpressionType someRule1InputEntry2ExpressionType = ExpressionType.FEEL
     final String someRule1InputEntry2ExpressionValue = 'not("blue", "purple")'
-    final String someRule1OutputEntry1Name = 'Some Rule 1 Output Entry 1 Name'
+    final String someRule1OutputEntry1Name = someOutput1Name
     final ExpressionType someRule1OutputEntry1ExpressionType = ExpressionType.GROOVY
     final String someRule1OutputEntry1ExpressionValue = 'someVariable1 || someVariable2'
     final String someRule2Description = 'Some Rule 2 Description'
     final String someRule2InputEntry1Name = someInput1Name
     final String someRule2InputEntry2Name = someInput2Name
-    final String someRule2OutputEntry1Name = 'Some Rule 2 Output Entry 1 Name'
-    final String someRule2OutputEntry2Name = 'Some Rule 2 Output Entry 2 Name'
+    final String someRule2OutputEntry1Name = someOutput1Name
+    final String someRule2OutputEntry2Name = someOutput2Name
     final Integer someRule2OutputEntry1ExpressionValue = 1
-    final Integer someRule2OutputEntry2ExpressionValue = 2
+    final Integer someRule2OutputEntry2ExpressionValue = null
 
     void 'should build decision with fluent API'() {
         given:
@@ -365,7 +364,6 @@ class DecisionSpec extends Specification {
                             { outputEntryBuilder ->
                                 outputEntryBuilder
                                         .name(someRule2OutputEntry2Name)
-                                        .withLiteralValue(someRule2OutputEntry2ExpressionValue)
                                         .build()
                             })
                             .build()
@@ -484,5 +482,197 @@ class DecisionSpec extends Specification {
             getType() == ExpressionType.LITERAL
             getValue() == someRule2OutputEntry2ExpressionValue
         }
+    }
+
+    void 'should throw exception when duplicates occur'() {
+        given:
+        //nothing
+
+        when:
+        Decision.builder()
+                .id(someTableId)
+                .name(someTableName)
+                .hitPolicy(someHitPolicy)
+                .expressionType(someExpressionType)
+                .withInput(
+                { inputsBuilder ->
+                    inputsBuilder.name(someInput1Name)
+                            .description(someInput1Description)
+                            .type(someInput1Type)
+                            .withExpression(
+                            { expressionBuilder ->
+                                expressionBuilder
+                                        .type(someInput1Expression1Type)
+                                        .value(someInput1Expression1Value)
+                                        .build()
+                            })
+                            .build()
+                })
+                .withInput(
+                { inputsBuilder ->
+                    inputsBuilder
+                            .name(someInput1Name)
+                            .description(someInput2Description)
+                            .type(someInput2Type)
+                            .build()
+                })
+                .withOutput(
+                { outputsBuilder ->
+                    outputsBuilder
+                            .name(someOutput1Name)
+                            .description(someOutput1Description)
+                            .type(someOutput1Type)
+                            .build()
+                })
+                .withRule(
+                { rulesBuilder ->
+                    rulesBuilder
+                            .withInputEntry(
+                            { inputEntryBuilder ->
+                                inputEntryBuilder.name(someRule1InputEntry2Name)
+                                        .withExpression(
+                                        { expressionBuilder ->
+                                            expressionBuilder
+                                                    .type(someRule1InputEntry2ExpressionType)
+                                                    .value(someRule1InputEntry2ExpressionValue)
+                                                    .build()
+                                        })
+                                        .build()
+                            })
+                            .withOutputEntry(
+                            { outputEntryBuilder ->
+                                outputEntryBuilder
+                                        .name(someRule1OutputEntry1Name)
+                                        .withExpression(
+                                        { expressionBuilder ->
+                                            expressionBuilder
+                                                    .type(someRule1OutputEntry1ExpressionType)
+                                                    .value(someRule1OutputEntry1ExpressionValue)
+                                                    .build()
+                                        })
+                                        .build()
+                            })
+                            .build()
+                })
+                .withRule(
+                { rulesBuilder ->
+                    rulesBuilder
+                            .withInputEntry(
+                            { inputEntryBuilder ->
+                                inputEntryBuilder
+                                        .name(someRule2InputEntry2Name)
+                                        .build()
+                            })
+                            .withOutputEntry(
+                            { outputEntryBuilder ->
+                                outputEntryBuilder
+                                        .name(someRule2OutputEntry1Name)
+                                        .withLiteralValue(someRule2OutputEntry1ExpressionValue)
+                                        .build()
+                            })
+                            .build()
+                })
+                .build()
+
+        then:
+        final DecisionBuildException exception = thrown()
+        exception != null
+        exception.getMessage() == "Inputs must have unique names. Duplicated names: [$someInput1Name]"
+    }
+
+    void 'should throw exception when non match entries'() {
+        given:
+        //nothing
+
+        when:
+        Decision.builder()
+                .id(someTableId)
+                .name(someTableName)
+                .hitPolicy(someHitPolicy)
+                .expressionType(someExpressionType)
+                .withInput(
+                { inputsBuilder ->
+                    inputsBuilder.name(someInput1Name)
+                            .description(someInput1Description)
+                            .type(someInput1Type)
+                            .withExpression(
+                            { expressionBuilder ->
+                                expressionBuilder
+                                        .type(someInput1Expression1Type)
+                                        .value(someInput1Expression1Value)
+                                        .build()
+                            })
+                            .build()
+                })
+                .withInput(
+                { inputsBuilder ->
+                    inputsBuilder
+                            .name(someInput2Name)
+                            .description(someInput2Description)
+                            .type(someInput2Type)
+                            .build()
+                })
+                .withOutput(
+                { outputsBuilder ->
+                    outputsBuilder
+                            .name(someOutput1Name)
+                            .description(someOutput1Description)
+                            .type(someOutput1Type)
+                            .build()
+                })
+                .withRule(
+                { rulesBuilder ->
+                    rulesBuilder
+                            .withInputEntry(
+                            { inputEntryBuilder ->
+                                inputEntryBuilder.name(someRule1InputEntry1NonMatchName)
+                                        .withExpression(
+                                        { expressionBuilder ->
+                                            expressionBuilder
+                                                    .type(someRule1InputEntry2ExpressionType)
+                                                    .value(someRule1InputEntry2ExpressionValue)
+                                                    .build()
+                                        })
+                                        .build()
+                            })
+                            .withOutputEntry(
+                            { outputEntryBuilder ->
+                                outputEntryBuilder
+                                        .name(someRule1OutputEntry1Name)
+                                        .withExpression(
+                                        { expressionBuilder ->
+                                            expressionBuilder
+                                                    .type(someRule1OutputEntry1ExpressionType)
+                                                    .value(someRule1OutputEntry1ExpressionValue)
+                                                    .build()
+                                        })
+                                        .build()
+                            })
+                            .build()
+                })
+                .withRule(
+                { rulesBuilder ->
+                    rulesBuilder
+                            .withInputEntry(
+                            { inputEntryBuilder ->
+                                inputEntryBuilder
+                                        .name(someRule2InputEntry2Name)
+                                        .build()
+                            })
+                            .withOutputEntry(
+                            { outputEntryBuilder ->
+                                outputEntryBuilder
+                                        .name(someRule2OutputEntry1Name)
+                                        .withLiteralValue(someRule2OutputEntry1ExpressionValue)
+                                        .build()
+                            })
+                            .build()
+                })
+                .build()
+
+        then:
+        final DecisionBuildException exception = thrown()
+        exception != null
+        exception.getMessage() == "Input entries refer to non existing inputs: [$someRule1InputEntry1NonMatchName]"
     }
 }

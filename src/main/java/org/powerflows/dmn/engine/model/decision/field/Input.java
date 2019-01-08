@@ -106,6 +106,9 @@ public class Input implements Serializable {
                 product.expression = Expression.builder().build();
             }
 
+            validateIsNonNull(product.name, "Name is required");
+            validateIsNonNull(product.type, "Type is required");
+
             return product;
         }
     }

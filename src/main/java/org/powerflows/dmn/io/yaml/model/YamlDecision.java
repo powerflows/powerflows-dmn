@@ -29,8 +29,8 @@ import java.util.List;
 public final class YamlDecision {
     private String id;
     private String name;
-    private HitPolicy hitPolicy;
-    private ExpressionType expressionType;
+    private HitPolicy hitPolicy = HitPolicy.UNIQUE;
+    private ExpressionType expressionType = ExpressionType.LITERAL;
     private EvaluationMode evaluationMode = EvaluationMode.BOOLEAN;
     private YamlFields fields;
     private List<YamlRule> rules;
