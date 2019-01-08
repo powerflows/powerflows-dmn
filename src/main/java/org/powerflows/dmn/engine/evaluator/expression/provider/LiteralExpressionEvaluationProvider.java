@@ -18,8 +18,8 @@ package org.powerflows.dmn.engine.evaluator.expression.provider;
 
 import lombok.extern.slf4j.Slf4j;
 import org.powerflows.dmn.engine.evaluator.context.EvaluationContext;
-import org.powerflows.dmn.engine.model.decision.expression.Expression;
 import org.powerflows.dmn.engine.model.decision.field.Input;
+import org.powerflows.dmn.engine.model.decision.rule.entry.Entry;
 
 import java.io.Serializable;
 
@@ -43,10 +43,10 @@ class LiteralExpressionEvaluationProvider implements ExpressionEvaluationProvide
     }
 
     @Override
-    public Serializable evaluateEntry(final Expression entryExpression, final EvaluationContext evaluationContext) {
-        log.debug("Starting evaluation of entry with expression: {} and evaluation context: {}", entryExpression, evaluationContext);
+    public Serializable evaluateEntry(final Entry entry, final EvaluationContext evaluationContext) {
+        log.debug("Starting evaluation of entry {} with evaluation context: {}", entry, evaluationContext);
 
-        final Serializable result = entryExpression.getValue();
+        final Serializable result = entry.getExpression().getValue();
 
         log.debug("Evaluated entry result: {}", result);
 

@@ -14,23 +14,27 @@
  * limitations under the License.
  */
 
-package org.powerflows.dmn.engine.evaluator.expression.provider;
+package org.powerflows.dmn.engine.model.decision.rule.entry;
 
-import org.powerflows.dmn.engine.evaluator.context.EvaluationContext;
-import org.powerflows.dmn.engine.model.decision.field.Input;
-import org.powerflows.dmn.engine.model.decision.rule.entry.Entry;
+import lombok.ToString;
+import org.powerflows.dmn.engine.model.decision.expression.Expression;
 
 import java.io.Serializable;
 
-class FeelExpressionEvaluationProvider implements ExpressionEvaluationProvider {
+@ToString
+public class Entry implements Serializable {
 
-    @Override
-    public Serializable evaluateInput(final Input input, final EvaluationContext evaluationContext) {
-        throw new UnsupportedOperationException();
+    protected String name;
+    protected Expression expression;
+
+    Entry() {
     }
 
-    @Override
-    public Serializable evaluateEntry(final Entry entry, final EvaluationContext evaluationContext) {
-        throw new UnsupportedOperationException();
+    public String getName() {
+        return name;
+    }
+
+    public Expression getExpression() {
+        return expression;
     }
 }

@@ -26,24 +26,14 @@ import java.io.Serializable;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
-@EqualsAndHashCode
-@ToString
-public class OutputEntry implements Serializable {
+@EqualsAndHashCode(callSuper = true)
+@ToString(callSuper = true)
+public class OutputEntry extends Entry {
 
     private static final long serialVersionUID = 1;
 
-    private String name;
-    private Expression expression;
-
     private OutputEntry() {
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public Expression getExpression() {
-        return expression;
+        super();
     }
 
     public static <P extends AbstractBuilder> FluentBuilder<P> fluentBuilder(final P parentBuilder, final Consumer<OutputEntry> outputEntryConsumer) {

@@ -93,7 +93,7 @@ class DecisionUtilSpec extends Specification {
         then:
         final DecisionBuildException exception = thrown()
         exception != null
-        exception.getMessage() == 'Can not set value 5 for InputEntry(name=null, expression=null, evaluationMode=null)'
+        exception.getMessage() == 'Can not set value 5 for InputEntry(super=Entry(name=null, expression=null), evaluationMode=null)'
     }
 
     void 'should throw exception when can not find field by type'() {
