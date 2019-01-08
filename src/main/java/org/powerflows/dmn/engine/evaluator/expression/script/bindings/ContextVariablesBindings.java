@@ -26,6 +26,7 @@ import java.util.Set;
 public class ContextVariablesBindings implements Bindings {
 
     private final Bindings bindings;
+    private static final String DEFAULT_INPUT_NAME_ALIAS = "cellInput";
 
     private ContextVariablesBindings(final Bindings bindings, final EvaluationContext evaluationContext) {
         this.bindings = bindings;
@@ -36,8 +37,21 @@ public class ContextVariablesBindings implements Bindings {
                 .forEach(variableName -> this.bindings.put(variableName, evaluationContext.get(variableName)));
     }
 
-    public static ContextVariablesBindings create(final Bindings bindings, final EvaluationContext evaluationContext) {
+    private ContextVariablesBindings(final Bindings bindings, final EvaluationContext evaluationContext, final String inputName) {
+        this(bindings, evaluationContext);
+
+        this.bindings.put(DEFAULT_INPUT_NAME_ALIAS, evaluationContext.get(inputName));
+    }
+
+    public static ContextVariablesBindings create(final Bindings bindings,
+                                                  final EvaluationContext evaluationContext) {
         return new ContextVariablesBindings(bindings, evaluationContext);
+    }
+
+    public static ContextVariablesBindings create(final Bindings bindings,
+                                                  final EvaluationContext evaluationContext,
+                                                  final String inputName) {
+        return new ContextVariablesBindings(bindings, evaluationContext, inputName);
     }
 
     @Override

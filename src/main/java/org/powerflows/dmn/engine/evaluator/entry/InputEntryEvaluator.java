@@ -66,7 +66,7 @@ public class InputEntryEvaluator {
 
         final Object inputValue = evaluationContext.get(inputEntry.getName());
         final SpecifiedTypeValue<?> typedInputValue = typeConverter.convert(inputValue);
-        final Object inputEntryValue = inputEntryExpressionEvaluator.evaluateEntry(inputEntry.getExpression(), evaluationContext);
+        final Object inputEntryValue = inputEntryExpressionEvaluator.evaluateEntry(inputEntry, evaluationContext);
 
         final SpecifiedTypeValue<?> typedInputEntryValue;
         if (isBoolean(inputEntryValue)) {

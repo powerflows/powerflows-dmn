@@ -23,6 +23,7 @@ import org.powerflows.dmn.engine.evaluator.expression.script.ScriptEngineProvide
 import org.powerflows.dmn.engine.evaluator.expression.script.bindings.ContextVariablesBindings;
 import org.powerflows.dmn.engine.model.decision.expression.Expression;
 import org.powerflows.dmn.engine.model.decision.field.Input;
+import org.powerflows.dmn.engine.model.decision.rule.entry.Entry;
 
 import javax.script.Bindings;
 import javax.script.ScriptEngine;
@@ -51,20 +52,31 @@ class ScriptExpressionEvaluationProvider implements ExpressionEvaluationProvider
     }
 
     @Override
-    public Serializable evaluateEntry(final Expression entryExpression, final EvaluationContext evaluationContext) {
-        log.debug("Starting evaluation of entry with expression: {} and evaluation context: {}", entryExpression, evaluationContext);
+    public Serializable evaluateEntry(final Entry entry, final EvaluationContext evaluationContext) {
+        log.debug("Starting evaluation of entry {} with evaluation context: {}", entry, evaluationContext);
 
-        final Serializable result = evaluate(entryExpression, evaluationContext);
+        final Serializable result = evaluate(entry, evaluationContext);
 
         log.debug("Evaluated entry result: {}", result);
 
         return result;
     }
 
+    private Serializable evaluate(final Entry entry, final EvaluationContext evaluationContext) {
+        final ScriptEngine scriptEngine = scriptEngineProvider.getScriptEngine(entry.getExpression().getType());
+        final Bindings bindings = ContextVariablesBindings.create(scriptEngine.createBindings(), evaluationContext, entry.getName());
+
+        return evaluate(entry.getExpression(), scriptEngine, bindings);
+    }
+
     private Serializable evaluate(final Expression expression, final EvaluationContext evaluationContext) {
         final ScriptEngine scriptEngine = scriptEngineProvider.getScriptEngine(expression.getType());
         final Bindings bindings = ContextVariablesBindings.create(scriptEngine.createBindings(), evaluationContext);
 
+        return evaluate(expression, scriptEngine, bindings);
+    }
+
+    private Serializable evaluate(final Expression expression, final ScriptEngine scriptEngine, final Bindings bindings) {
         final Serializable result;
 
         try {
