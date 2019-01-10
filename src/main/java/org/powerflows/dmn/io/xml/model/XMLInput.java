@@ -39,6 +39,9 @@ public class XMLInput {
     @XmlAttribute
     private String label;
 
+    @XmlAttribute(namespace = "http://camunda.org/schema/1.0/dmn")
+    private String inputVariable;
+
     @XmlElement
     private XMLInputValues inputValues;
 

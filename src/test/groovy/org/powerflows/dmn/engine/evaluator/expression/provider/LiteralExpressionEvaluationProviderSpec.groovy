@@ -21,6 +21,7 @@ import org.powerflows.dmn.engine.model.decision.expression.Expression
 import org.powerflows.dmn.engine.model.decision.expression.ExpressionType
 import org.powerflows.dmn.engine.model.decision.field.Input
 import org.powerflows.dmn.engine.model.decision.rule.entry.InputEntry
+import org.powerflows.dmn.engine.model.decision.rule.entry.OutputEntry
 import org.powerflows.dmn.engine.model.evaluation.variable.DecisionVariables
 import spock.lang.Specification
 
@@ -29,7 +30,7 @@ class LiteralExpressionEvaluationProviderSpec extends Specification {
     private final ExpressionEvaluationProvider expressionEvaluationProvider =
             new LiteralExpressionEvaluationProvider()
 
-    void 'should evaluate entry literal expression value'() {
+    void 'should evaluate input entry literal expression value'() {
         given:
         final Object inputEntryValue = 5
         final Object contextVariable = 6
@@ -40,7 +41,25 @@ class LiteralExpressionEvaluationProviderSpec extends Specification {
         final EvaluationContext evaluationContext = new EvaluationContext(decisionVariables)
 
         when:
-        final boolean inputEntryResult = expressionEvaluationProvider.evaluateEntry(inputEntry, evaluationContext)
+        final boolean inputEntryResult = expressionEvaluationProvider.evaluateInputEntry(inputEntry, evaluationContext)
+
+        then:
+        inputEntryResult
+        0 * _
+    }
+
+    void 'should evaluate output entry literal expression value'() {
+        given:
+        final Object inputEntryValue = 5
+        final Object contextVariable = 6
+        final Expression entryExpression = [value: inputEntryValue, type: ExpressionType.LITERAL]
+        final OutputEntry outputEntry = [expression: entryExpression]
+
+        final DecisionVariables decisionVariables = new DecisionVariables([TestInputName: contextVariable])
+        final EvaluationContext evaluationContext = new EvaluationContext(decisionVariables)
+
+        when:
+        final boolean inputEntryResult = expressionEvaluationProvider.evaluateOutputEntry(outputEntry, evaluationContext)
 
         then:
         inputEntryResult

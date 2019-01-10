@@ -117,21 +117,26 @@ public class XMLDecisionConverter implements DecisionToExternalModelConverter<XM
     private void processRules(final Decision.Builder builder, final List<XMLInput> inputs, final List<XMLOutput> outputs, final List<XMLRule> rules) {
         final Set<String> inputNames = new LinkedHashSet<>();
         final Supplier<String> inputNameSequence = makeSequenceNameSupplier("input_");
+
         inputs.forEach(input -> {
             final String name = selectOrCreateUniqueName(inputNames, input.getId(), null, inputNameSequence);
 
-            builder.withInput(inputBuilder ->
-                    inputBuilder
-                            .description(input.getLabel())
-                            .name(name)
-                            .withExpression(expressionBuilder ->
-                                    expressionBuilder
-                                            .value(input.getInputExpression().getText())
-                                            .type(resolveExpressionType(input.getInputExpression().getExpressionLanguage()))
-                                            .build())
-                            .type(resolveType(input.getInputExpression().getTypeRef()))
-                            .build()
-            );
+            builder.withInput(inputBuilder -> {
+                if (input.getInputVariable() != null) {
+                    inputBuilder.nameAlias(input.getInputVariable());
+                }
+
+                return inputBuilder
+                        .description(input.getLabel())
+                        .name(name)
+                        .withExpression(expressionBuilder ->
+                                expressionBuilder
+                                        .value(input.getInputExpression().getText())
+                                        .type(resolveExpressionType(input.getInputExpression().getExpressionLanguage()))
+                                        .build())
+                        .type(resolveType(input.getInputExpression().getTypeRef()))
+                        .build();
+            });
         });
 
         final Set<String> outputNames = new LinkedHashSet<>();

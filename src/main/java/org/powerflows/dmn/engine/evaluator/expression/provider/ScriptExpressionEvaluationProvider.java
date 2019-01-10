@@ -23,7 +23,8 @@ import org.powerflows.dmn.engine.evaluator.expression.script.ScriptEngineProvide
 import org.powerflows.dmn.engine.evaluator.expression.script.bindings.ContextVariablesBindings;
 import org.powerflows.dmn.engine.model.decision.expression.Expression;
 import org.powerflows.dmn.engine.model.decision.field.Input;
-import org.powerflows.dmn.engine.model.decision.rule.entry.Entry;
+import org.powerflows.dmn.engine.model.decision.rule.entry.InputEntry;
+import org.powerflows.dmn.engine.model.decision.rule.entry.OutputEntry;
 
 import javax.script.Bindings;
 import javax.script.ScriptEngine;
@@ -52,21 +53,32 @@ class ScriptExpressionEvaluationProvider implements ExpressionEvaluationProvider
     }
 
     @Override
-    public Serializable evaluateEntry(final Entry entry, final EvaluationContext evaluationContext) {
-        log.debug("Starting evaluation of entry {} with evaluation context: {}", entry, evaluationContext);
+    public Serializable evaluateInputEntry(final InputEntry inputEntry, final EvaluationContext evaluationContext) {
+        log.debug("Starting evaluation of input entry {} with evaluation context: {}", inputEntry, evaluationContext);
 
-        final Serializable result = evaluate(entry, evaluationContext);
+        final Serializable result = evaluate(inputEntry, evaluationContext);
 
         log.debug("Evaluated entry result: {}", result);
 
         return result;
     }
 
-    private Serializable evaluate(final Entry entry, final EvaluationContext evaluationContext) {
-        final ScriptEngine scriptEngine = scriptEngineProvider.getScriptEngine(entry.getExpression().getType());
-        final Bindings bindings = ContextVariablesBindings.create(scriptEngine.createBindings(), evaluationContext, entry.getName());
+    @Override
+    public Serializable evaluateOutputEntry(final OutputEntry outputEntry, final EvaluationContext evaluationContext) {
+        log.debug("Starting evaluation of output entry {} with evaluation context: {}", outputEntry, evaluationContext);
 
-        return evaluate(entry.getExpression(), scriptEngine, bindings);
+        final Serializable result = evaluate(outputEntry.getExpression(), evaluationContext);
+
+        log.debug("Evaluated entry result: {}", result);
+
+        return result;
+    }
+
+    private Serializable evaluate(final InputEntry inputEntry, final EvaluationContext evaluationContext) {
+        final ScriptEngine scriptEngine = scriptEngineProvider.getScriptEngine(inputEntry.getExpression().getType());
+        final Bindings bindings = ContextVariablesBindings.create(scriptEngine.createBindings(), evaluationContext, inputEntry);
+
+        return evaluate(inputEntry.getExpression(), scriptEngine, bindings);
     }
 
     private Serializable evaluate(final Expression expression, final EvaluationContext evaluationContext) {

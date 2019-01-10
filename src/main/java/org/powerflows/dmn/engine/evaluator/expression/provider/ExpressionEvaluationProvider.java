@@ -18,7 +18,8 @@ package org.powerflows.dmn.engine.evaluator.expression.provider;
 
 import org.powerflows.dmn.engine.evaluator.context.EvaluationContext;
 import org.powerflows.dmn.engine.model.decision.field.Input;
-import org.powerflows.dmn.engine.model.decision.rule.entry.Entry;
+import org.powerflows.dmn.engine.model.decision.rule.entry.InputEntry;
+import org.powerflows.dmn.engine.model.decision.rule.entry.OutputEntry;
 
 import java.io.Serializable;
 
@@ -26,5 +27,7 @@ public interface ExpressionEvaluationProvider {
 
     Serializable evaluateInput(Input input, EvaluationContext evaluationContext);
 
-    Serializable evaluateEntry(Entry entry, EvaluationContext evaluationContext);
+    Serializable evaluateInputEntry(InputEntry inputEntry, EvaluationContext evaluationContext);
+
+    Serializable evaluateOutputEntry(OutputEntry outputEntry, EvaluationContext evaluationContext);
 }

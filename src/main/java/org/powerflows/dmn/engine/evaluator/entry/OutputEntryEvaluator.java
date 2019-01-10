@@ -45,7 +45,7 @@ public class OutputEntryEvaluator {
         final ExpressionEvaluationProvider expressionEvaluator = expressionEvaluationProviderFactory.getInstance(outputEntry.getExpression().getType());
         final TypeConverter typeConverter = typeConverterFactory.getInstance(output.getType());
 
-        final Serializable outputEntryValue = expressionEvaluator.evaluateEntry(outputEntry, evaluationContext);
+        final Serializable outputEntryValue = expressionEvaluator.evaluateOutputEntry(outputEntry, evaluationContext);
 
         //Needed for the output entry value validation.
         //Correct build means the output entry value has a type compatible with the output definition.

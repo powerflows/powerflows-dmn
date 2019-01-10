@@ -24,7 +24,6 @@ import org.powerflows.dmn.engine.model.decision.rule.entry.InputEntry;
 import org.powerflows.dmn.engine.model.decision.rule.entry.OutputEntry;
 
 import java.lang.reflect.Field;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
@@ -39,7 +38,7 @@ class DecisionUtil {
                                final List<Rule> rules,
                                final ExpressionType decisionExpressionType,
                                final EvaluationMode decisionEvaluationMode) {
-        final Field expressionTypeField = findField(Expression.class, ExpressionType.class);
+        final Field expressionTypeField = findField(Expression.class, "type");
 
         expressionTypeField.setAccessible(true);
         assignInputsDefaults(inputs, decisionExpressionType, decisionEvaluationMode, expressionTypeField);
@@ -51,7 +50,7 @@ class DecisionUtil {
                                              final ExpressionType decisionExpressionType,
                                              final EvaluationMode decisionEvaluationMode,
                                              final Field expressionTypeField) {
-        final Field inputEvaluationModeField = findField(Input.class, EvaluationMode.class);
+        final Field inputEvaluationModeField = findField(Input.class, "evaluationMode");
 
         inputEvaluationModeField.setAccessible(true);
 
@@ -72,9 +71,11 @@ class DecisionUtil {
                                               final List<Rule> rules,
                                               final ExpressionType decisionExpressionType,
                                               final Field expressionTypeField) {
-        final Field inputEntryEvaluationModeField = findField(InputEntry.class, EvaluationMode.class);
+        final Field inputEntryEvaluationModeField = findField(InputEntry.class, "evaluationMode");
+        final Field inputEntryNameAliasField = findField(InputEntry.class, "nameAlias");
 
         inputEntryEvaluationModeField.setAccessible(true);
+        inputEntryNameAliasField.setAccessible(true);
 
         final Map<String, Input> inputsMap = inputs
                 .stream()
@@ -93,6 +94,12 @@ class DecisionUtil {
                             inputEntry,
                             inputsMap.get(inputEntry.getName()).getEvaluationMode());
                 }
+
+                if (inputEntry.getNameAlias() == null) {
+                    setValue(inputEntryNameAliasField,
+                            inputEntry,
+                            inputsMap.get(inputEntry.getName()).getNameAlias());
+                }
             }
 
             for (OutputEntry outputEntry : rule.getOutputEntries()) {
@@ -105,13 +112,15 @@ class DecisionUtil {
         }
 
         inputEntryEvaluationModeField.setAccessible(false);
+        inputEntryNameAliasField.setAccessible(false);
     }
 
-    private static Field findField(final Class clazz, final Class fieldClass) {
-        return Arrays.stream(clazz.getDeclaredFields())
-                .filter(f -> f.getType() == fieldClass)
-                .findFirst()
-                .orElseThrow(() -> new DecisionBuildException("Can not find " + fieldClass + " in " + clazz));
+    private static Field findField(final Class clazz, final String fieldName) {
+        try {
+            return clazz.getDeclaredField(fieldName);
+        } catch (NoSuchFieldException e) {
+            throw new DecisionBuildException("Can not find " + fieldName + " in " + clazz);
+        }
     }
 
     private static void setValue(final Field field, final Object object, final Object value) {

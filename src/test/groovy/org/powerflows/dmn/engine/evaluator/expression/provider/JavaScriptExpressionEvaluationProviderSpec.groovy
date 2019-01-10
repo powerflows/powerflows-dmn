@@ -38,17 +38,17 @@ class JavaScriptExpressionEvaluationProviderSpec extends Specification {
             new ScriptExpressionEvaluationProvider(scriptEngineProvider)
 
     @Unroll
-    void 'should evaluate entry javascript expression value #entryExpressionValue and variables #contextVariable with #expectedEntryResult'(
+    void 'should evaluate input entry javascript expression value #entryExpressionValue and variables #contextVariable with #expectedEntryResult'(
             final Object entryExpressionValue, final Object contextVariable, final boolean expectedEntryResult) {
         given:
         final Expression entryExpression = [value: entryExpressionValue, type: ExpressionType.JAVASCRIPT]
-        final InputEntry inputEntry = [expression: entryExpression] as InputEntry
+        final InputEntry inputEntry = [expression: entryExpression, nameAlias: 'cellInput']
 
         final DecisionVariables decisionVariables = new DecisionVariables([x: contextVariable, TestInputName: true])
         final EvaluationContext evaluationContext = new EvaluationContext(decisionVariables)
 
         when:
-        final boolean inputEntryResult = expressionEvaluationProvider.evaluateEntry(inputEntry, evaluationContext)
+        final boolean inputEntryResult = expressionEvaluationProvider.evaluateInputEntry(inputEntry, evaluationContext)
 
         then:
         inputEntryResult == expectedEntryResult
@@ -62,19 +62,44 @@ class JavaScriptExpressionEvaluationProviderSpec extends Specification {
         '(2 + 5) == x'       | 7               || true
     }
 
-    void 'should evaluate entry javascript expression with default alias usage'() {
+    void 'should evaluate input entry javascript expression with default alias usage'() {
         given:
         final Expression expression = [value: "cellInput == 'something'", type: ExpressionType.JAVASCRIPT]
-        final InputEntry inputEntry = [name: 'TestInputName', expression: expression]
+        final InputEntry inputEntry = [name: 'TestInputName', expression: expression, nameAlias: 'cellInput']
 
         final DecisionVariables decisionVariables = new DecisionVariables(['TestInputName': 'something'])
         final EvaluationContext contextVariables = new EvaluationContext(decisionVariables)
 
         when:
-        final boolean inputEntryResult = expressionEvaluationProvider.evaluateEntry(inputEntry, contextVariables)
+        final boolean inputEntryResult = expressionEvaluationProvider.evaluateInputEntry(inputEntry, contextVariables)
 
         then:
         inputEntryResult
+    }
+
+    @Unroll
+    void 'should evaluate output entry javascript expression value #entryExpressionValue and variables #contextVariable with #expectedEntryResult'(
+            final Object entryExpressionValue, final Object contextVariable, final boolean expectedEntryResult) {
+        given:
+        final Expression entryExpression = [value: entryExpressionValue, type: ExpressionType.JAVASCRIPT]
+        final OutputEntry outputEntry = [expression: entryExpression]
+
+        final DecisionVariables decisionVariables = new DecisionVariables([x: contextVariable, TestInputName: true])
+        final EvaluationContext evaluationContext = new EvaluationContext(decisionVariables)
+
+        when:
+        final boolean outputEntryResult = expressionEvaluationProvider.evaluateOutputEntry(outputEntry, evaluationContext)
+
+        then:
+        outputEntryResult == expectedEntryResult
+        0 * _
+
+        where:
+        entryExpressionValue | contextVariable || expectedEntryResult
+        '2 < x'              | 4               || true
+        '2 == x'             | 2               || true
+        '2 == x'             | 3               || false
+        '(2 + 5) == x'       | 7               || true
     }
 
     @Unroll
@@ -110,7 +135,7 @@ class JavaScriptExpressionEvaluationProviderSpec extends Specification {
         final EvaluationContext contextVariables = new EvaluationContext(decisionVariables)
 
         when:
-        expressionEvaluationProvider.evaluateEntry(outputEntry, contextVariables)
+        expressionEvaluationProvider.evaluateOutputEntry(outputEntry, contextVariables)
 
         then:
         final EvaluationException exception = thrown()
