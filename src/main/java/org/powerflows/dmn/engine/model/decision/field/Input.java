@@ -33,6 +33,7 @@ public class Input implements Serializable {
     private static final long serialVersionUID = 1;
 
     private String name;
+    private String nameAlias = "cellInput";
     private String description;
     private ValueType type;
     private Expression expression;
@@ -43,6 +44,10 @@ public class Input implements Serializable {
 
     public String getName() {
         return name;
+    }
+
+    public String getNameAlias() {
+        return nameAlias;
     }
 
     public String getDescription() {
@@ -82,6 +87,12 @@ public class Input implements Serializable {
             return (B) this;
         }
 
+        public B nameAlias(String nameAlias) {
+            this.product.nameAlias = nameAlias;
+
+            return (B) this;
+        }
+
         public B description(String description) {
             this.product.description = description;
 
@@ -107,6 +118,7 @@ public class Input implements Serializable {
             }
 
             validateIsNonNull(product.name, "Name is required");
+            validateIsNonNull(product.nameAlias, "Name alias is required");
             validateIsNonNull(product.type, "Type is required");
 
             return product;

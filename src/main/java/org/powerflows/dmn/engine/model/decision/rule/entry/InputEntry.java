@@ -27,16 +27,31 @@ import java.io.Serializable;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
-@EqualsAndHashCode(callSuper = true)
-@ToString(callSuper = true)
-public class InputEntry extends Entry {
+@EqualsAndHashCode
+@ToString
+public class InputEntry implements Serializable {
 
     private static final long serialVersionUID = 1;
 
+    private String name;
+    private String nameAlias;
+    private Expression expression;
     private EvaluationMode evaluationMode;
 
     private InputEntry() {
         super();
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public String getNameAlias() {
+        return nameAlias;
+    }
+
+    public Expression getExpression() {
+        return expression;
     }
 
     public EvaluationMode getEvaluationMode() {
@@ -60,6 +75,12 @@ public class InputEntry extends Entry {
 
         public B name(String name) {
             this.product.name = name;
+
+            return (B) this;
+        }
+
+        public B nameAlias(String nameAlias) {
+            this.product.nameAlias = nameAlias;
 
             return (B) this;
         }

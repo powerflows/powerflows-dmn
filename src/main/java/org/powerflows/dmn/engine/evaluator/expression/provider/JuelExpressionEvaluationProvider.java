@@ -18,7 +18,8 @@ package org.powerflows.dmn.engine.evaluator.expression.provider;
 
 import org.powerflows.dmn.engine.evaluator.context.EvaluationContext;
 import org.powerflows.dmn.engine.model.decision.field.Input;
-import org.powerflows.dmn.engine.model.decision.rule.entry.Entry;
+import org.powerflows.dmn.engine.model.decision.rule.entry.InputEntry;
+import org.powerflows.dmn.engine.model.decision.rule.entry.OutputEntry;
 
 import java.io.Serializable;
 
@@ -30,7 +31,12 @@ class JuelExpressionEvaluationProvider implements ExpressionEvaluationProvider {
     }
 
     @Override
-    public Serializable evaluateEntry(final Entry entry, final EvaluationContext evaluationContext) {
+    public Serializable evaluateInputEntry(final InputEntry inputEntry, final EvaluationContext evaluationContext) {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public Serializable evaluateOutputEntry(final OutputEntry outputEntry, final EvaluationContext evaluationContext) {
         throw new UnsupportedOperationException();
     }
 }

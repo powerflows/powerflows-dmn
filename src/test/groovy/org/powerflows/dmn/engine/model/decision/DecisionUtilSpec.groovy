@@ -33,17 +33,20 @@ class DecisionUtilSpec extends Specification {
         given:
         final String input1Name = 'x'
         final String input2Name = 'y'
+        final String input1NameAlias = 'xAlias'
+        final String input2NameAlias = 'yAlias'
         final Expression input1Expression = [type: ExpressionType.FEEL]
         final Expression input2Expression = [type: null]
-        final Input input1 = [name: input1Name, type: ValueType.INTEGER, expression: input1Expression, evaluationMode: EvaluationMode.BOOLEAN]
-        final Input input2 = [name: input2Name, type: ValueType.INTEGER, expression: input2Expression]
+        final Input input1 = [name: input1Name, type: ValueType.INTEGER, expression: input1Expression, nameAlias: input1NameAlias, evaluationMode: EvaluationMode.BOOLEAN]
+        final Input input2 = [name: input2Name, type: ValueType.INTEGER, expression: input2Expression, nameAlias: input2NameAlias]
 
         final Integer inputEntry1Value = 1
         final Integer inputEntry2Value = 2
         final Expression expression1 = [value: inputEntry1Value, type: null]
         final InputEntry inputEntry1 = [name: input1Name, expression: expression1, evaluationMode: EvaluationMode.BOOLEAN]
         final Expression expression2 = [value: inputEntry2Value, type: ExpressionType.LITERAL]
-        final InputEntry inputEntry2 = [name: input2Name, expression: expression2]
+        final String inputEntry2NameAlias = 'yInputEntryAlias'
+        final InputEntry inputEntry2 = [name: input2Name, expression: expression2, nameAlias: inputEntry2NameAlias]
 
         final Boolean outputEntry1Value = true
         final String outputEntry2Value = 'test'
@@ -74,8 +77,10 @@ class DecisionUtilSpec extends Specification {
 
         inputEntry1.expression.type == ExpressionType.FEEL
         inputEntry1.evaluationMode == EvaluationMode.BOOLEAN
+        inputEntry1.nameAlias == input1NameAlias
         inputEntry2.expression.type == ExpressionType.LITERAL
         inputEntry2.evaluationMode == EvaluationMode.INPUT_COMPARISON
+        inputEntry2.nameAlias == inputEntry2NameAlias
 
         outputEntry1.expression.type == ExpressionType.LITERAL
         outputEntry2.expression.type == ExpressionType.GROOVY
@@ -83,7 +88,7 @@ class DecisionUtilSpec extends Specification {
 
     void 'should throw exception when can not set field value'() {
         given:
-        final Field field = DecisionUtil.findField(InputEntry.class, EvaluationMode.class);
+        final Field field = DecisionUtil.findField(InputEntry.class, 'evaluationMode');
         final InputEntry inputEntry = []
         final Integer value = 5
 
@@ -93,20 +98,20 @@ class DecisionUtilSpec extends Specification {
         then:
         final DecisionBuildException exception = thrown()
         exception != null
-        exception.getMessage() == 'Can not set value 5 for InputEntry(super=Entry(name=null, expression=null), evaluationMode=null)'
+        exception.getMessage() == 'Can not set value 5 for InputEntry(name=null, nameAlias=null, expression=null, evaluationMode=null)'
     }
 
     void 'should throw exception when can not find field by type'() {
         given:
         final Class clazz = InputEntry.class
-        final Class fieldClass = HitPolicy.class
+        final String fieldName = 'hitPolicy'
 
         when:
-        DecisionUtil.findField(clazz, fieldClass);
+        DecisionUtil.findField(clazz, fieldName);
 
         then:
         final DecisionBuildException exception = thrown()
         exception != null
-        exception.getMessage() == 'Can not find class org.powerflows.dmn.engine.model.decision.HitPolicy in class org.powerflows.dmn.engine.model.decision.rule.entry.InputEntry'
+        exception.getMessage() == 'Can not find hitPolicy in class org.powerflows.dmn.engine.model.decision.rule.entry.InputEntry'
     }
 }

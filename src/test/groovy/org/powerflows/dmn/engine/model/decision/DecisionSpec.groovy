@@ -28,12 +28,14 @@ import spock.lang.Specification
 
 class DecisionSpec extends Specification {
 
+    final String defaultNameAlias = 'cellInput'
     final String someTableId = 'some_table_id'
     final String someTableName = 'Some Table Name'
     final HitPolicy someHitPolicy = HitPolicy.UNIQUE
     final ExpressionType someExpressionType = ExpressionType.GROOVY
     final ValueType someInput1Type = ValueType.INTEGER
     final String someInput1Name = 'Some Input 1 Name'
+    final String someInput1NameAlias = 'Some Input 1 Name Alias'
     final String someInput1Description = 'Some Input 1 Description'
     final ExpressionType someInput1Expression1Type = ExpressionType.LITERAL
     final int someInput1Expression1Value = 5
@@ -52,6 +54,7 @@ class DecisionSpec extends Specification {
     final ExpressionType someRule1InputEntry1ExpressionType = ExpressionType.GROOVY
     final String someRule1InputEntry1ExpressionValue = '> 20'
     final String someRule1InputEntry2Name = someInput2Name
+    final String someRule1InputEntry2NameAlias = someInput2Name + 'Alias'
     final ExpressionType someRule1InputEntry2ExpressionType = ExpressionType.FEEL
     final String someRule1InputEntry2ExpressionValue = 'not("blue", "purple")'
     final String someRule1OutputEntry1Name = someOutput1Name
@@ -77,6 +80,7 @@ class DecisionSpec extends Specification {
                 .expressionType(someExpressionType)
                 .withInputs()
                     .name(someInput1Name)
+                    .nameAlias(someInput1NameAlias)
                     .description(someInput1Description)
                     .type(someInput1Type)
                     .withExpression()
@@ -107,6 +111,7 @@ class DecisionSpec extends Specification {
                             .and()
                         .next()
                         .name(someRule1InputEntry2Name)
+                        .nameAlias(someRule1InputEntry2NameAlias)
                         .withExpression()
                             .type(someRule1InputEntry2ExpressionType)
                             .value(someRule1InputEntry2ExpressionValue)
@@ -153,6 +158,7 @@ class DecisionSpec extends Specification {
         final Input input1 = decision.getInputs().get(0)
         with(input1) {
             getName() == someInput1Name
+            getNameAlias() == someInput1NameAlias
             getDescription() == someInput1Description
             getType() == someInput1Type
 
@@ -167,6 +173,7 @@ class DecisionSpec extends Specification {
         final Input input2 = decision.getInputs().get(1)
         with(input2) {
             getName() == someInput2Name
+            getNameAlias() == defaultNameAlias
             getDescription() == someInput2Description
             getType() == someInput2Type
         }
@@ -201,6 +208,7 @@ class DecisionSpec extends Specification {
 
         final InputEntry rule1InputEntry1 = rule1.getInputEntries().get(0)
         rule1InputEntry1.getName() == someRule1InputEntry1Name
+        rule1InputEntry1.getNameAlias() == input1.getNameAlias()
 
         final Expression rule1InputEntry1Expression = rule1InputEntry1.getExpression()
         with(rule1InputEntry1Expression) {
@@ -210,6 +218,7 @@ class DecisionSpec extends Specification {
 
         final InputEntry rule1InputEntry2 = rule1.getInputEntries().get(1)
         rule1InputEntry2.getName() == someRule1InputEntry2Name
+        rule1InputEntry2.getNameAlias() == someRule1InputEntry2NameAlias
 
         final Expression rule1InputEntry2Expression = rule1InputEntry2.getExpression()
         with(rule1InputEntry2Expression) {
@@ -234,10 +243,16 @@ class DecisionSpec extends Specification {
         }
 
         final InputEntry rule2InputEntry1 = rule2.getInputEntries().get(0)
-        rule2InputEntry1.getName() == someRule2InputEntry1Name
+        with(rule2InputEntry1){
+            getName() == someRule2InputEntry1Name
+            getNameAlias() == input1.getNameAlias()
+        }
 
         final InputEntry rule2InputEntry2 = rule2.getInputEntries().get(1)
-        rule2InputEntry2.getName() == someRule2InputEntry2Name
+        with(rule2InputEntry2){
+            getName() == someRule2InputEntry2Name
+            getNameAlias() == input2.getNameAlias()
+        }
 
         final OutputEntry rule2OutputEntry1 = rule2.getOutputEntries().get(0)
         rule2OutputEntry1.getName() == someRule2OutputEntry1Name

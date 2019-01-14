@@ -17,6 +17,7 @@
 package org.powerflows.dmn.engine.evaluator.expression.script.bindings;
 
 import org.powerflows.dmn.engine.evaluator.context.EvaluationContext;
+import org.powerflows.dmn.engine.model.decision.rule.entry.InputEntry;
 
 import javax.script.Bindings;
 import java.util.Collection;
@@ -26,7 +27,6 @@ import java.util.Set;
 public class ContextVariablesBindings implements Bindings {
 
     private final Bindings bindings;
-    private static final String DEFAULT_INPUT_NAME_ALIAS = "cellInput";
 
     private ContextVariablesBindings(final Bindings bindings, final EvaluationContext evaluationContext) {
         this.bindings = bindings;
@@ -37,10 +37,12 @@ public class ContextVariablesBindings implements Bindings {
                 .forEach(variableName -> this.bindings.put(variableName, evaluationContext.get(variableName)));
     }
 
-    private ContextVariablesBindings(final Bindings bindings, final EvaluationContext evaluationContext, final String inputName) {
+    private ContextVariablesBindings(final Bindings bindings,
+                                     final EvaluationContext evaluationContext,
+                                     final InputEntry inputEntry) {
         this(bindings, evaluationContext);
 
-        this.bindings.put(DEFAULT_INPUT_NAME_ALIAS, evaluationContext.get(inputName));
+        this.bindings.put(inputEntry.getNameAlias(), evaluationContext.get(inputEntry.getName()));
     }
 
     public static ContextVariablesBindings create(final Bindings bindings,
@@ -50,8 +52,8 @@ public class ContextVariablesBindings implements Bindings {
 
     public static ContextVariablesBindings create(final Bindings bindings,
                                                   final EvaluationContext evaluationContext,
-                                                  final String inputName) {
-        return new ContextVariablesBindings(bindings, evaluationContext, inputName);
+                                                  final InputEntry inputEntry) {
+        return new ContextVariablesBindings(bindings, evaluationContext, inputEntry);
     }
 
     @Override
