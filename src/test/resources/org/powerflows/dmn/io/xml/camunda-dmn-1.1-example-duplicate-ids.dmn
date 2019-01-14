@@ -5,7 +5,7 @@
       <biodi:bounds x="664" y="260" width="180" height="80" />
     </extensionElements>
     <decisionTable id="decisionTable_1" hitPolicy="FIRST">
-      <input id="duplicate" label="Some Input 1 Description">
+      <input id="duplicate">
         <inputExpression id="inputExpression_1" typeRef="integer" >
           <text>&gt; 5</text>
         </inputExpression>

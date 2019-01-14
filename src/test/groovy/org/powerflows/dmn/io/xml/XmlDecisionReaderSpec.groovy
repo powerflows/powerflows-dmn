@@ -26,11 +26,12 @@ import spock.lang.Shared
 import spock.lang.Specification
 
 class XmlDecisionReaderSpec extends Specification {
-    final static String omgExampleXml = 'omg-dmn-1.1-example.dmn'
-    final static String camundaExampleXml = 'camunda-dmn-1.1-example.dmn'
-    final static String camundaExampleXmlBadInputColumns = 'camunda-dmn-1.1-example-bad-input-columns.dmn'
-    final static String camundaExampleXmlBadOutputColumns = 'camunda-dmn-1.1-example-bad-output-columns.dmn'
-    final static String camundaExampleXmlDuplicateIds = 'camunda-dmn-1.1-example-duplicate-ids.dmn'
+    final String omgExampleXml = 'omg-dmn-1.1-example.dmn'
+    final String camundaExampleXml = 'camunda-dmn-1.1-example.dmn'
+    final String camundaExampleXmlBadInputColumns = 'camunda-dmn-1.1-example-bad-input-columns.dmn'
+    final String camundaExampleXmlBadOutputColumns = 'camunda-dmn-1.1-example-bad-output-columns.dmn'
+    final String camundaExampleXmlDuplicateIds = 'camunda-dmn-1.1-example-duplicate-ids.dmn'
+    final String camundaExampleXmlDuplicateLabels = 'camunda-dmn-1.1-example-duplicate-labels.dmn'
 
     @Shared
     private XmlDecisionReader reader
@@ -121,6 +122,21 @@ class XmlDecisionReaderSpec extends Specification {
         result.ifPresent({ d -> assertFirstCamundaExampleContents(d) })
     }
 
+    void 'should generate correctly names if duplicated labels'() {
+        given:
+        final InputStream inputStream = this.class.getResourceAsStream(camundaExampleXmlDuplicateLabels)
+
+        when:
+        final Optional<Decision> result = reader.read(inputStream)
+
+        then:
+        result.isPresent()
+        with(result.get()) {
+            getInputs()[0].name == 'duplicate'
+            getInputs()[1].name == 'input_0'
+        }
+    }
+
     void 'should read single decision by id from Camunda example stream'() {
         given:
         final InputStream inputStream = this.class.getResourceAsStream(camundaExampleXml)
@@ -201,7 +217,7 @@ class XmlDecisionReaderSpec extends Specification {
         }
 
         with(result.getInputs()[0]) {
-            getName() == 'input_1'
+            getName() == 'Some_Input_1_Description'
             getDescription() == 'Some Input 1 Description'
             getType() == ValueType.INTEGER
             getExpression().getType() == ExpressionType.FEEL
@@ -223,13 +239,13 @@ class XmlDecisionReaderSpec extends Specification {
         }
 
         with(result.getOutputs()[0]) {
-            getName() == 'output_0'
+            getName() == 'Some_Output_1_Description'
             getType() == ValueType.BOOLEAN
 
         }
 
         with(result.getOutputs()[1]) {
-            getName() == 'output_1'
+            getName() == 'output_0'
             getType() == ValueType.STRING
         }
 
@@ -239,7 +255,7 @@ class XmlDecisionReaderSpec extends Specification {
         }
 
         with(result.getRules()[0].getInputEntries()[0]) {
-            getName() == 'input_1'
+            getName() == 'Some_Input_1_Description'
             getExpression().getType() == ExpressionType.GROOVY
             getExpression().getValue() == '> 20'
         }
@@ -251,7 +267,7 @@ class XmlDecisionReaderSpec extends Specification {
         }
 
         with(result.getRules()[0].getOutputEntries()[0]) {
-            getName() == 'output_0'
+            getName() == 'Some_Output_1_Description'
             getExpression().getType() == ExpressionType.GROOVY
             getExpression().getValue() == 'someVariable1 || someVariable2'
         }
@@ -262,7 +278,7 @@ class XmlDecisionReaderSpec extends Specification {
         }
 
         with(result.getRules()[1].getInputEntries()[0]) {
-            getName() == 'input_1'
+            getName() == 'Some_Input_1_Description'
             getExpression().getType() == ExpressionType.FEEL
             getExpression().getValue() == '5'
         }
@@ -274,7 +290,7 @@ class XmlDecisionReaderSpec extends Specification {
         }
 
         with(result.getRules()[1].getOutputEntries()[0]) {
-            getName() == 'output_1'
+            getName() == 'output_0'
             getExpression().getType() == ExpressionType.FEEL
             getExpression().getValue() == '"The output"'
         }

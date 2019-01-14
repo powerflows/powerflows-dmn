@@ -119,7 +119,7 @@ public class XMLDecisionConverter implements DecisionToExternalModelConverter<XM
         final Supplier<String> inputNameSequence = makeSequenceNameSupplier("input_");
 
         inputs.forEach(input -> {
-            final String name = selectOrCreateUniqueName(inputNames, input.getId(), null, inputNameSequence);
+            final String name = selectOrCreateUniqueName(inputNames, input.getId(), null, input.getLabel(), inputNameSequence);
 
             builder.withInput(inputBuilder -> {
                 if (input.getInputVariable() != null) {
@@ -143,7 +143,7 @@ public class XMLDecisionConverter implements DecisionToExternalModelConverter<XM
         final Supplier<String> outputNameSequence = makeSequenceNameSupplier("output_");
 
         outputs.forEach(output -> {
-            final String name = selectOrCreateUniqueName(outputNames, output.getId(), output.getName(), outputNameSequence);
+            final String name = selectOrCreateUniqueName(outputNames, output.getId(), output.getName(), output.getLabel(), outputNameSequence);
 
             builder.withOutput(outputBuilder ->
                     outputBuilder
@@ -157,10 +157,18 @@ public class XMLDecisionConverter implements DecisionToExternalModelConverter<XM
         rules.forEach(this.ruleProcessor(new ArrayList<>(inputNames), new ArrayList<>(outputNames), builder));
     }
 
-    private String selectOrCreateUniqueName(final Set<String> names, final String id, final String name, final Supplier<String> nameSequence) {
+    private String selectOrCreateUniqueName(final Set<String> names, final String id, final String name, final String label, final Supplier<String> nameSequence) {
         final String resultName;
 
-        if (name != null) {
+        if (label != null) {
+            final String sanitizedLabel = label.replaceAll("[^a-zA-Z0-9\\-]", "_");
+            if (names.contains(sanitizedLabel)) {
+                log.warn("Names collection {} already contains name {}, using one from sequence {}", names, sanitizedLabel, nameSequence);
+                resultName = getNextUniqueName(nameSequence, names);
+            } else {
+                resultName = sanitizedLabel;
+            }
+        } else if (name != null) {
             if (names.contains(name)) {
                 log.warn("Names collection {} already contains name {}, using one from sequence {}", names, name, nameSequence);
                 resultName = getNextUniqueName(nameSequence, names);
