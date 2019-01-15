@@ -33,6 +33,8 @@ import org.powerflows.dmn.io.yaml.model.rule.entry.YamlOutputEntry;
 import java.io.Serializable;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 public class YamlDecisionConverter implements DecisionToExternalModelConverter<YamlDecision> {
@@ -45,9 +47,14 @@ public class YamlDecisionConverter implements DecisionToExternalModelConverter<Y
         yamlDecision.setEvaluationMode(decision.getEvaluationMode());
         yamlDecision.setHitPolicy(decision.getHitPolicy());
         yamlDecision.setFields(createFields(decision.getInputs(), decision.getOutputs()));
+
+        final Map<String, Input> inputsMap = decision.getInputs()
+                .stream()
+                .collect(Collectors.toMap(Input::getName, Function.identity()));
+
         yamlDecision.setRules(decision.getRules()
                 .stream()
-                .map(this::ruleToYamlRule)
+                .map(rule -> ruleToYamlRule(rule, inputsMap))
                 .collect(Collectors.toList()));
 
         return yamlDecision;
@@ -65,6 +72,11 @@ public class YamlDecisionConverter implements DecisionToExternalModelConverter<Y
             yamlInput.setDescription(input.getDescription());
             yamlInput.setType(input.getType());
             yamlInput.setEvaluationMode(input.getEvaluationMode());
+
+            if (!Input.DEFAULT_NAME_ALIAS.equals(input.getNameAlias())) {
+                yamlInput.setNameAlias(input.getNameAlias());
+            }
+
             if (input.getExpression() != null && input.getExpression().getValue() != null) {
                 yamlInput.setExpression(input.getExpression().getValue());
                 yamlInput.setExpressionType(
@@ -88,7 +100,7 @@ public class YamlDecisionConverter implements DecisionToExternalModelConverter<Y
         return yamlFields;
     }
 
-    private YamlRule ruleToYamlRule(final Rule rule) {
+    private YamlRule ruleToYamlRule(final Rule rule, final Map<String, Input> inputsMap) {
         final YamlRule yamlRule = new YamlRule();
         yamlRule.setDescription(rule.getDescription());
         final LinkedHashMap<String, YamlInputEntry> in = new LinkedHashMap<>();
@@ -101,6 +113,12 @@ public class YamlDecisionConverter implements DecisionToExternalModelConverter<Y
             yamlInputEntry.setExpressionType(inputEntry.getExpression().getType());
             yamlInputEntry.setExpression(inputEntry.getExpression().getValue());
             yamlInputEntry.setEvaluationMode(inputEntry.getEvaluationMode());
+
+            final Input input = inputsMap.get(inputEntry.getName());
+
+            if (inputEntry.getNameAlias() != null && !inputEntry.getNameAlias().equals(input.getNameAlias())) {
+                yamlInputEntry.setNameAlias(inputEntry.getNameAlias());
+            }
 
             in.put(inputEntry.getName(), yamlInputEntry);
         });
