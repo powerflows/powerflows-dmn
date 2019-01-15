@@ -31,9 +31,10 @@ import java.util.function.Function;
 public class Input implements Serializable {
 
     private static final long serialVersionUID = 1;
+    public static final String DEFAULT_NAME_ALIAS = "cellInput";
 
     private String name;
-    private String nameAlias = "cellInput";
+    private String nameAlias = DEFAULT_NAME_ALIAS;
     private String description;
     private ValueType type;
     private Expression expression;
