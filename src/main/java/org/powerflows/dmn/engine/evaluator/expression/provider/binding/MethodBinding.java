@@ -13,14 +13,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.powerflows.dmn.engine.evaluator.expression.provider;
+package org.powerflows.dmn.engine.evaluator.expression.provider.binding;
 
-import org.powerflows.dmn.engine.model.decision.expression.ExpressionType;
-
-import java.util.List;
-
-public interface ExpressionEvaluationProviderFactory {
-    ExpressionEvaluationProvider createProvider(ExpressionEvaluationConfiguration configuration);
-
-    List<ExpressionType> supportedExpressionTypes();
+public interface MethodBinding extends BoundMethod {
+    String name();
 }

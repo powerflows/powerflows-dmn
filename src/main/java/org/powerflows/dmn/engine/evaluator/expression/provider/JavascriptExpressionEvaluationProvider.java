@@ -13,14 +13,25 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package org.powerflows.dmn.engine.evaluator.expression.provider;
 
-import org.powerflows.dmn.engine.model.decision.expression.ExpressionType;
+import org.powerflows.dmn.engine.evaluator.expression.provider.binding.BoundMethod;
+import org.powerflows.dmn.engine.evaluator.expression.provider.binding.MethodBinding;
 
-import java.util.List;
+class JavascriptExpressionEvaluationProvider extends ScriptEngineExpressionEvaluationProvider {
 
-public interface ExpressionEvaluationProviderFactory {
-    ExpressionEvaluationProvider createProvider(ExpressionEvaluationConfiguration configuration);
+    public JavascriptExpressionEvaluationProvider(final ExpressionEvaluationConfiguration configuration) {
+        super(configuration);
+    }
 
-    List<ExpressionType> supportedExpressionTypes();
+    @Override
+    protected Object createMethodBinding(final MethodBinding methodBinding) {
+        return (BoundMethod) methodBinding::execute;
+    }
+
+    @Override
+    protected String getEngineName() {
+        return "javascript";
+    }
 }

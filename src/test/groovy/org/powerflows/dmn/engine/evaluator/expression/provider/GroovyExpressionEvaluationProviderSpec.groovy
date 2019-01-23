@@ -18,8 +18,10 @@ package org.powerflows.dmn.engine.evaluator.expression.provider
 
 import org.powerflows.dmn.engine.evaluator.context.EvaluationContext
 import org.powerflows.dmn.engine.evaluator.exception.EvaluationException
-import org.powerflows.dmn.engine.evaluator.expression.script.DefaultScriptEngineProvider
-import org.powerflows.dmn.engine.evaluator.expression.script.ScriptEngineProvider
+import org.powerflows.dmn.engine.evaluator.expression.provider.binding.InstanceMethodBinding
+import org.powerflows.dmn.engine.evaluator.expression.provider.binding.MethodBinding
+import org.powerflows.dmn.engine.evaluator.expression.provider.binding.StaticMethodBinding
+import org.powerflows.dmn.engine.evaluator.expression.provider.sample.MethodSource
 import org.powerflows.dmn.engine.model.decision.expression.Expression
 import org.powerflows.dmn.engine.model.decision.expression.ExpressionType
 import org.powerflows.dmn.engine.model.decision.field.Input
@@ -30,16 +32,19 @@ import spock.lang.Specification
 import spock.lang.Unroll
 
 import javax.script.ScriptEngineManager
+import java.lang.reflect.Method
 
 class GroovyExpressionEvaluationProviderSpec extends Specification {
 
-    private final ScriptEngineProvider scriptEngineProvider = new DefaultScriptEngineProvider(new ScriptEngineManager())
-    private final ExpressionEvaluationProvider expressionEvaluationProvider =
-            new ScriptExpressionEvaluationProvider(scriptEngineProvider)
+    private ExpressionEvaluationProvider expressionEvaluationProvider
+
+    void setup() {
+        expressionEvaluationProvider = new GroovyExpressionEvaluationProvider(ExpressionEvaluationConfiguration.simpleConfiguration())
+    }
 
     @Unroll
     void 'should evaluate input entry groovy expression value #entryExpressionValue and variables #contextVariable with #expectedEntryResult'(
-            final Object entryExpressionValue, final Object contextVariable, final boolean expectedEntryResult) {
+            final Object entryExpressionValue, final Object contextVariable, final Serializable expectedEntryResult) {
         given:
         final Expression entryExpression = [value: entryExpressionValue, type: ExpressionType.GROOVY]
         final InputEntry inputEntry = [expression: entryExpression, nameAlias: 'cellInput']
@@ -48,7 +53,7 @@ class GroovyExpressionEvaluationProviderSpec extends Specification {
         final EvaluationContext evaluationContext = new EvaluationContext(decisionVariables)
 
         when:
-        final boolean inputEntryResult = expressionEvaluationProvider.evaluateInputEntry(inputEntry, evaluationContext)
+        final Serializable inputEntryResult = expressionEvaluationProvider.evaluateInputEntry(inputEntry, evaluationContext)
 
         then:
         inputEntryResult == expectedEntryResult
@@ -71,7 +76,7 @@ class GroovyExpressionEvaluationProviderSpec extends Specification {
         final EvaluationContext contextVariables = new EvaluationContext(decisionVariables)
 
         when:
-        final boolean inputEntryResult = expressionEvaluationProvider.evaluateInputEntry(inputEntry, contextVariables)
+        final Serializable inputEntryResult = expressionEvaluationProvider.evaluateInputEntry(inputEntry, contextVariables)
 
         then:
         inputEntryResult
@@ -79,7 +84,7 @@ class GroovyExpressionEvaluationProviderSpec extends Specification {
 
     @Unroll
     void 'should evaluate output entry groovy expression value #entryExpressionValue and variables #contextVariable with #expectedEntryResult'(
-            final Object entryExpressionValue, final Object contextVariable, final boolean expectedEntryResult) {
+            final Object entryExpressionValue, final Object contextVariable, final Serializable expectedEntryResult) {
         given:
         final Expression entryExpression = [value: entryExpressionValue, type: ExpressionType.GROOVY]
         final OutputEntry outputEntry = [expression: entryExpression]
@@ -88,7 +93,7 @@ class GroovyExpressionEvaluationProviderSpec extends Specification {
         final EvaluationContext evaluationContext = new EvaluationContext(decisionVariables)
 
         when:
-        final boolean outputEntryResult = expressionEvaluationProvider.evaluateOutputEntry(outputEntry, evaluationContext)
+        final Serializable outputEntryResult = expressionEvaluationProvider.evaluateOutputEntry(outputEntry, evaluationContext)
 
         then:
         outputEntryResult == expectedEntryResult
@@ -104,7 +109,7 @@ class GroovyExpressionEvaluationProviderSpec extends Specification {
 
     @Unroll
     void 'should evaluate input groovy expression value #inputExpression and variables #contextVariable with #expectedInputResult'(
-            final Object inputExpression, final Object contextVariable, final boolean expectedInputResult) {
+            final Object inputExpression, final Object contextVariable, final Serializable expectedInputResult) {
         given:
         final Expression expression = [value: inputExpression, type: ExpressionType.GROOVY]
         final Input input = [name: 'TestInputName', expression: expression]
@@ -113,7 +118,7 @@ class GroovyExpressionEvaluationProviderSpec extends Specification {
         final EvaluationContext contextVariables = new EvaluationContext(decisionVariables)
 
         when:
-        final boolean inputEntryResult = expressionEvaluationProvider.evaluateInput(input, contextVariables)
+        final Serializable inputEntryResult = expressionEvaluationProvider.evaluateInput(input, contextVariables)
 
         then:
         inputEntryResult == expectedInputResult
@@ -140,5 +145,65 @@ class GroovyExpressionEvaluationProviderSpec extends Specification {
         final EvaluationException exception = thrown()
         exception != null
         exception.getMessage() == 'Script evaluation exception'
+    }
+
+    void 'should bind static method and make it available in expression'() {
+        given:
+        final Method method = MethodSource.class.getMethod('sampleStaticMethod', String, Integer.TYPE)
+        final List<MethodBinding> methodBinding = [new StaticMethodBinding('testMethod', method)]
+        final ExpressionEvaluationConfiguration configuration = ExpressionEvaluationConfiguration
+                .builder()
+                .methodBinding(methodBinding)
+                .build()
+        final ExpressionEvaluationProvider expressionEvaluationProvider = new GroovyExpressionEvaluationProvider(configuration)
+        final Expression expression = [value: 'testMethod(x, 1)', type: ExpressionType.GROOVY]
+        final Input input = [name: 'TestInputName', expression: expression]
+
+        final DecisionVariables decisionVariables = new DecisionVariables([x: 'text'])
+        final EvaluationContext contextVariables = new EvaluationContext(decisionVariables)
+
+        when:
+        final Serializable inputEntryResult = expressionEvaluationProvider.evaluateInput(input, contextVariables)
+
+        then:
+        inputEntryResult == 'static-' + decisionVariables.get('x') + '-1'
+    }
+
+    void 'should bind instance method and make it available in expression'() {
+        given:
+        final MethodSource theInstance = new MethodSource('someValue')
+        final Method method = MethodSource.class.getMethod('sampleInstanceMethod', Integer.TYPE, String)
+        final List<MethodBinding> methodBinding = [new InstanceMethodBinding('testMethod', method, {
+            theInstance
+        })]
+        final ExpressionEvaluationConfiguration configuration = ExpressionEvaluationConfiguration
+                .builder()
+                .methodBinding(methodBinding)
+                .build()
+        final ExpressionEvaluationProvider expressionEvaluationProvider = new GroovyExpressionEvaluationProvider(configuration)
+        final Expression expression = [value: 'testMethod(2, y)', type: ExpressionType.GROOVY]
+        final Input input = [name: 'TestInputName', expression: expression]
+
+        final DecisionVariables decisionVariables = new DecisionVariables([y: 'text'])
+        final EvaluationContext contextVariables = new EvaluationContext(decisionVariables)
+
+        when:
+        final Serializable inputEntryResult = expressionEvaluationProvider.evaluateInput(input, contextVariables)
+
+        then:
+        inputEntryResult == 'static 2 someValue ' + decisionVariables.get('y')
+    }
+
+    void 'should throw exception when no script engine is provided'() {
+        given:
+        final ScriptEngineManager scriptEngineManager = Mock()
+        final ExpressionEvaluationConfiguration configuration = ExpressionEvaluationConfiguration.builder().scriptEngineManager(scriptEngineManager).build()
+
+        when:
+        new GroovyExpressionEvaluationProvider(configuration)
+
+        then:
+        1 * scriptEngineManager.getEngineByName('groovy') >> null
+        thrown(IllegalStateException)
     }
 }

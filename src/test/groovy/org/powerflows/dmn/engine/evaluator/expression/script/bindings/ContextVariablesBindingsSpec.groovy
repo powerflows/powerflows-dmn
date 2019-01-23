@@ -17,9 +17,6 @@
 package org.powerflows.dmn.engine.evaluator.expression.script.bindings
 
 import org.powerflows.dmn.engine.evaluator.context.EvaluationContext
-import org.powerflows.dmn.engine.evaluator.expression.script.DefaultScriptEngineProvider
-import org.powerflows.dmn.engine.evaluator.expression.script.ScriptEngineProvider
-import org.powerflows.dmn.engine.model.decision.expression.ExpressionType
 import org.powerflows.dmn.engine.model.evaluation.variable.DecisionVariables
 import spock.lang.Shared
 import spock.lang.Specification
@@ -34,8 +31,7 @@ class ContextVariablesBindingsSpec extends Specification {
     private ScriptEngine scriptEngine
 
     void setupSpec() {
-        final ScriptEngineProvider scriptEngineProvider = new DefaultScriptEngineProvider(new ScriptEngineManager());
-        scriptEngine = scriptEngineProvider.getScriptEngine(ExpressionType.GROOVY);
+        scriptEngine = new ScriptEngineManager().getEngineByName("groovy")
     }
 
     void 'should create ContextVariablesBindings instance'() {

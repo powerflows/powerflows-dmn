@@ -13,14 +13,19 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.powerflows.dmn.engine.evaluator.expression.provider;
+package org.powerflows.dmn.engine.evaluator.expression.provider.binding;
 
-import org.powerflows.dmn.engine.model.decision.expression.ExpressionType;
+import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
+import java.util.function.Supplier;
 
-import java.util.List;
+public class StaticMethodBinding extends AbstractMethodBinding {
+    private static final Supplier<Object> NULL_SUPPLIER = () -> null;
 
-public interface ExpressionEvaluationProviderFactory {
-    ExpressionEvaluationProvider createProvider(ExpressionEvaluationConfiguration configuration);
-
-    List<ExpressionType> supportedExpressionTypes();
+    public StaticMethodBinding(final String name, final Method method) {
+        super(name, method, NULL_SUPPLIER);
+        if ((method.getModifiers() & Modifier.STATIC) == 0) {
+            throw new IllegalArgumentException("Provided method must be static");
+        }
+    }
 }

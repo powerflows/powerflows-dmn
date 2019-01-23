@@ -19,7 +19,7 @@ package org.powerflows.dmn.engine.evaluator.expression.provider;
 import lombok.extern.slf4j.Slf4j;
 import org.powerflows.dmn.engine.evaluator.context.EvaluationContext;
 import org.powerflows.dmn.engine.evaluator.exception.EvaluationException;
-import org.powerflows.dmn.engine.evaluator.expression.script.ScriptEngineProvider;
+import org.powerflows.dmn.engine.evaluator.expression.provider.binding.MethodBinding;
 import org.powerflows.dmn.engine.evaluator.expression.script.bindings.ContextVariablesBindings;
 import org.powerflows.dmn.engine.model.decision.expression.Expression;
 import org.powerflows.dmn.engine.model.decision.field.Input;
@@ -27,19 +27,32 @@ import org.powerflows.dmn.engine.model.decision.rule.entry.InputEntry;
 import org.powerflows.dmn.engine.model.decision.rule.entry.OutputEntry;
 
 import javax.script.Bindings;
+import javax.script.ScriptContext;
 import javax.script.ScriptEngine;
 import javax.script.ScriptException;
 import java.io.Serializable;
-
+import java.util.stream.Collectors;
 
 @Slf4j
-class ScriptExpressionEvaluationProvider implements ExpressionEvaluationProvider {
+public abstract class ScriptEngineExpressionEvaluationProvider implements ExpressionEvaluationProvider {
+    protected final ScriptEngine scriptEngine;
 
-    private final ScriptEngineProvider scriptEngineProvider;
+    public ScriptEngineExpressionEvaluationProvider(final ExpressionEvaluationConfiguration configuration) {
+        scriptEngine = configuration.getScriptEngineManager().getEngineByName(getEngineName());
+        if (scriptEngine == null) {
+            throw new IllegalStateException("Unsupported script engine: " + getEngineName());
+        }
 
-    public ScriptExpressionEvaluationProvider(final ScriptEngineProvider scriptEngineProvider) {
-        this.scriptEngineProvider = scriptEngineProvider;
+        final Bindings bindings = scriptEngine.createBindings();
+        bindings.putAll(configuration.getMethodBinding()
+                .stream()
+                .collect(Collectors.toMap(MethodBinding::name, this::createMethodBinding)));
+        scriptEngine.setBindings(bindings, ScriptContext.GLOBAL_SCOPE);
     }
+
+    protected abstract Object createMethodBinding(MethodBinding methodBinding);
+
+    protected abstract String getEngineName();
 
     @Override
     public Serializable evaluateInput(final Input input, final EvaluationContext evaluationContext) {
@@ -75,14 +88,12 @@ class ScriptExpressionEvaluationProvider implements ExpressionEvaluationProvider
     }
 
     private Serializable evaluate(final InputEntry inputEntry, final EvaluationContext evaluationContext) {
-        final ScriptEngine scriptEngine = scriptEngineProvider.getScriptEngine(inputEntry.getExpression().getType());
         final Bindings bindings = ContextVariablesBindings.create(scriptEngine.createBindings(), evaluationContext, inputEntry);
 
         return evaluate(inputEntry.getExpression(), scriptEngine, bindings);
     }
 
     private Serializable evaluate(final Expression expression, final EvaluationContext evaluationContext) {
-        final ScriptEngine scriptEngine = scriptEngineProvider.getScriptEngine(expression.getType());
         final Bindings bindings = ContextVariablesBindings.create(scriptEngine.createBindings(), evaluationContext);
 
         return evaluate(expression, scriptEngine, bindings);

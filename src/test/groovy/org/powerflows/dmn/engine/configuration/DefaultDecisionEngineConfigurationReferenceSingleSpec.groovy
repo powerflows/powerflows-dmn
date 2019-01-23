@@ -17,14 +17,17 @@
 package org.powerflows.dmn.engine.configuration
 
 import org.powerflows.dmn.engine.DecisionEngine
+import org.powerflows.dmn.engine.evaluator.expression.provider.binding.StaticMethodBinding
 import org.powerflows.dmn.engine.model.decision.Decision
-import org.powerflows.dmn.engine.model.evaluation.variable.DecisionVariables
 import org.powerflows.dmn.engine.model.evaluation.result.DecisionResult
 import org.powerflows.dmn.engine.model.evaluation.result.EntryResult
+import org.powerflows.dmn.engine.model.evaluation.variable.DecisionVariables
 import org.powerflows.dmn.engine.reader.DecisionReader
 import org.powerflows.dmn.io.yaml.YamlDecisionReader
 import spock.lang.Shared
 import spock.lang.Specification
+
+import java.lang.reflect.Method
 
 class DefaultDecisionEngineConfigurationReferenceSingleSpec extends Specification {
 
@@ -39,13 +42,13 @@ class DefaultDecisionEngineConfigurationReferenceSingleSpec extends Specificatio
 
     void setupSpec() {
         final DecisionReader decisionReader = new YamlDecisionReader()
-        decisionEngineConfiguration = new DefaultDecisionEngineConfiguration()
-
-        decisionEngine = decisionEngineConfiguration.configure()
-
         final String decisionFileName = 'reference-single.yml'
         final InputStream decisionInputStream = this.class.getResourceAsStream(decisionFileName)
         decision = decisionReader.read(decisionInputStream).get()
+
+        final Method method = TestMethods.class.getMethod('parse', String)
+        decisionEngineConfiguration = new DefaultDecisionEngineConfiguration().methodBindings([new StaticMethodBinding('parseDate', method)])
+        decisionEngine = decisionEngineConfiguration.configure()
     }
 
     void 'should configure default decision engine'() {

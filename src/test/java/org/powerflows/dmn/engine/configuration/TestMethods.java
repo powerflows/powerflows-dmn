@@ -13,14 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.powerflows.dmn.engine.evaluator.expression.provider;
+package org.powerflows.dmn.engine.configuration;
 
-import org.powerflows.dmn.engine.model.decision.expression.ExpressionType;
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.util.Date;
 
-import java.util.List;
-
-public interface ExpressionEvaluationProviderFactory {
-    ExpressionEvaluationProvider createProvider(ExpressionEvaluationConfiguration configuration);
-
-    List<ExpressionType> supportedExpressionTypes();
+public class TestMethods {
+    public static Date parse(final String dateText) {
+        return Date.from(LocalDate.parse(dateText).atStartOfDay(ZoneId.systemDefault()).toInstant());
+    }
 }
