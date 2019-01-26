@@ -28,6 +28,6 @@ public final class YamlOutputEntry {
     public YamlOutputEntry() {
     }
 
-    private ExpressionType expressionType = ExpressionType.LITERAL;
+    private ExpressionType expressionType;
     private Object expression;
 }

@@ -43,11 +43,15 @@ public class Decision implements Serializable {
 
     private static final long serialVersionUID = 1;
 
+    public static final HitPolicy DEFAULT_HIT_POLICY = HitPolicy.UNIQUE;
+    public static final ExpressionType DEFAULT_EXPRESSION_TYPE = ExpressionType.LITERAL;
+    public static final EvaluationMode DEFAULT_EVALUATION_MODE = EvaluationMode.BOOLEAN;
+
     private String id;
     private String name;
-    private HitPolicy hitPolicy = HitPolicy.UNIQUE;
-    private ExpressionType expressionType = ExpressionType.LITERAL;
-    private EvaluationMode evaluationMode = EvaluationMode.BOOLEAN;
+    private HitPolicy hitPolicy = DEFAULT_HIT_POLICY;
+    private ExpressionType expressionType = DEFAULT_EXPRESSION_TYPE;
+    private EvaluationMode evaluationMode = DEFAULT_EVALUATION_MODE;
     private List<Input> inputs = new ArrayList<>();
     private List<Output> outputs = new ArrayList<>();
     private List<Rule> rules = new ArrayList<>();

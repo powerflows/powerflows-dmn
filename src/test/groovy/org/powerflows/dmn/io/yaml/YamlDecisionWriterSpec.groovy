@@ -27,7 +27,7 @@ class YamlDecisionWriterSpec extends Specification {
     final String someTableId1 = 'some_table_id_1'
     final String someTableId2 = 'some_table_id_2'
     final String someTableName = 'Some Table Name'
-    final HitPolicy someHitPolicy = HitPolicy.UNIQUE
+    final HitPolicy someHitPolicy = HitPolicy.COLLECT
     final ExpressionType someExpressionType = ExpressionType.GROOVY
     final EvaluationMode someEvaluationMode1 = EvaluationMode.BOOLEAN
     final EvaluationMode someEvaluationMode2 = EvaluationMode.INPUT_COMPARISON
@@ -149,12 +149,12 @@ class YamlDecisionWriterSpec extends Specification {
         result.hitPolicy == decision.hitPolicy
         result.name == decision.name
         result.inputs[0].name == decision.inputs[0].name
-        result.inputs[0].evaluationMode == decision.evaluationMode
+        result.inputs[0].evaluationMode == decision.inputs[0].evaluationMode
         result.inputs[0].type == decision.inputs[0].type
         result.inputs[0].description == decision.inputs[0].description
         result.inputs[0].expression == decision.inputs[0].expression
         result.inputs[1].name == decision.inputs[1].name
-        result.inputs[1].evaluationMode == decision.evaluationMode
+        result.inputs[1].evaluationMode == decision.inputs[1].evaluationMode
         result.inputs[1].type == decision.inputs[1].type
         result.inputs[1].description == decision.inputs[1].description
         result.inputs[1].expression == decision.inputs[1].expression
@@ -168,22 +168,23 @@ class YamlDecisionWriterSpec extends Specification {
         result.rules[0].description == decision.rules[0].description
         result.rules[0].inputEntries.size() == 2
         result.rules[0].inputEntries[0].expression == decision.rules[0].inputEntries[0].expression
-        result.rules[0].inputEntries[0].evaluationMode == decision.evaluationMode
+        result.rules[0].inputEntries[0].evaluationMode == decision.rules[0].inputEntries[0].evaluationMode
         result.rules[0].inputEntries[0].name == decision.rules[0].inputEntries[0].name
         result.rules[0].inputEntries[1].expression == decision.rules[0].inputEntries[1].expression
-        result.rules[0].inputEntries[1].evaluationMode == decision.evaluationMode
+        result.rules[0].inputEntries[1].evaluationMode == decision.rules[0].inputEntries[1].evaluationMode
         result.rules[0].inputEntries[1].name == decision.rules[0].inputEntries[1].name
         result.rules[0].outputEntries.size() == 1
-        result.rules[0].outputEntries[0].expression == decision.rules[0].outputEntries[0].expression
+        result.rules[0].outputEntries[0].expression.value == decision.rules[0].outputEntries[0].expression.value
+        result.rules[0].outputEntries[0].expression.type == decision.rules[0].outputEntries[0].expression.type
         result.rules[0].outputEntries[0].name == decision.rules[0].outputEntries[0].name
 
         result.rules[1].description == decision.rules[1].description
         result.rules[1].inputEntries.size() == 2
         result.rules[1].inputEntries[0].expression == decision.rules[1].inputEntries[0].expression
-        result.rules[1].inputEntries[0].evaluationMode == decision.evaluationMode
+        result.rules[1].inputEntries[0].evaluationMode == decision.rules[1].inputEntries[0].evaluationMode
         result.rules[1].inputEntries[0].name == decision.rules[1].inputEntries[0].name
         result.rules[1].inputEntries[1].expression == decision.rules[1].inputEntries[1].expression
-        result.rules[1].inputEntries[1].evaluationMode == decision.evaluationMode
+        result.rules[1].inputEntries[1].evaluationMode == decision.rules[1].inputEntries[1].evaluationMode
         result.rules[1].inputEntries[1].name == decision.rules[1].inputEntries[1].name
         result.rules[1].outputEntries.size() == 2
         result.rules[1].outputEntries[0].expression == decision.rules[1].outputEntries[0].expression

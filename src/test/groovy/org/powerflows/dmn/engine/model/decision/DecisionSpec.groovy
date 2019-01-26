@@ -180,7 +180,7 @@ class DecisionSpec extends Specification {
 
         final Expression input1Expression2 = input2.getExpression()
         with(input1Expression2) {
-            getType() == ExpressionType.LITERAL
+            getType() == someExpressionType
             getValue() == null
         }
 
@@ -494,7 +494,7 @@ class DecisionSpec extends Specification {
 
         final Expression rule2OutputEntry2Expression = rule2OutputEntry2.getExpression()
         with(rule2OutputEntry2Expression) {
-            getType() == ExpressionType.LITERAL
+            getType() == someExpressionType
             getValue() == someRule2OutputEntry2ExpressionValue
         }
     }

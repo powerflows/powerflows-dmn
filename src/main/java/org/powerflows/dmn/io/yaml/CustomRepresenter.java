@@ -15,8 +15,6 @@
  */
 package org.powerflows.dmn.io.yaml;
 
-import org.powerflows.dmn.engine.model.decision.EvaluationMode;
-import org.powerflows.dmn.engine.model.decision.expression.ExpressionType;
 import org.powerflows.dmn.io.yaml.model.YamlDecision;
 import org.powerflows.dmn.io.yaml.model.rule.entry.YamlInputEntry;
 import org.powerflows.dmn.io.yaml.model.rule.entry.YamlOutputEntry;
@@ -42,8 +40,12 @@ public class CustomRepresenter extends Representer {
 
         @Override
         public Node representData(Object data) {
-            if (data instanceof YamlInputEntry && ((YamlInputEntry) data).getExpressionType() == ExpressionType.LITERAL && ((YamlInputEntry) data).getEvaluationMode() == EvaluationMode.BOOLEAN) {
-                return represent(((YamlInputEntry) data).getExpression());
+            if (data instanceof YamlInputEntry) {
+                final YamlInputEntry yie = (YamlInputEntry) data;
+
+                if (yie.getEvaluationMode() == null && yie.getExpressionType() == null && yie.getNameAlias() == null) {
+                    return represent(yie.getExpression());
+                }
             }
 
             return representJavaBean(getProperties(data.getClass()), data);
@@ -51,11 +53,14 @@ public class CustomRepresenter extends Representer {
     }
 
     class RepresentYamlOutputEntry implements Represent {
-
         @Override
         public Node representData(Object data) {
-            if (data instanceof YamlOutputEntry && ((YamlOutputEntry) data).getExpressionType() == ExpressionType.LITERAL) {
-                return represent(((YamlOutputEntry) data).getExpression());
+            if (data instanceof YamlOutputEntry) {
+                final YamlOutputEntry yoe = (YamlOutputEntry) data;
+
+                if (yoe.getExpressionType() == null) {
+                    return represent(yoe.getExpression());
+                }
             }
 
             return representJavaBean(getProperties(data.getClass()), data);
@@ -81,7 +86,7 @@ public class CustomRepresenter extends Representer {
         } else if (propertyValue instanceof String) {
             empty = ((String) propertyValue).isEmpty();
         } else {
-            empty = propertyValue == ExpressionType.LITERAL || propertyValue == EvaluationMode.BOOLEAN;
+            empty = false;
         }
 
         return empty;
