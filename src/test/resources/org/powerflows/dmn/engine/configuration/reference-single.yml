@@ -95,7 +95,7 @@ rules:
   in:
     inputFour:
       expression-type: GROOVY
-      expression: "((cellInput instanceof String) ? Date.parse('yyyy-MM-dd', '2018-12-24') : cellInput) < Date.parse('yyyy-MM-dd', '2018-12-14')"
+      expression: "((cellInput instanceof String) ? parseDate('2018-12-24') : cellInput) < parseDate('2018-12-14')"
       evaluation-mode: BOOLEAN
   out:
     outputOne: true

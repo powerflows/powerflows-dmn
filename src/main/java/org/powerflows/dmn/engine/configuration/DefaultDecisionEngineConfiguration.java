@@ -17,34 +17,40 @@
 package org.powerflows.dmn.engine.configuration;
 
 
+import lombok.Setter;
+import lombok.experimental.Accessors;
 import org.powerflows.dmn.engine.DecisionEngine;
 import org.powerflows.dmn.engine.DefaultDecisionEngine;
 import org.powerflows.dmn.engine.evaluator.decision.DecisionEvaluator;
 import org.powerflows.dmn.engine.evaluator.entry.InputEntryEvaluator;
 import org.powerflows.dmn.engine.evaluator.entry.OutputEntryEvaluator;
 import org.powerflows.dmn.engine.evaluator.entry.mode.provider.EvaluationModeProviderFactory;
-import org.powerflows.dmn.engine.evaluator.expression.provider.ExpressionEvaluationProviderFactory;
-import org.powerflows.dmn.engine.evaluator.expression.script.DefaultScriptEngineProvider;
-import org.powerflows.dmn.engine.evaluator.expression.script.ScriptEngineProvider;
+import org.powerflows.dmn.engine.evaluator.expression.provider.DefaultExpressionEvaluationProviderFactory;
+import org.powerflows.dmn.engine.evaluator.expression.provider.ExpressionEvaluationConfiguration;
+import org.powerflows.dmn.engine.evaluator.expression.provider.binding.MethodBinding;
 import org.powerflows.dmn.engine.evaluator.rule.RuleEvaluator;
 import org.powerflows.dmn.engine.evaluator.type.converter.TypeConverterFactory;
 
-import javax.script.ScriptEngineManager;
+import java.util.Collections;
+import java.util.List;
 
+@Accessors(chain = true, fluent = true)
 public class DefaultDecisionEngineConfiguration implements DecisionEngineConfiguration {
 
+    @Setter
+    private List<MethodBinding> methodBindings = Collections.emptyList();
+    private ExpressionEvaluationConfiguration configuration;
     private DecisionEvaluator decisionEvaluator;
     private RuleEvaluator ruleEvaluator;
     private EvaluationModeProviderFactory evaluationModeProviderFactory;
     private InputEntryEvaluator inputEntryEvaluator;
     private OutputEntryEvaluator outputEntryEvaluator;
-    private ScriptEngineProvider scriptEngineProvider;
-    private ExpressionEvaluationProviderFactory expressionEvaluationProviderFactory;
+    private DefaultExpressionEvaluationProviderFactory expressionEvaluationProviderFactory;
     private TypeConverterFactory typeConverterFactory;
 
     @Override
     public DecisionEngine configure() {
-        initScriptEngineProvider();
+        initExpressionEvaluation();
         initEvaluationProviderFactory();
         initTypeConverterFactory();
         initEvaluationModeProviderFactory();
@@ -56,16 +62,18 @@ public class DefaultDecisionEngineConfiguration implements DecisionEngineConfigu
         return new DefaultDecisionEngine(decisionEvaluator);
     }
 
+    private void initExpressionEvaluation() {
+        configuration = ExpressionEvaluationConfiguration.builder()
+                .methodBinding(methodBindings)
+                .build();
+    }
+
     private void initEvaluationProviderFactory() {
-        expressionEvaluationProviderFactory = new ExpressionEvaluationProviderFactory(scriptEngineProvider);
+        expressionEvaluationProviderFactory = new DefaultExpressionEvaluationProviderFactory(configuration);
     }
 
     private void initTypeConverterFactory() {
         typeConverterFactory = new TypeConverterFactory();
-    }
-
-    private void initScriptEngineProvider() {
-        scriptEngineProvider = new DefaultScriptEngineProvider(new ScriptEngineManager());
     }
 
     private void initEvaluationModeProviderFactory() {

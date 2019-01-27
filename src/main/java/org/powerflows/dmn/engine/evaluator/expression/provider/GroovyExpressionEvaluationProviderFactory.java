@@ -17,10 +17,19 @@ package org.powerflows.dmn.engine.evaluator.expression.provider;
 
 import org.powerflows.dmn.engine.model.decision.expression.ExpressionType;
 
+import java.util.Collections;
 import java.util.List;
 
-public interface ExpressionEvaluationProviderFactory {
-    ExpressionEvaluationProvider createProvider(ExpressionEvaluationConfiguration configuration);
+public class GroovyExpressionEvaluationProviderFactory implements ExpressionEvaluationProviderFactory {
+    private static final List<ExpressionType> SUPPORTED = Collections.singletonList(ExpressionType.GROOVY);
 
-    List<ExpressionType> supportedExpressionTypes();
+    @Override
+    public ExpressionEvaluationProvider createProvider(final ExpressionEvaluationConfiguration configuration) {
+        return new GroovyExpressionEvaluationProvider(configuration);
+    }
+
+    @Override
+    public List<ExpressionType> supportedExpressionTypes() {
+        return SUPPORTED;
+    }
 }

@@ -13,14 +13,23 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-package org.powerflows.dmn.engine.evaluator.expression.script;
+package org.powerflows.dmn.engine.evaluator.expression.provider;
 
 import org.powerflows.dmn.engine.model.decision.expression.ExpressionType;
 
-import javax.script.ScriptEngine;
+import java.util.Collections;
+import java.util.List;
 
-public interface ScriptEngineProvider {
+public class LiteralExpressionEvaluationProviderFactory implements ExpressionEvaluationProviderFactory {
+    private static final List<ExpressionType> SUPPORTED = Collections.singletonList(ExpressionType.LITERAL);
 
-    ScriptEngine getScriptEngine(ExpressionType expressionType);
+    @Override
+    public ExpressionEvaluationProvider createProvider(final ExpressionEvaluationConfiguration configuration) {
+        return new LiteralExpressionEvaluationProvider();
+    }
+
+    @Override
+    public List<ExpressionType> supportedExpressionTypes() {
+        return SUPPORTED;
+    }
 }

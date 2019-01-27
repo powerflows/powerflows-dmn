@@ -18,12 +18,11 @@ package org.powerflows.dmn.engine.evaluator.expression.provider
 
 import org.powerflows.dmn.engine.model.decision.expression.ExpressionType
 import spock.lang.Specification
+import spock.lang.Unroll
 
-class ExpressionEvaluationProviderFactorySpec extends Specification {
+class DefaultExpressionEvaluationProviderFactorySpec extends Specification {
 
-    private
-    final ExpressionEvaluationProviderFactory evaluationProviderFactory = new ExpressionEvaluationProviderFactory()
-
+    private final DefaultExpressionEvaluationProviderFactory evaluationProviderFactory = new DefaultExpressionEvaluationProviderFactory()
 
     void 'should throw exception when unknown expression type'() {
         given:
@@ -36,5 +35,24 @@ class ExpressionEvaluationProviderFactorySpec extends Specification {
         final IllegalArgumentException exception = thrown()
         exception != null
         exception.getMessage() == 'Unknown expression type null'
+    }
+
+    @Unroll
+    void 'should provide expression evaluation provider for #type'(ExpressionType type, Class<? extends ExpressionEvaluationProvider> targetClazz) {
+        when:
+        ExpressionEvaluationProvider result = evaluationProviderFactory.getInstance(type)
+
+        then:
+        noExceptionThrown()
+        result != null
+        targetClazz.isAssignableFrom(result.getClass())
+
+        where:
+        type                      | targetClazz
+        ExpressionType.FEEL       | FeelExpressionEvaluationProvider
+        ExpressionType.GROOVY     | GroovyExpressionEvaluationProvider
+        ExpressionType.JAVASCRIPT | JavascriptExpressionEvaluationProvider
+        ExpressionType.JUEL       | JuelExpressionEvaluationProvider
+        ExpressionType.LITERAL    | LiteralExpressionEvaluationProvider
     }
 }

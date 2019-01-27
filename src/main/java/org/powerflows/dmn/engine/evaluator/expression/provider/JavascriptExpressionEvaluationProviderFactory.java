@@ -17,10 +17,20 @@ package org.powerflows.dmn.engine.evaluator.expression.provider;
 
 import org.powerflows.dmn.engine.model.decision.expression.ExpressionType;
 
+import java.util.Collections;
 import java.util.List;
 
-public interface ExpressionEvaluationProviderFactory {
-    ExpressionEvaluationProvider createProvider(ExpressionEvaluationConfiguration configuration);
+public class JavascriptExpressionEvaluationProviderFactory implements ExpressionEvaluationProviderFactory {
 
-    List<ExpressionType> supportedExpressionTypes();
+    private static final List<ExpressionType> SUPPORTED = Collections.singletonList(ExpressionType.JAVASCRIPT);
+
+    @Override
+    public ExpressionEvaluationProvider createProvider(final ExpressionEvaluationConfiguration configuration) {
+        return new JavascriptExpressionEvaluationProvider(configuration);
+    }
+
+    @Override
+    public List<ExpressionType> supportedExpressionTypes() {
+        return SUPPORTED;
+    }
 }
