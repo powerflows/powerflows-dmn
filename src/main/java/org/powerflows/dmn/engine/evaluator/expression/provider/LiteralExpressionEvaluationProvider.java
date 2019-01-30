@@ -32,10 +32,18 @@ class LiteralExpressionEvaluationProvider implements ExpressionEvaluationProvide
     public Serializable evaluateInput(final Input input, final EvaluationContext evaluationContext) {
         log.debug("Starting evaluation of input: {} with evaluation context: {}", input, evaluationContext);
 
-        final Serializable value = evaluationContext.get(input.getName());
+        Serializable value = evaluationContext.get(input.getName());
 
         if (value == null) {
-            log.warn("Input value is null");
+            log.warn("Input value by name {} is null", input.getName());
+
+            value = evaluationContext.get(input.getNameAlias());
+
+            if (value == null) {
+                log.warn("Input value by name alias {} is null", input.getNameAlias());
+            } else {
+                evaluationContext.addVariable(input.getName(), value);
+            }
         }
 
         log.debug("Evaluated input result: {}", value);
