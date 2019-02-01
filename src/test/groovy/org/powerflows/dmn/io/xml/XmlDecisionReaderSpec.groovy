@@ -32,6 +32,7 @@ class XmlDecisionReaderSpec extends Specification {
     final String camundaExampleXmlBadOutputColumns = 'camunda-dmn-1.1-example-bad-output-columns.dmn'
     final String camundaExampleXmlDuplicateIds = 'camunda-dmn-1.1-example-duplicate-ids.dmn'
     final String camundaExampleXmlDuplicateLabels = 'camunda-dmn-1.1-example-duplicate-labels.dmn'
+    final String camundaExampleXmlUnknownTypeRef = 'camunda-dmn-1.1-example-unknown-type-ref.dmn'
 
     @Shared
     private XmlDecisionReader reader
@@ -187,6 +188,17 @@ class XmlDecisionReaderSpec extends Specification {
     void 'should fail reading xml with duplicate element ids'() {
         given:
         final InputStream inputStream = this.class.getResourceAsStream(camundaExampleXmlDuplicateIds)
+
+        when:
+        reader.readAll(inputStream)
+
+        then:
+        thrown(DecisionReadException)
+    }
+
+    void 'should fail reading xml with unknown type ref'() {
+        given:
+        final InputStream inputStream = this.class.getResourceAsStream(camundaExampleXmlUnknownTypeRef)
 
         when:
         reader.readAll(inputStream)

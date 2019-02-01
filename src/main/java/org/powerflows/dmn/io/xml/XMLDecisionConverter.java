@@ -276,9 +276,7 @@ public class XMLDecisionConverter implements DecisionToExternalModelConverter<XM
                     .filter(v -> v.name().equalsIgnoreCase(typeRef))
                     .findFirst()
                     .orElseGet(() -> {
-                        log.debug("Unable to resolve typeRef: {} to PowerFlows Type", typeRef);
-
-                        return null;
+                        throw new DecisionReadException("Unable to resolve typeRef " + typeRef + " to PowerFlows Type");
                     });
         }
     }
