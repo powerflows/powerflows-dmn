@@ -86,7 +86,7 @@ class DecisionUtil {
                 if (inputEntry.getExpression().getType() == null) {
                     setValue(expressionTypeField,
                             inputEntry.getExpression(),
-                            inputsMap.get(inputEntry.getName()).getExpression().getType());
+                            decisionExpressionType);
                 }
 
                 if (inputEntry.getEvaluationMode() == null) {

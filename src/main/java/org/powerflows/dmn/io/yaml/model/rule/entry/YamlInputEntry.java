@@ -30,7 +30,7 @@ public final class YamlInputEntry {
     }
 
     private String nameAlias;
-    private ExpressionType expressionType = ExpressionType.LITERAL;
+    private ExpressionType expressionType;
     private Object expression;
     private EvaluationMode evaluationMode;
 }

@@ -1,0 +1,17 @@
+id: some_table_id
+name: Some Table Name
+fields:
+  in:
+    inputOne:
+      type: INTEGER
+    inputTwo:
+      type: STRING
+  out:
+    outputOne:
+      type: BOOLEAN
+rules:
+- in:
+    inputOne: '> 20'
+    inputTwo: 3
+  out:
+    outputOne: someVariable1 || someVariable2

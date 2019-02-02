@@ -75,7 +75,7 @@ class DecisionUtilSpec extends Specification {
         input2.expression.type == ExpressionType.GROOVY
         input2.evaluationMode == EvaluationMode.INPUT_COMPARISON
 
-        inputEntry1.expression.type == ExpressionType.FEEL
+        inputEntry1.expression.type == ExpressionType.GROOVY
         inputEntry1.evaluationMode == EvaluationMode.BOOLEAN
         inputEntry1.nameAlias == input1NameAlias
         inputEntry2.expression.type == ExpressionType.LITERAL

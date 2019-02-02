@@ -112,7 +112,7 @@ class YamlDecisionReaderSpec extends Specification {
         with(decision.inputs[1]) {
             name == 'colour'
             expression.value == null
-            expression.type == ExpressionType.LITERAL
+            expression.type == ExpressionType.GROOVY
             description == 'This is something about colour'
             type == ValueType.STRING
         }
@@ -126,37 +126,37 @@ class YamlDecisionReaderSpec extends Specification {
         with(decision.rules[0]) {
             description == '3 allows always'
             inputEntries[0].name == 'age'
-            inputEntries[0].expression.type == ExpressionType.LITERAL
+            inputEntries[0].expression.type == ExpressionType.GROOVY
             inputEntries[0].expression.value == 3
 
             outputEntries[0].name == 'allow'
-            outputEntries[0].expression.type == ExpressionType.LITERAL
+            outputEntries[0].expression.type == ExpressionType.GROOVY
             outputEntries[0].expression.value == true
         }
 
         with(decision.rules[1]) {
             description == null
             inputEntries[0].name == 'age'
-            inputEntries[0].expression.type == ExpressionType.LITERAL
+            inputEntries[0].expression.type == ExpressionType.GROOVY
             inputEntries[0].expression.value == 8
 
             inputEntries[1].name == 'colour'
-            inputEntries[1].expression.type == ExpressionType.LITERAL
+            inputEntries[1].expression.type == ExpressionType.GROOVY
             inputEntries[1].expression.value == 'red'
 
             outputEntries[0].name == 'allow'
-            outputEntries[0].expression.type == ExpressionType.LITERAL
+            outputEntries[0].expression.type == ExpressionType.GROOVY
             outputEntries[0].expression.value == true
         }
 
         with(decision.rules[2]) {
             description == 'Green allows always'
             inputEntries[0].name == 'colour'
-            inputEntries[0].expression.type == ExpressionType.LITERAL
+            inputEntries[0].expression.type == ExpressionType.GROOVY
             inputEntries[0].expression.value == 'green'
 
             outputEntries[0].name == 'allow'
-            outputEntries[0].expression.type == ExpressionType.LITERAL
+            outputEntries[0].expression.type == ExpressionType.GROOVY
             outputEntries[0].expression.value == true
         }
 
@@ -168,11 +168,11 @@ class YamlDecisionReaderSpec extends Specification {
             inputEntries[0].expression.value == 'not("blue", "purple")'
 
             inputEntries[1].name == 'age'
-            inputEntries[1].expression.type == ExpressionType.LITERAL
+            inputEntries[1].expression.type == ExpressionType.GROOVY
             inputEntries[1].expression.value == 10
 
             outputEntries[0].name == 'allow'
-            outputEntries[0].expression.type == ExpressionType.LITERAL
+            outputEntries[0].expression.type == ExpressionType.GROOVY
             outputEntries[0].expression.value == true
         }
 
@@ -184,11 +184,11 @@ class YamlDecisionReaderSpec extends Specification {
             inputEntries[0].expression.value == 'not( "red", "pink" )'
 
             inputEntries[1].name == 'age'
-            inputEntries[1].expression.type == ExpressionType.LITERAL
+            inputEntries[1].expression.type == ExpressionType.GROOVY
             inputEntries[1].expression.value == 20
 
             outputEntries[0].name == 'allow'
-            outputEntries[0].expression.type == ExpressionType.LITERAL
+            outputEntries[0].expression.type == ExpressionType.GROOVY
             outputEntries[0].expression.value == true
         }
 
