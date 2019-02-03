@@ -31,7 +31,7 @@ public final class YamlDecision {
     private String name;
     private HitPolicy hitPolicy;
     private ExpressionType expressionType;
-    private EvaluationMode evaluationMode = EvaluationMode.BOOLEAN;
+    private EvaluationMode evaluationMode;
     private YamlFields fields;
     private List<YamlRule> rules;
 }

@@ -79,6 +79,14 @@ public class Output implements Serializable {
 
             return (B) this;
         }
+
+        @Override
+        protected Output assembleProduct() {
+            validateIsNonNull(product.name, "Name is required");
+            validateIsNonNull(product.type, "Type is required");
+
+            return product;
+        }
     }
 
     public static final class Builder extends OutputBuilder<Builder> {

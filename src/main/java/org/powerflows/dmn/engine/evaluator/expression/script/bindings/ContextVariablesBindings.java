@@ -17,6 +17,7 @@
 package org.powerflows.dmn.engine.evaluator.expression.script.bindings;
 
 import org.powerflows.dmn.engine.evaluator.context.EvaluationContext;
+import org.powerflows.dmn.engine.model.decision.rule.entry.InputEntry;
 
 import javax.script.Bindings;
 import java.util.Collection;
@@ -36,8 +37,23 @@ public class ContextVariablesBindings implements Bindings {
                 .forEach(variableName -> this.bindings.put(variableName, evaluationContext.get(variableName)));
     }
 
-    public static ContextVariablesBindings create(final Bindings bindings, final EvaluationContext evaluationContext) {
+    private ContextVariablesBindings(final Bindings bindings,
+                                     final EvaluationContext evaluationContext,
+                                     final InputEntry inputEntry) {
+        this(bindings, evaluationContext);
+
+        this.bindings.put(inputEntry.getNameAlias(), evaluationContext.get(inputEntry.getName()));
+    }
+
+    public static ContextVariablesBindings create(final Bindings bindings,
+                                                  final EvaluationContext evaluationContext) {
         return new ContextVariablesBindings(bindings, evaluationContext);
+    }
+
+    public static ContextVariablesBindings create(final Bindings bindings,
+                                                  final EvaluationContext evaluationContext,
+                                                  final InputEntry inputEntry) {
+        return new ContextVariablesBindings(bindings, evaluationContext, inputEntry);
     }
 
     @Override

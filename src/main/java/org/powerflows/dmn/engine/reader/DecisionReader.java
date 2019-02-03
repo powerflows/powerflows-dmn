@@ -21,18 +21,13 @@ import org.powerflows.dmn.engine.model.decision.Decision;
 
 import java.io.InputStream;
 import java.util.List;
+import java.util.Optional;
 
 public interface DecisionReader {
 
-    default Decision read(final String decisionId) {
-        throw new UnsupportedOperationException();
-    }
+    Optional<Decision> read(InputStream inputStream);
 
-    default List<Decision> readAll(final Iterable<String> decisionIds) {
-        throw new UnsupportedOperationException();
-    }
-
-    Decision read(InputStream inputStream);
+    Optional<Decision> read(InputStream inputStream, String decisionId);
 
     List<Decision> readAll(InputStream inputStream);
 

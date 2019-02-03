@@ -1,0 +1,23 @@
+id: some_table_id
+name: Some Table Name
+fields:
+  in:
+    inputOne:
+      type: INTEGER
+    inputTwo:
+      type: STRING
+  out:
+    outputOne:
+      type: BOOLEAN
+rules:
+- in:
+    inputOne:
+      expression: '> 20'
+      expression-type: JUEL
+    inputTwo:
+      expression: 3
+      expression-type: JUEL
+  out:
+    outputOne:
+      expression: someVariable1 || someVariable2
+      expression-type: JAVASCRIPT

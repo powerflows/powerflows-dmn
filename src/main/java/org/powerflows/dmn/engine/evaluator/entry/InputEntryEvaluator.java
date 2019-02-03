@@ -22,7 +22,7 @@ import org.powerflows.dmn.engine.evaluator.context.EvaluationContext;
 import org.powerflows.dmn.engine.evaluator.entry.mode.provider.EvaluationModeProvider;
 import org.powerflows.dmn.engine.evaluator.entry.mode.provider.EvaluationModeProviderFactory;
 import org.powerflows.dmn.engine.evaluator.expression.provider.ExpressionEvaluationProvider;
-import org.powerflows.dmn.engine.evaluator.expression.provider.ExpressionEvaluationProviderFactory;
+import org.powerflows.dmn.engine.evaluator.expression.provider.DefaultExpressionEvaluationProviderFactory;
 import org.powerflows.dmn.engine.evaluator.type.converter.TypeConverter;
 import org.powerflows.dmn.engine.evaluator.type.converter.TypeConverterFactory;
 import org.powerflows.dmn.engine.evaluator.type.value.SpecifiedTypeValue;
@@ -36,12 +36,12 @@ import java.io.Serializable;
 @Slf4j
 public class InputEntryEvaluator {
 
-    private final ExpressionEvaluationProviderFactory expressionEvaluationProviderFactory;
+    private final DefaultExpressionEvaluationProviderFactory expressionEvaluationProviderFactory;
     private final TypeConverterFactory typeConverterFactory;
     private final EvaluationModeProviderFactory evaluationModeProviderFactory;
 
 
-    public InputEntryEvaluator(final ExpressionEvaluationProviderFactory expressionEvaluationProviderFactory,
+    public InputEntryEvaluator(final DefaultExpressionEvaluationProviderFactory expressionEvaluationProviderFactory,
                                final TypeConverterFactory typeConverterFactory,
                                final EvaluationModeProviderFactory evaluationModeProviderFactory) {
         this.expressionEvaluationProviderFactory = expressionEvaluationProviderFactory;
@@ -66,7 +66,7 @@ public class InputEntryEvaluator {
 
         final Object inputValue = evaluationContext.get(inputEntry.getName());
         final SpecifiedTypeValue<?> typedInputValue = typeConverter.convert(inputValue);
-        final Object inputEntryValue = inputEntryExpressionEvaluator.evaluateEntry(inputEntry.getExpression(), evaluationContext);
+        final Object inputEntryValue = inputEntryExpressionEvaluator.evaluateInputEntry(inputEntry, evaluationContext);
 
         final SpecifiedTypeValue<?> typedInputEntryValue;
         if (isBoolean(inputEntryValue)) {

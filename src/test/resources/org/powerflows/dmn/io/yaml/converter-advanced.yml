@@ -1,0 +1,35 @@
+id: some_table_id
+name: Some Table Name
+hit-policy: COLLECT
+expression-type: GROOVY
+evaluation-mode: INPUT_COMPARISON
+fields:
+  in:
+    inputOne:
+      name-alias: inputOneAlias
+      type: INTEGER
+      expression-type: JAVASCRIPT
+      evaluation-mode: BOOLEAN
+    inputTwo:
+      name-alias: inputTwoAlias
+      type: STRING
+      expression-type: FEEL
+      evaluation-mode: INPUT_COMPARISON
+  out:
+    outputOne:
+      type: BOOLEAN
+rules:
+- in:
+    inputOne:
+      name-alias: inputOneAliasOverridden
+      expression: '> 20'
+      expression-type: JUEL
+      evaluation-mode: INPUT_COMPARISON
+    inputTwo:
+      expression: 3
+      expression-type: JAVASCRIPT
+      evaluation-mode: BOOLEAN
+  out:
+    outputOne:
+      expression: someVariable1 || someVariable2
+      expression-type: JUEL

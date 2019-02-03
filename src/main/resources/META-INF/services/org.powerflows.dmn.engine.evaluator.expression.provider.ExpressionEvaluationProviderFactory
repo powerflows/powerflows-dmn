@@ -1,0 +1,5 @@
+org.powerflows.dmn.engine.evaluator.expression.provider.FeelExpressionEvaluationProviderFactory
+org.powerflows.dmn.engine.evaluator.expression.provider.GroovyExpressionEvaluationProviderFactory
+org.powerflows.dmn.engine.evaluator.expression.provider.JavascriptExpressionEvaluationProviderFactory
+org.powerflows.dmn.engine.evaluator.expression.provider.JuelExpressionEvaluationProviderFactory
+org.powerflows.dmn.engine.evaluator.expression.provider.LiteralExpressionEvaluationProviderFactory

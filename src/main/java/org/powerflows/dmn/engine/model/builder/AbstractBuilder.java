@@ -16,6 +16,12 @@
 
 package org.powerflows.dmn.engine.model.builder;
 
+import org.powerflows.dmn.engine.model.decision.DecisionBuildException;
+
+import java.io.Serializable;
+import java.util.List;
+import java.util.Objects;
+
 public abstract class AbstractBuilder<T> implements Buildable<T> {
     protected T product;
 
@@ -33,10 +39,22 @@ public abstract class AbstractBuilder<T> implements Buildable<T> {
     public final T build() {
         final T temp = assembleProduct();
         if (temp == null) {
-            throw new IllegalStateException("Only single build() call is allowed.");
+            throw new IllegalStateException("Only single build() call is allowed");
         }
         this.product = null;
 
         return temp;
+    }
+
+    protected void validateIsNonNull(final Serializable value, final String message) {
+        if (Objects.isNull(value)) {
+            throw new DecisionBuildException(message);
+        }
+    }
+
+    protected void validateIsNonEmpty(final List value, final String message) {
+        if (value.isEmpty()) {
+            throw new DecisionBuildException(message);
+        }
     }
 }

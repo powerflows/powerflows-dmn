@@ -20,5 +20,8 @@ public enum HitPolicy {
     UNIQUE,
     FIRST,
     ANY,
-    COLLECT
+    COLLECT,
+    PRIORITY,
+    RULE_ORDER,
+    OUTPUT_ORDER
 }

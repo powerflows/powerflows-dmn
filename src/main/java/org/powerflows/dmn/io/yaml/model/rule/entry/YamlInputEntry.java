@@ -29,7 +29,8 @@ public final class YamlInputEntry {
     public YamlInputEntry() {
     }
 
-    private ExpressionType expressionType = ExpressionType.LITERAL;
+    private String nameAlias;
+    private ExpressionType expressionType;
     private Object expression;
     private EvaluationMode evaluationMode;
 }

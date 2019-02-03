@@ -18,8 +18,9 @@ package org.powerflows.dmn.engine.evaluator.expression.provider;
 
 import lombok.extern.slf4j.Slf4j;
 import org.powerflows.dmn.engine.evaluator.context.EvaluationContext;
-import org.powerflows.dmn.engine.model.decision.expression.Expression;
 import org.powerflows.dmn.engine.model.decision.field.Input;
+import org.powerflows.dmn.engine.model.decision.rule.entry.InputEntry;
+import org.powerflows.dmn.engine.model.decision.rule.entry.OutputEntry;
 
 import java.io.Serializable;
 
@@ -31,10 +32,18 @@ class LiteralExpressionEvaluationProvider implements ExpressionEvaluationProvide
     public Serializable evaluateInput(final Input input, final EvaluationContext evaluationContext) {
         log.debug("Starting evaluation of input: {} with evaluation context: {}", input, evaluationContext);
 
-        final Serializable value = evaluationContext.get(input.getName());
+        Serializable value = evaluationContext.get(input.getName());
 
         if (value == null) {
-            log.warn("Input value is null");
+            log.warn("Input value by name {} is null", input.getName());
+
+            value = evaluationContext.get(input.getNameAlias());
+
+            if (value == null) {
+                log.warn("Input value by name alias {} is null", input.getNameAlias());
+            } else {
+                evaluationContext.addVariable(input.getName(), value);
+            }
         }
 
         log.debug("Evaluated input result: {}", value);
@@ -43,12 +52,23 @@ class LiteralExpressionEvaluationProvider implements ExpressionEvaluationProvide
     }
 
     @Override
-    public Serializable evaluateEntry(final Expression entryExpression, final EvaluationContext evaluationContext) {
-        log.debug("Starting evaluation of entry with expression: {} and evaluation context: {}", entryExpression, evaluationContext);
+    public Serializable evaluateInputEntry(final InputEntry inputEntry, final EvaluationContext evaluationContext) {
+        log.debug("Starting evaluation of input entry with evaluation context: {}", inputEntry, evaluationContext);
 
-        final Serializable result = entryExpression.getValue();
+        final Serializable result = inputEntry.getExpression().getValue();
 
-        log.debug("Evaluated entry result: {}", result);
+        log.debug("Evaluated input entry result: {}", result);
+
+        return result;
+    }
+
+    @Override
+    public Serializable evaluateOutputEntry(final OutputEntry outputEntry, final EvaluationContext evaluationContext) {
+        log.debug("Starting evaluation of output entry with evaluation context: {}", outputEntry, evaluationContext);
+
+        final Serializable result = outputEntry.getExpression().getValue();
+
+        log.debug("Evaluated output entry result: {}", result);
 
         return result;
     }

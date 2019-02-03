@@ -13,35 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package org.powerflows.dmn.engine.evaluator.expression.provider;
 
-import org.powerflows.dmn.engine.evaluator.expression.script.ScriptEngineProvider;
 import org.powerflows.dmn.engine.model.decision.expression.ExpressionType;
 
-import java.util.EnumMap;
+import java.util.List;
 
-public class ExpressionEvaluationProviderFactory {
+public interface ExpressionEvaluationProviderFactory {
+    ExpressionEvaluationProvider createProvider(ExpressionEvaluationConfiguration configuration);
 
-    private final EnumMap<ExpressionType, ExpressionEvaluationProvider> factories = new EnumMap<>(ExpressionType.class);
-
-    public ExpressionEvaluationProviderFactory(final ScriptEngineProvider scriptEngineProvider) {
-        final ExpressionEvaluationProvider scriptExpressionEvaluationProvider = new ScriptExpressionEvaluationProvider(scriptEngineProvider);
-
-        factories.put(ExpressionType.LITERAL, new LiteralExpressionEvaluationProvider());
-        factories.put(ExpressionType.FEEL, new FeelExpressionEvaluationProvider());
-        factories.put(ExpressionType.JUEL, new JuelExpressionEvaluationProvider());
-        factories.put(ExpressionType.GROOVY, scriptExpressionEvaluationProvider);
-        factories.put(ExpressionType.JAVASCRIPT, scriptExpressionEvaluationProvider);
-    }
-
-    public ExpressionEvaluationProvider getInstance(final ExpressionType expressionType) {
-        final ExpressionEvaluationProvider expressionEvaluationProvider = factories.get(expressionType);
-
-        if (expressionEvaluationProvider == null) {
-            throw new IllegalArgumentException("Unknown expression type " + expressionType);
-        }
-
-        return expressionEvaluationProvider;
-    }
+    List<ExpressionType> supportedExpressionTypes();
 }

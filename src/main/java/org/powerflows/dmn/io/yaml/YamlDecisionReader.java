@@ -24,6 +24,7 @@ import org.yaml.snakeyaml.Yaml;
 
 import java.io.InputStream;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.StreamSupport;
 
 import static java.util.stream.Collectors.toList;
@@ -31,6 +32,7 @@ import static java.util.stream.Collectors.toList;
 
 public class YamlDecisionReader implements DecisionReader {
 
+    public static final String UNABLE_TO_READ_FROM_STREAM = "Unable to read from stream";
     private final Yaml yaml = new Yaml(new CustomConstructor());
     private final YamlDecisionConverter converter = new YamlDecisionConverter();
 
@@ -42,16 +44,29 @@ public class YamlDecisionReader implements DecisionReader {
                     .map(converter::from)
                     .collect(toList());
         } catch (final Exception e) {
-            throw new DecisionReadException("Unable to read from stream", e);
+            throw new DecisionReadException(UNABLE_TO_READ_FROM_STREAM, e);
         }
     }
 
     @Override
-    public Decision read(final InputStream inputStream) {
+    public Optional<Decision> read(final InputStream inputStream) {
         try {
-            return converter.from(yaml.load(inputStream));
+            return Optional.of((YamlDecision) yaml.load(inputStream)).map(converter::from);
         } catch (final Exception e) {
-            throw new DecisionReadException("Unable to read from stream", e);
+            throw new DecisionReadException(UNABLE_TO_READ_FROM_STREAM, e);
+        }
+    }
+
+    @Override
+    public Optional<Decision> read(final InputStream inputStream, final String decisionId) {
+        try {
+            return StreamSupport.stream(yaml.loadAll(inputStream).spliterator(), true)
+                    .map(o -> (YamlDecision) o)
+                    .filter(d -> decisionId.equals(d.getId()))
+                    .map(converter::from)
+                    .findFirst();
+        } catch (final Exception e) {
+            throw new DecisionReadException(UNABLE_TO_READ_FROM_STREAM, e);
         }
     }
 

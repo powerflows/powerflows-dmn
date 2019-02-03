@@ -34,14 +34,20 @@ public class InputEntry implements Serializable {
     private static final long serialVersionUID = 1;
 
     private String name;
+    private String nameAlias;
     private Expression expression;
     private EvaluationMode evaluationMode;
 
     private InputEntry() {
+        super();
     }
 
     public String getName() {
         return name;
+    }
+
+    public String getNameAlias() {
+        return nameAlias;
     }
 
     public Expression getExpression() {
@@ -73,6 +79,12 @@ public class InputEntry implements Serializable {
             return (B) this;
         }
 
+        public B nameAlias(String nameAlias) {
+            this.product.nameAlias = nameAlias;
+
+            return (B) this;
+        }
+
         public B evaluationMode(EvaluationMode evaluationMode) {
             this.product.evaluationMode = evaluationMode;
 
@@ -93,6 +105,8 @@ public class InputEntry implements Serializable {
             if (product.expression == null) {
                 product.expression = Expression.builder().build();
             }
+
+            validateIsNonNull(product.name, "Name is required");
 
             return product;
         }

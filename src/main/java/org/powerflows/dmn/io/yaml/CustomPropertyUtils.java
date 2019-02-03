@@ -37,6 +37,7 @@ public class CustomPropertyUtils extends PropertyUtils {
         PROPERTY_NAME_MAP.put("hitPolicy", "hit-policy");
         PROPERTY_NAME_MAP.put("expressionType", "expression-type");
         PROPERTY_NAME_MAP.put("evaluationMode", "evaluation-mode");
+        PROPERTY_NAME_MAP.put("nameAlias", "name-alias");
     }
 
     CustomPropertyUtils() {

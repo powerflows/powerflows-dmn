@@ -33,11 +33,22 @@ class JuelExpressionEvaluationProviderSpec extends Specification {
         exception != null
     }
 
-    void 'should throw exception for evaluate entry'() {
+    void 'should throw exception for evaluate input entry'() {
         given:
 
         when:
-        expressionEvaluationProvider.evaluateEntry(null, null)
+        expressionEvaluationProvider.evaluateInputEntry(null, null)
+
+        then:
+        final UnsupportedOperationException exception = thrown()
+        exception != null
+    }
+
+    void 'should throw exception for evaluate output entry'() {
+        given:
+
+        when:
+        expressionEvaluationProvider.evaluateOutputEntry(null, null)
 
         then:
         final UnsupportedOperationException exception = thrown()

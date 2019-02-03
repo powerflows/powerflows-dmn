@@ -1,0 +1,29 @@
+id: some_table_id_1
+name: Some Table Name
+hit-policy: COLLECT
+evaluation-mode: INPUT_COMPARISON
+expression-type: LITERAL
+fields:
+  in:
+    inputOne:
+      name-alias: inputOneAlias
+      type: INTEGER
+    inputTwo:
+      name-alias: inputOne
+      type: INTEGER
+  out:
+    outputOne:
+      type: STRING
+rules:
+- description: Some Rule 1 Description
+  in:
+    inputOne: 2
+    inputTwo: 2
+  out:
+    outputOne: Result 1
+- description: Some Rule 2 Description
+  in:
+    inputOne: 2
+    inputTwo: 4
+  out:
+    outputOne: Result 2

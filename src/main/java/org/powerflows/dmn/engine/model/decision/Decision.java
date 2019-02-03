@@ -23,12 +23,16 @@ import org.powerflows.dmn.engine.model.decision.expression.ExpressionType;
 import org.powerflows.dmn.engine.model.decision.field.Input;
 import org.powerflows.dmn.engine.model.decision.field.Output;
 import org.powerflows.dmn.engine.model.decision.rule.Rule;
+import org.powerflows.dmn.engine.model.decision.rule.entry.InputEntry;
+import org.powerflows.dmn.engine.model.decision.rule.entry.OutputEntry;
 
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 import java.util.function.Consumer;
 import java.util.function.Function;
+import java.util.stream.Collectors;
 
 import static java.util.Collections.unmodifiableList;
 import static org.powerflows.dmn.engine.model.decision.DecisionUtil.assignDefaults;
@@ -39,11 +43,15 @@ public class Decision implements Serializable {
 
     private static final long serialVersionUID = 1;
 
+    public static final HitPolicy DEFAULT_HIT_POLICY = HitPolicy.UNIQUE;
+    public static final ExpressionType DEFAULT_EXPRESSION_TYPE = ExpressionType.LITERAL;
+    public static final EvaluationMode DEFAULT_EVALUATION_MODE = EvaluationMode.BOOLEAN;
+
     private String id;
     private String name;
-    private HitPolicy hitPolicy = HitPolicy.UNIQUE;
-    private ExpressionType expressionType = ExpressionType.LITERAL;
-    private EvaluationMode evaluationMode = EvaluationMode.BOOLEAN;
+    private HitPolicy hitPolicy = DEFAULT_HIT_POLICY;
+    private ExpressionType expressionType = DEFAULT_EXPRESSION_TYPE;
+    private EvaluationMode evaluationMode = DEFAULT_EVALUATION_MODE;
     private List<Input> inputs = new ArrayList<>();
     private List<Output> outputs = new ArrayList<>();
     private List<Rule> rules = new ArrayList<>();
@@ -129,6 +137,41 @@ public class Decision implements Serializable {
 
         @Override
         protected Decision assembleProduct() {
+            validateIsNonEmpty(product.inputs, "At least one input is required");
+            validateIsNonEmpty(product.outputs, "At least one output is required");
+            validateIsNonEmpty(product.rules, "At least one rule is required");
+
+            final List<String> inputNames = product.inputs.stream()
+                    .map(Input::getName)
+                    .collect(Collectors.toList());
+
+            final List<String> outputNames = product.outputs.stream()
+                    .map(Output::getName)
+                    .collect(Collectors.toList());
+
+            validateIsNonDuplicated(inputNames, "Inputs must have unique names. Duplicated names: ");
+            validateIsNonDuplicated(outputNames, "Outputs must have unique names. Duplicated names: ");
+
+            product.rules.forEach(rule -> {
+                final List<String> inputEntryNames = rule.getInputEntries().stream()
+                        .map(InputEntry::getName)
+                        .collect(Collectors.toList());
+                validateIsNonDuplicated(inputEntryNames, "Input entries must have unique names. Duplicated names: ");
+                validateAreEntriesMatch(inputNames, inputEntryNames, "Input entries refer to non existing inputs: ");
+
+                final List<String> outputEntryNames = rule.getOutputEntries().stream()
+                        .map(OutputEntry::getName)
+                        .collect(Collectors.toList());
+                validateIsNonDuplicated(outputEntryNames, "Output entries must have unique names. Duplicated names: ");
+                validateAreEntriesMatch(outputNames, outputEntryNames, "Output entries refer to non existing outputs: ");
+            });
+
+            validateIsNonNull(product.id, "Id is required");
+            validateIsNonNull(product.name, "Name is required");
+            validateIsNonNull(product.hitPolicy, "Hit policy is required");
+            validateIsNonNull(product.expressionType, "Expression type is required");
+            validateIsNonNull(product.evaluationMode, "Evaluation mode is required");
+
             assignDefaults(this.product.inputs, this.product.rules, this.product.expressionType, this.product.evaluationMode);
 
             this.product.inputs = unmodifiableList(this.product.inputs);
@@ -136,6 +179,34 @@ public class Decision implements Serializable {
             this.product.rules = unmodifiableList(this.product.rules);
 
             return this.product;
+        }
+
+        private void validateAreEntriesMatch(final List<String> fields, final List<String> entries, final String message) {
+            final List<String> missing = entries.stream()
+                    .filter(s -> !fields.contains(s))
+                    .collect(Collectors.toList());
+
+            if (!missing.isEmpty()) {
+                throw new DecisionBuildException(message + missing);
+            }
+        }
+
+        private void validateIsNonDuplicated(final List<String> names, final String message) {
+            final Set<String> duplicates = names.stream()
+                    .collect(
+                            Collectors.collectingAndThen(
+                                    Collectors.groupingBy(
+                                            Function.identity(), Collectors.counting()
+                                    ), map -> {
+                                        map.values().removeIf(count -> count == 1);
+
+                                        return map.keySet();
+                                    }
+                            )
+                    );
+            if (!duplicates.isEmpty()) {
+                throw new DecisionBuildException(message + duplicates);
+            }
         }
     }
 
