@@ -36,6 +36,11 @@ public abstract class AbstractMethodBinding implements MethodBinding {
     }
 
     @Override
+    public Method method() {
+        return method;
+    }
+
+    @Override
     public Object execute(final Object... args) {
         try {
             return method.invoke(instanceSupplier.get(), args);
