@@ -25,7 +25,7 @@ public class JuelExpressionEvaluationProviderFactory implements ExpressionEvalua
 
     @Override
     public ExpressionEvaluationProvider createProvider(final ExpressionEvaluationConfiguration configuration) {
-        return new JuelExpressionEvaluationProvider();
+        return new JuelExpressionEvaluationProvider(configuration);
     }
 
     @Override

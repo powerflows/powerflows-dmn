@@ -19,6 +19,5 @@ import java.lang.reflect.Method;
 
 public interface MethodBinding extends BoundMethod {
     String name();
-
     Method method();
 }
