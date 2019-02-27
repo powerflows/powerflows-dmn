@@ -3,3 +3,4 @@ org.powerflows.dmn.engine.evaluator.expression.provider.GroovyExpressionEvaluati
 org.powerflows.dmn.engine.evaluator.expression.provider.JavascriptExpressionEvaluationProviderFactory
 org.powerflows.dmn.engine.evaluator.expression.provider.JuelExpressionEvaluationProviderFactory
 org.powerflows.dmn.engine.evaluator.expression.provider.LiteralExpressionEvaluationProviderFactory
+org.powerflows.dmn.engine.evaluator.expression.provider.MvelExpressionEvaluationProviderFactory

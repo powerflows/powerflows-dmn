@@ -21,5 +21,6 @@ public enum ExpressionType {
     FEEL,
     JUEL,
     GROOVY,
-    JAVASCRIPT
+    JAVASCRIPT,
+    MVEL
 }

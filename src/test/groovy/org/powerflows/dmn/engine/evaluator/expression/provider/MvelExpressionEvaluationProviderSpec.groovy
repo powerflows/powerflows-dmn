@@ -16,9 +16,8 @@
 
 package org.powerflows.dmn.engine.evaluator.expression.provider
 
-
 import org.powerflows.dmn.engine.evaluator.context.EvaluationContext
-import org.powerflows.dmn.engine.evaluator.expression.provider.binding.ExpressionEvaluationException
+import org.powerflows.dmn.engine.evaluator.exception.EvaluationException
 import org.powerflows.dmn.engine.evaluator.expression.provider.binding.InstanceMethodBinding
 import org.powerflows.dmn.engine.evaluator.expression.provider.binding.MethodBinding
 import org.powerflows.dmn.engine.evaluator.expression.provider.binding.StaticMethodBinding
@@ -26,7 +25,6 @@ import org.powerflows.dmn.engine.evaluator.expression.provider.sample.MethodSour
 import org.powerflows.dmn.engine.model.decision.expression.Expression
 import org.powerflows.dmn.engine.model.decision.expression.ExpressionType
 import org.powerflows.dmn.engine.model.decision.field.Input
-import org.powerflows.dmn.engine.model.decision.field.ValueType
 import org.powerflows.dmn.engine.model.decision.rule.entry.InputEntry
 import org.powerflows.dmn.engine.model.decision.rule.entry.OutputEntry
 import org.powerflows.dmn.engine.model.evaluation.variable.DecisionVariables
@@ -35,19 +33,19 @@ import spock.lang.Unroll
 
 import java.lang.reflect.Method
 
-class JuelExpressionEvaluationProviderSpec extends Specification {
+class MvelExpressionEvaluationProviderSpec extends Specification {
 
     private ExpressionEvaluationProvider expressionEvaluationProvider
 
     void setup() {
-        expressionEvaluationProvider = new JuelExpressionEvaluationProvider(ExpressionEvaluationConfiguration.simpleConfiguration())
+        expressionEvaluationProvider = new MvelExpressionEvaluationProvider(ExpressionEvaluationConfiguration.simpleConfiguration())
     }
 
     @Unroll
-    void 'should evaluate input entry juel expression value #entryExpressionValue and variables #contextVariable with #expectedEntryResult'(
-            final Object entryExpressionValue, final Serializable contextVariable, final Serializable expectedEntryResult) {
+    void 'should evaluate input entry mvel expression value #entryExpressionValue and variables #contextVariable with #expectedEntryResult'(
+            final Object entryExpressionValue, final Object contextVariable, final Serializable expectedEntryResult) {
         given:
-        final Expression entryExpression = [value: entryExpressionValue, type: ExpressionType.JUEL]
+        final Expression entryExpression = [value: entryExpressionValue, type: ExpressionType.MVEL]
         final InputEntry inputEntry = [expression: entryExpression, nameAlias: 'cellInput']
 
         final DecisionVariables decisionVariables = new DecisionVariables([x: contextVariable, TestInputName: true])
@@ -68,9 +66,9 @@ class JuelExpressionEvaluationProviderSpec extends Specification {
         '(2 + 5) == x'       | 7               || true
     }
 
-    void 'should evaluate input entry juel expression with default alias usage'() {
+    void 'should evaluate input entry mvel expression with default alias usage'() {
         given:
-        final Expression expression = [value: "cellInput == 'something'", type: ExpressionType.JUEL]
+        final Expression expression = [value: "cellInput == 'something'", type: ExpressionType.MVEL]
         final InputEntry inputEntry = [name: 'TestInputName', expression: expression, nameAlias: 'cellInput']
 
         final DecisionVariables decisionVariables = new DecisionVariables(['TestInputName': 'something'])
@@ -84,10 +82,10 @@ class JuelExpressionEvaluationProviderSpec extends Specification {
     }
 
     @Unroll
-    void 'should evaluate output entry juel expression value #entryExpressionValue and variables #contextVariable with #expectedEntryResult'(
-            final Object entryExpressionValue, final Serializable contextVariable, final Serializable expectedEntryResult) {
+    void 'should evaluate output entry mvel expression value #entryExpressionValue and variables #contextVariable with #expectedEntryResult'(
+            final Object entryExpressionValue, final Object contextVariable, final Serializable expectedEntryResult) {
         given:
-        final Expression entryExpression = [value: entryExpressionValue, type: ExpressionType.JUEL]
+        final Expression entryExpression = [value: entryExpressionValue, type: ExpressionType.MVEL]
         final OutputEntry outputEntry = [expression: entryExpression]
 
         final DecisionVariables decisionVariables = new DecisionVariables([x: contextVariable, TestInputName: true])
@@ -109,11 +107,11 @@ class JuelExpressionEvaluationProviderSpec extends Specification {
     }
 
     @Unroll
-    void 'should evaluate input juel expression value #inputExpression and variables #contextVariable with #expectedInputResult'(
-            final Object inputExpression, final ValueType inputType, final Serializable contextVariable, final Serializable expectedInputResult) {
+    void 'should evaluate input mvel expression value #inputExpression and variables #contextVariable with #expectedInputResult'(
+            final Object inputExpression, final Object contextVariable, final Serializable expectedInputResult) {
         given:
-        final Expression expression = [value: inputExpression, type: ExpressionType.JUEL]
-        final Input input = [name: 'TestInputName', expression: expression, type: inputType]
+        final Expression expression = [value: inputExpression, type: ExpressionType.MVEL]
+        final Input input = [name: 'TestInputName', expression: expression]
 
         final DecisionVariables decisionVariables = new DecisionVariables([x: contextVariable])
         final EvaluationContext contextVariables = new EvaluationContext(decisionVariables)
@@ -125,10 +123,27 @@ class JuelExpressionEvaluationProviderSpec extends Specification {
         inputEntryResult == expectedInputResult
 
         where:
-        inputExpression | inputType         | contextVariable || expectedInputResult
-        '2 < x'         | ValueType.BOOLEAN | 4               || true
-        '2 + x'         | ValueType.INTEGER | 3               || 5
-        '4 * x'         | ValueType.STRING  | 4               || '16'
+        inputExpression | contextVariable || expectedInputResult
+        '2 < x'         | 4               || true
+        '2 + x'         | 3               || 5
+        '"a" + 4'       | null            || 'a4'
+    }
+
+    void 'should throw exception when missing variable evaluating mvel expression'() {
+        given:
+        final String outputEntryValue = 'x'
+        final Expression entryExpression = [value: outputEntryValue, type: ExpressionType.MVEL]
+        final DecisionVariables decisionVariables = new DecisionVariables([:])
+        final EvaluationContext contextVariables = new EvaluationContext(decisionVariables)
+        final OutputEntry outputEntry = [expression: entryExpression] as OutputEntry
+
+        when:
+        expressionEvaluationProvider.evaluateOutputEntry(outputEntry, contextVariables)
+
+        then:
+        final EvaluationException exception = thrown()
+        exception != null
+        exception.getMessage() == 'Script evaluation exception'
     }
 
     void 'should bind static method and make it available in expression'() {
@@ -139,9 +154,9 @@ class JuelExpressionEvaluationProviderSpec extends Specification {
                 .builder()
                 .methodBinding(methodBinding)
                 .build()
-        final ExpressionEvaluationProvider expressionEvaluationProvider = new JuelExpressionEvaluationProvider(configuration)
-        final Expression expression = [value: 'testMethod(x, 1)', type: ExpressionType.JUEL]
-        final Input input = [name: 'TestInputName', expression: expression, type: ValueType.STRING]
+        final ExpressionEvaluationProvider expressionEvaluationProvider = new MvelExpressionEvaluationProvider(configuration)
+        final Expression expression = [value: 'testMethod(x, 1)', type: ExpressionType.MVEL]
+        final Input input = [name: 'TestInputName', expression: expression]
 
         final DecisionVariables decisionVariables = new DecisionVariables([x: 'text'])
         final EvaluationContext contextVariables = new EvaluationContext(decisionVariables)
@@ -153,7 +168,7 @@ class JuelExpressionEvaluationProviderSpec extends Specification {
         inputEntryResult == 'static-' + decisionVariables.get('x') + '-1'
     }
 
-    void 'should throw exception for instance method binding '() {
+    void 'should throw exception when bind instance method and make it available in expression'() {
         given:
         final MethodSource theInstance = new MethodSource('someValue')
         final Method method = MethodSource.class.getMethod('sampleInstanceMethod', Integer.TYPE, String)
@@ -166,9 +181,11 @@ class JuelExpressionEvaluationProviderSpec extends Specification {
                 .build()
 
         when:
-        new JuelExpressionEvaluationProvider(configuration)
+        new MvelExpressionEvaluationProvider(configuration)
 
         then:
-        thrown(ExpressionEvaluationException)
+        final EvaluationException exception = thrown()
+        exception != null
+        exception.getMessage() == 'Instance method binding for MVEL is not supported yet'
     }
 }

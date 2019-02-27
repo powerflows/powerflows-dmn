@@ -15,6 +15,9 @@
  */
 package org.powerflows.dmn.engine.evaluator.expression.provider.binding;
 
+import java.lang.reflect.Method;
+
 public interface MethodBinding extends BoundMethod {
     String name();
+    Method method();
 }

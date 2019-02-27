@@ -20,12 +20,12 @@ import org.powerflows.dmn.engine.model.decision.expression.ExpressionType;
 import java.util.Collections;
 import java.util.List;
 
-public class JuelExpressionEvaluationProviderFactory implements ExpressionEvaluationProviderFactory {
-    private static final List<ExpressionType> SUPPORTED = Collections.singletonList(ExpressionType.JUEL);
+public class MvelExpressionEvaluationProviderFactory implements ExpressionEvaluationProviderFactory {
+    private static final List<ExpressionType> SUPPORTED = Collections.singletonList(ExpressionType.MVEL);
 
     @Override
     public ExpressionEvaluationProvider createProvider(final ExpressionEvaluationConfiguration configuration) {
-        return new JuelExpressionEvaluationProvider(configuration);
+        return new MvelExpressionEvaluationProvider(configuration);
     }
 
     @Override

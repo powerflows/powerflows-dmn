@@ -16,15 +16,23 @@
 
 package org.powerflows.dmn.engine.model.decision.field;
 
+import java.io.Serializable;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.Optional;
 
 public enum ValueType {
-    STRING,
-    INTEGER,
-    DOUBLE,
-    BOOLEAN,
-    DATE;
+    STRING(String.class),
+    INTEGER(Integer.class),
+    DOUBLE(Double.class),
+    BOOLEAN(Boolean.class),
+    DATE(Date.class);
+
+    private final Class<? extends Serializable> realType;
+
+    ValueType(final Class<? extends Serializable> realType) {
+        this.realType = realType;
+    }
 
     public static Optional<ValueType> safeValueOf(final String name) {
         if (name == null) {
@@ -35,6 +43,9 @@ public enum ValueType {
                 .filter(v -> v.name()
                         .equalsIgnoreCase(name))
                 .findFirst();
+    }
 
+    public Class<? extends Serializable> realType() {
+        return realType;
     }
 }

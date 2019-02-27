@@ -81,6 +81,7 @@
         <spock.version>1.1-groovy-2.4</spock.version>
         <cglib.version>3.2.5</cglib.version>
         <groovy.version>2.4.15</groovy.version>
+        <mvel.version>2.4.3.Final</mvel.version>
         <snakeyaml.version>1.21</snakeyaml.version>
         <lombok.version>1.18.2</lombok.version>
         <objenesis.version>2.6</objenesis.version>
@@ -92,6 +93,7 @@
         <maven.gpg.version>1.6</maven.gpg.version>
         <slf4j.version>1.7.25</slf4j.version>
         <log4j.version>2.11.1</log4j.version>
+        <juel.version>2.2.7</juel.version>
     </properties>
 
     <dependencies>
@@ -113,6 +115,25 @@
             <groupId>org.codehaus.groovy</groupId>
             <artifactId>groovy-all</artifactId>
             <version>${groovy.version}</version>
+        </dependency>
+
+        <!-- MVEL -->
+        <dependency>
+            <groupId>org.mvel</groupId>
+            <artifactId>mvel2</artifactId>
+            <version>${mvel.version}</version>
+        </dependency>
+
+        <!-- JUEL -->
+        <dependency>
+            <groupId>de.odysseus.juel</groupId>
+            <artifactId>juel-api</artifactId>
+            <version>${juel.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>de.odysseus.juel</groupId>
+            <artifactId>juel-impl</artifactId>
+            <version>${juel.version}</version>
         </dependency>
 
         <!-- Tests -->

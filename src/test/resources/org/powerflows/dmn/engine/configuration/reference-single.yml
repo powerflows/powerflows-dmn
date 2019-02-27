@@ -69,7 +69,7 @@ rules:
 - description: Some Rule 5 Description
   in:
     inputOne:
-      expression-type: JAVASCRIPT
+      expression-type: MVEL
       expression: (p + q) > 50
       evaluation-mode: BOOLEAN
   out:

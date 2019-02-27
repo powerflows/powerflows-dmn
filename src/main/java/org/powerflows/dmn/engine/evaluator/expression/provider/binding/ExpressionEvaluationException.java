@@ -19,4 +19,12 @@ public class ExpressionEvaluationException extends RuntimeException {
     public ExpressionEvaluationException(final Exception e) {
         super(e);
     }
+
+    public ExpressionEvaluationException(final String message, final Exception exception) {
+        super(message, exception);
+    }
+
+    public ExpressionEvaluationException(String message) {
+        super(message);
+    }
 }
