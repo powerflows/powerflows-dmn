@@ -93,6 +93,7 @@
         <maven.gpg.version>1.6</maven.gpg.version>
         <slf4j.version>1.7.25</slf4j.version>
         <log4j.version>2.11.1</log4j.version>
+        <juel.version>2.2.7</juel.version>
     </properties>
 
     <dependencies>
@@ -121,6 +122,18 @@
             <groupId>org.mvel</groupId>
             <artifactId>mvel2</artifactId>
             <version>${mvel.version}</version>
+        </dependency>
+
+        <!-- JUEL -->
+        <dependency>
+            <groupId>de.odysseus.juel</groupId>
+            <artifactId>juel-api</artifactId>
+            <version>${juel.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>de.odysseus.juel</groupId>
+            <artifactId>juel-impl</artifactId>
+            <version>${juel.version}</version>
         </dependency>
 
         <!-- Tests -->
