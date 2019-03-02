@@ -30,8 +30,8 @@ rules:
 - description: Some Rule 1 Description
   in:
     inputOne:
-      expression-type: LITERAL
-      expression: 2
+      expression-type: FEEL
+      expression: "2"
     inputTwo:
       expression-type: LITERAL
       expression: true
