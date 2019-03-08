@@ -64,7 +64,7 @@ public class DefaultDecisionEngineConfiguration implements DecisionEngineConfigu
 
     private void initExpressionEvaluation() {
         configuration = ExpressionEvaluationConfiguration.builder()
-                .methodBinding(methodBindings)
+                .methodBindings(methodBindings)
                 .build();
     }
 

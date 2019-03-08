@@ -153,7 +153,7 @@ class GroovyExpressionEvaluationProviderSpec extends Specification {
         final List<MethodBinding> methodBinding = [new StaticMethodBinding('testMethod', method)]
         final ExpressionEvaluationConfiguration configuration = ExpressionEvaluationConfiguration
                 .builder()
-                .methodBinding(methodBinding)
+                .methodBindings(methodBinding)
                 .build()
         final ExpressionEvaluationProvider expressionEvaluationProvider = new GroovyExpressionEvaluationProvider(configuration)
         final Expression expression = [value: 'testMethod(x, 1)', type: ExpressionType.GROOVY]
@@ -178,7 +178,7 @@ class GroovyExpressionEvaluationProviderSpec extends Specification {
         })]
         final ExpressionEvaluationConfiguration configuration = ExpressionEvaluationConfiguration
                 .builder()
-                .methodBinding(methodBinding)
+                .methodBindings(methodBinding)
                 .build()
         final ExpressionEvaluationProvider expressionEvaluationProvider = new GroovyExpressionEvaluationProvider(configuration)
         final Expression expression = [value: 'testMethod(2, y)', type: ExpressionType.GROOVY]

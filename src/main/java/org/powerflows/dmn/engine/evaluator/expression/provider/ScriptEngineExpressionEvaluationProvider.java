@@ -44,7 +44,7 @@ public abstract class ScriptEngineExpressionEvaluationProvider implements Expres
         }
 
         final Bindings bindings = scriptEngine.createBindings();
-        bindings.putAll(configuration.getMethodBinding()
+        bindings.putAll(configuration.getMethodBindings()
                 .stream()
                 .collect(Collectors.toMap(MethodBinding::name, this::createMethodBinding)));
         scriptEngine.setBindings(bindings, ScriptContext.GLOBAL_SCOPE);

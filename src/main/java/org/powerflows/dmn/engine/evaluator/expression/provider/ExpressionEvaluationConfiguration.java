@@ -27,11 +27,11 @@ import java.util.List;
 @Builder
 public class ExpressionEvaluationConfiguration {
 
-    private final List<MethodBinding> methodBinding;
+    private final List<MethodBinding> methodBindings;
     private final ScriptEngineManager scriptEngineManager;
 
-    private ExpressionEvaluationConfiguration(final List<MethodBinding> methodBinding, final ScriptEngineManager scriptEngineManager) {
-        this.methodBinding = methodBinding == null ? Collections.emptyList() : methodBinding;
+    private ExpressionEvaluationConfiguration(final List<MethodBinding> methodBindings, final ScriptEngineManager scriptEngineManager) {
+        this.methodBindings = methodBindings == null ? Collections.emptyList() : methodBindings;
         this.scriptEngineManager = scriptEngineManager == null ? new ScriptEngineManager() : scriptEngineManager;
     }
 
