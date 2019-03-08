@@ -18,6 +18,7 @@ package org.powerflows.dmn.engine.evaluator.expression.provider
 
 import org.powerflows.dmn.engine.evaluator.context.EvaluationContext
 import org.powerflows.dmn.engine.evaluator.exception.EvaluationException
+import org.powerflows.dmn.engine.evaluator.expression.provider.binding.ExpressionEvaluationException
 import org.powerflows.dmn.engine.evaluator.expression.provider.binding.InstanceMethodBinding
 import org.powerflows.dmn.engine.evaluator.expression.provider.binding.MethodBinding
 import org.powerflows.dmn.engine.evaluator.expression.provider.binding.StaticMethodBinding
@@ -141,9 +142,9 @@ class MvelExpressionEvaluationProviderSpec extends Specification {
         expressionEvaluationProvider.evaluateOutputEntry(outputEntry, contextVariables)
 
         then:
-        final EvaluationException exception = thrown()
+        final ExpressionEvaluationException exception = thrown()
         exception != null
-        exception.getMessage() == 'Script evaluation exception'
+        exception.getMessage() == "Can not evaluate feel expression 'x'"
     }
 
     void 'should bind static method and make it available in expression'() {
@@ -152,7 +153,7 @@ class MvelExpressionEvaluationProviderSpec extends Specification {
         final List<MethodBinding> methodBinding = [new StaticMethodBinding('testMethod', method)]
         final ExpressionEvaluationConfiguration configuration = ExpressionEvaluationConfiguration
                 .builder()
-                .methodBinding(methodBinding)
+                .methodBindings(methodBinding)
                 .build()
         final ExpressionEvaluationProvider expressionEvaluationProvider = new MvelExpressionEvaluationProvider(configuration)
         final Expression expression = [value: 'testMethod(x, 1)', type: ExpressionType.MVEL]
@@ -177,7 +178,7 @@ class MvelExpressionEvaluationProviderSpec extends Specification {
         })]
         final ExpressionEvaluationConfiguration configuration = ExpressionEvaluationConfiguration
                 .builder()
-                .methodBinding(methodBinding)
+                .methodBindings(methodBinding)
                 .build()
 
         when:

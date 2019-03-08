@@ -40,7 +40,7 @@ class JuelExpressionEvaluationProvider implements ExpressionEvaluationProvider {
 
     JuelExpressionEvaluationProvider(final ExpressionEvaluationConfiguration configuration) {
         this.expressionFactory = new ExpressionFactoryImpl();
-        rootFunctionMapper = new ContextFunctionMapper(configuration.getMethodBinding());
+        rootFunctionMapper = new ContextFunctionMapper(configuration.getMethodBindings());
     }
 
     @Override

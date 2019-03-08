@@ -15,8 +15,13 @@
  */
 package org.powerflows.dmn.engine.evaluator.expression.provider;
 
+import org.powerflows.dmn.engine.evaluator.exception.EvaluationException;
+import org.powerflows.dmn.engine.evaluator.expression.provider.binding.MethodBinding;
+import org.powerflows.dmn.engine.evaluator.expression.provider.binding.StaticMethodBinding;
+import org.powerflows.dmn.engine.evaluator.expression.provider.feel.function.DateAndTime;
 import org.powerflows.dmn.engine.model.decision.expression.ExpressionType;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -25,7 +30,24 @@ public class FeelExpressionEvaluationProviderFactory implements ExpressionEvalua
 
     @Override
     public ExpressionEvaluationProvider createProvider(final ExpressionEvaluationConfiguration configuration) {
-        return new FeelExpressionEvaluationProvider();
+        final List<MethodBinding> feelMethodBindings = new ArrayList<>(configuration.getMethodBindings());
+
+        try {
+            feelMethodBindings.add(new StaticMethodBinding(
+                    "date and time",
+                    DateAndTime.class.getMethod("execute", String.class))
+            );
+        } catch (NoSuchMethodException e) {
+            throw new EvaluationException("Can not bind feel function", e);
+        }
+
+        final ExpressionEvaluationConfiguration feelConfiguration = ExpressionEvaluationConfiguration
+                .builder()
+                .methodBindings(feelMethodBindings)
+                .scriptEngineManager(configuration.getScriptEngineManager())
+                .build();
+
+        return new FeelExpressionEvaluationProvider(feelConfiguration);
     }
 
     @Override
