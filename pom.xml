@@ -4,7 +4,7 @@
 
     <groupId>org.powerflows</groupId>
     <artifactId>dmn</artifactId>
-    <version>0.9.0</version>
+    <version>0.10.0-SNAPSHOT</version>
     <packaging>jar</packaging>
     <name>DMN</name>
     <description>Power Flows DMN</description>
@@ -41,7 +41,7 @@
         <url>https://github.com/powerflows/powerflows-dmn</url>
         <connection>scm:git:https://github.com/powerflows/powerflows-dmn.git</connection>
         <developerConnection>scm:git:https://github.com/powerflows/powerflows-dmn.git</developerConnection>
-        <tag>dmn-0.9.0</tag>
+        <tag>HEAD</tag>
     </scm>
     <issueManagement>
         <url>https://github.com/powerflows/powerflows-dmn/issues</url>
