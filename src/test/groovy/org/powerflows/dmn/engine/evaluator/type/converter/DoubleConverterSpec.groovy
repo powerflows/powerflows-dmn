@@ -32,6 +32,21 @@ class DoubleConverterSpec extends Specification {
     }
 
 
+    void 'should convert single null value'() {
+        given:
+        final Object singleValue = null
+        final Double expectedSingleValue = null
+
+        when:
+        final DoubleValue doubleValue = doubleTypeConverter.convert(singleValue) as DoubleValue
+
+        then:
+        doubleValue != null
+        doubleValue.isSingleValue()
+        doubleValue.getValue() == expectedSingleValue
+        doubleValue.getValues() == null
+    }
+
     void 'should convert single double value'() {
         given:
         final Object singleValue = 5.48

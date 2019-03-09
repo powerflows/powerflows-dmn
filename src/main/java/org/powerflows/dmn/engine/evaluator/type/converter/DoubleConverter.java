@@ -31,8 +31,10 @@ public class DoubleConverter implements TypeConverter<Double> {
     @Override
     public SpecifiedTypeValue<Double> convert(final Object unspecifiedValue) {
         final SpecifiedTypeValue<Double> doubleTypeValue;
-
-        if (unspecifiedValue instanceof Collection) {
+        if (unspecifiedValue == null) {
+            final Double doubleValue = null;
+            doubleTypeValue = new DoubleValue(doubleValue);
+        } else if (unspecifiedValue instanceof Collection) {
             final List<Double> doubleValues = convertCollection((Collection<Object>) unspecifiedValue);
             doubleTypeValue = new DoubleValue(doubleValues);
         } else if (unspecifiedValue.getClass().isArray()) {

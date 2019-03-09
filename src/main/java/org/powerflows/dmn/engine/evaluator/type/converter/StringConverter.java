@@ -30,8 +30,10 @@ public class StringConverter implements TypeConverter<String> {
     @Override
     public SpecifiedTypeValue<String> convert(final Object unspecifiedValue) {
         final SpecifiedTypeValue<String> stringTypeValue;
-
-        if (unspecifiedValue instanceof Collection) {
+        if (unspecifiedValue == null) {
+            final String stringValues = null;
+            stringTypeValue = new StringValue(stringValues);
+        } else if (unspecifiedValue instanceof Collection) {
             final List<String> stringValues = convertCollection((Collection<Object>) unspecifiedValue);
             stringTypeValue = new StringValue(stringValues);
         } else if (unspecifiedValue.getClass().isArray()) {

@@ -32,6 +32,21 @@ class IntegerConverterSpec extends Specification {
     }
 
 
+    void 'should convert single null value'() {
+        given:
+        final Object singleValue = null
+        final Integer expectedSingleValue = null
+
+        when:
+        final IntegerValue integerValue = integerTypeConverter.convert(singleValue) as IntegerValue
+
+        then:
+        integerValue != null
+        integerValue.isSingleValue()
+        integerValue.getValue() == expectedSingleValue
+        integerValue.getValues() == null
+    }
+
     void 'should convert single integer value'() {
         given:
         final Object singleValue = 5
