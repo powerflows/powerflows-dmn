@@ -51,3 +51,6 @@ rules:
       age: 20
     out:
       allow: true
+  - description: No input entry
+    out:
+      allow: true

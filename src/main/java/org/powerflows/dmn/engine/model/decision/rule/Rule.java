@@ -78,7 +78,6 @@ public class Rule implements Serializable {
 
         @Override
         protected Rule assembleProduct() {
-            validateIsNonEmpty(product.inputEntries, "At least one input entry is required");
             validateIsNonEmpty(product.outputEntries, "At least one output entry is required");
 
             this.product.inputEntries = unmodifiableList(this.product.inputEntries);
