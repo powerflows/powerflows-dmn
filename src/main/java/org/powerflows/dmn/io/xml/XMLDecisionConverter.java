@@ -122,7 +122,7 @@ public class XMLDecisionConverter implements DecisionToExternalModelConverter<XM
             final String name = selectOrCreateUniqueName(inputNames, input.getId(), null, input.getLabel(), inputNameSequence);
 
             builder.withInput(inputBuilder -> {
-                if (input.getInputVariable() != null) {
+                if (input.getInputVariable() != null && !input.getInputVariable().trim().isEmpty()) {
                     inputBuilder.nameAlias(input.getInputVariable());
                 }
 
