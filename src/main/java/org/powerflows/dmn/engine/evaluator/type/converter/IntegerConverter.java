@@ -31,8 +31,10 @@ public class IntegerConverter implements TypeConverter<Integer> {
     @Override
     public SpecifiedTypeValue<Integer> convert(final Object unspecifiedValue) {
         final SpecifiedTypeValue<Integer> integerTypeValue;
-
-        if (unspecifiedValue instanceof Collection) {
+        if (unspecifiedValue == null) {
+            final Integer integerValue = null;
+            integerTypeValue = new IntegerValue(integerValue);
+        } else if (unspecifiedValue instanceof Collection) {
             final List<Integer> integerValues = convertCollection((Collection<Object>) unspecifiedValue);
             integerTypeValue = new IntegerValue(integerValues);
         } else if (unspecifiedValue.getClass().isArray()) {

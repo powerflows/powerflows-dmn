@@ -30,6 +30,20 @@ class StringConverterSpec extends Specification {
         stringTypeConverter = converterFactory.getInstance(ValueType.STRING)
     }
 
+    void 'should convert single null value'() {
+        given:
+        final Object singleValue = null
+        final String expectedSingleValue = null
+
+        when:
+        final StringValue stringValue = stringTypeConverter.convert(singleValue) as StringValue
+
+        then:
+        stringValue != null
+        stringValue.isSingleValue()
+        stringValue.getValue() == expectedSingleValue
+        stringValue.getValues() == null
+    }
 
     void 'should convert single string value'() {
         given:
