@@ -20,6 +20,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.mvel2.integration.VariableResolverFactory;
 import org.mvel2.integration.impl.MapVariableResolverFactory;
 import org.powerflows.dmn.engine.evaluator.context.EvaluationContext;
+import org.powerflows.dmn.engine.evaluator.expression.provider.binding.ExpressionEvaluationException;
 import org.powerflows.dmn.engine.evaluator.expression.provider.feel.converter.ExpressionConverter;
 import org.powerflows.dmn.engine.evaluator.expression.provider.feel.converter.mvel.FeelToMvelExpressionConverter;
 import org.powerflows.dmn.engine.model.decision.expression.Expression;
@@ -57,7 +58,19 @@ class FeelExpressionEvaluationProvider extends MvelExpressionEvaluationProvider 
 
     @Override
     public Serializable evaluateOutputEntry(final OutputEntry outputEntry, final EvaluationContext evaluationContext) {
-        throw new UnsupportedOperationException("Evaluation of FEEL expressions for output entry is not supported");
+        log.debug("Starting evaluation of output entry with evaluation context: {}", outputEntry, evaluationContext);
+
+        Serializable result = outputEntry.getExpression().getValue();
+
+        if (result instanceof String && ((String) result).startsWith("\"") && ((String) result).endsWith("\"")) {
+            result = ((String) result).substring(1, ((String) result).length() - 1);
+        } else if (result instanceof String) {
+            throw new ExpressionEvaluationException("Can not evaluate expression '" + outputEntry.getExpression().getValue() + "'. Only literals can be evaluated for output entry with FEEL expression");
+        }
+
+        log.debug("Evaluated output entry result: {}", result);
+
+        return result;
     }
 
     @Override

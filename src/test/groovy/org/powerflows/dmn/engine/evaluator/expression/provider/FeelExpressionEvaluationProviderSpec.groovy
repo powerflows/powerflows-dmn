@@ -22,6 +22,7 @@ import org.powerflows.dmn.engine.model.decision.expression.Expression
 import org.powerflows.dmn.engine.model.decision.expression.ExpressionType
 import org.powerflows.dmn.engine.model.decision.field.Input
 import org.powerflows.dmn.engine.model.decision.rule.entry.InputEntry
+import org.powerflows.dmn.engine.model.decision.rule.entry.OutputEntry
 import org.powerflows.dmn.engine.model.evaluation.variable.DecisionVariables
 import spock.lang.Shared
 import spock.lang.Specification
@@ -134,16 +135,48 @@ class FeelExpressionEvaluationProviderSpec extends Specification {
         'not(4)'        | 2               || true
     }
 
-    void 'should throw exception for evaluate output entry'() {
+    @Unroll
+    void 'should evaluate output entry feel expression value #entryExpressionValue with #expectedEntryResult'(
+            final Object entryExpressionValue, final Serializable expectedEntryResult) {
         given:
+        final Expression entryExpression = [value: entryExpressionValue, type: ExpressionType.FEEL]
+        final OutputEntry outputEntry = [expression: entryExpression, name: 'TestOutputName']
+
+        final DecisionVariables decisionVariables = new DecisionVariables([:])
+        final EvaluationContext evaluationContext = new EvaluationContext(decisionVariables)
 
         when:
-        expressionEvaluationProvider.evaluateOutputEntry(null, null)
+        final Serializable inputEntryResult = expressionEvaluationProvider.evaluateOutputEntry(outputEntry, evaluationContext)
 
         then:
-        final UnsupportedOperationException exception = thrown()
+        inputEntryResult == expectedEntryResult
+        0 * _
+
+        where:
+        entryExpressionValue || expectedEntryResult
+        '"some string"'      || 'some string'
+        '"not(4)"'           || 'not(4)'
+        4                    || 4
+        2.3d                 || 2.3d
+        true                 || true
+        false                || false
+    }
+
+    void 'should throw exception for evaluate output entry if string no literal'() {
+        given:
+        final Expression entryExpression = [value: 'not(4)', type: ExpressionType.FEEL]
+        final OutputEntry outputEntry = [expression: entryExpression, name: 'TestOutputName']
+
+        final DecisionVariables decisionVariables = new DecisionVariables([:])
+        final EvaluationContext evaluationContext = new EvaluationContext(decisionVariables)
+
+        when:
+        expressionEvaluationProvider.evaluateOutputEntry(outputEntry, evaluationContext)
+
+        then:
+        final ExpressionEvaluationException exception = thrown()
         exception != null
-        exception.getMessage() == 'Evaluation of FEEL expressions for output entry is not supported'
+        exception.getMessage() == "Can not evaluate expression 'not(4)'. Only literals can be evaluated for output entry with FEEL expression"
     }
 
     void 'should throw exception for empty value of collection'() {
