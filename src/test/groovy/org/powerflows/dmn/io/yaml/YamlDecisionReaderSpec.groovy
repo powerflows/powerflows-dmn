@@ -98,7 +98,7 @@ class YamlDecisionReaderSpec extends Specification {
             expressionType == ExpressionType.GROOVY
             inputs.size() == 2
             outputs.size() == 1
-            rules.size() == 5
+            rules.size() == 6
         }
 
         with(decision.inputs[0]) {
@@ -192,5 +192,13 @@ class YamlDecisionReaderSpec extends Specification {
             outputEntries[0].expression.value == true
         }
 
+        with(decision.rules[5]) {
+            description == 'No input entry'
+
+            inputEntries.isEmpty()
+            outputEntries[0].name == 'allow'
+            outputEntries[0].expression.type == ExpressionType.GROOVY
+            outputEntries[0].expression.value == true
+        }
     }
 }

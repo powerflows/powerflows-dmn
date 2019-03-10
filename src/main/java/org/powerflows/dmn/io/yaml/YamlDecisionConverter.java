@@ -219,16 +219,18 @@ public class YamlDecisionConverter implements DecisionToExternalModelConverter<Y
                         .build()));
 
         model.getRules().forEach(rule -> builder.withRule(ruleBuilder -> {
-            rule.getIn().forEach((name, inputEntry) -> ruleBuilder
-                    .withInputEntry(inputEntryBuilder -> inputEntryBuilder
-                            .name(name)
-                            .nameAlias(inputEntry.getNameAlias())
-                            .evaluationMode(inputEntry.getEvaluationMode())
-                            .withExpression(expressionBuilder -> expressionBuilder
-                                    .type(inputEntry.getExpressionType())
-                                    .value((Serializable) inputEntry.getExpression())
-                                    .build())
-                            .build()));
+            if (rule.getIn() != null) {
+                rule.getIn().forEach((name, inputEntry) -> ruleBuilder
+                        .withInputEntry(inputEntryBuilder -> inputEntryBuilder
+                                .name(name)
+                                .nameAlias(inputEntry.getNameAlias())
+                                .evaluationMode(inputEntry.getEvaluationMode())
+                                .withExpression(expressionBuilder -> expressionBuilder
+                                        .type(inputEntry.getExpressionType())
+                                        .value((Serializable) inputEntry.getExpression())
+                                        .build())
+                                .build()));
+            }
 
             rule.getOut().forEach((name, outputEntry) -> ruleBuilder
                     .withOutputEntry(outputEntryBuilder -> outputEntryBuilder

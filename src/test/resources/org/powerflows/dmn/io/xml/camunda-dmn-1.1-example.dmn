@@ -64,6 +64,23 @@
           <text>"The output"</text>
         </outputEntry>
       </rule>
+      <rule id="DecisionRule_0cj16hi">
+        <inputEntry id="UnaryTests_00u6clr">
+          <text> </text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_084dgjr">
+          <text></text>
+        </inputEntry>ó
+        <inputEntry id="UnaryTests_002esir">
+          <text></text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_04ch9zr">
+          <text>"test"</text>
+        </outputEntry>
+        <outputEntry id="LiteralExpression_16r1xyr">
+          <text></text>
+        </outputEntry>
+      </rule>
     </decisionTable>
   </decision>
   <decision id="Decision_0replv7" name="Another Table">

@@ -51,6 +51,9 @@ rules:
       age: 20
     out:
       allow: true
+  - description: No input entry
+    out:
+      allow: true
 ---
 id: sample_decision_2
 name: Sample Decision One
@@ -103,5 +106,8 @@ rules:
             "pink"
           )
       age: 20
+    out:
+      allow: true
+  - description: No input entry
     out:
       allow: true

@@ -225,7 +225,7 @@ class XmlDecisionReaderSpec extends Specification {
             getHitPolicy() == HitPolicy.FIRST
             getInputs().size() == 3
             getOutputs().size() == 2
-            getRules().size() == 2
+            getRules().size() == 3
         }
 
         with(result.getInputs()[0]) {
@@ -306,5 +306,7 @@ class XmlDecisionReaderSpec extends Specification {
             getExpression().getType() == ExpressionType.FEEL
             getExpression().getValue() == '"The output"'
         }
+
+        result.getRules()[1].getInputEntries().isEmpty()
     }
 }
