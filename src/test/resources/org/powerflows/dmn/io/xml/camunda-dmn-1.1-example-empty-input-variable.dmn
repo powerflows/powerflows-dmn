@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/DMN/20151101/dmn.xsd" xmlns:camunda="http://camunda.org/schema/1.0/dmn" xmlns:biodi="http://bpmn.io/schema/dmn/biodi/1.0" id="Definitions_0ulq5ro" name="DRD" namespace="http://camunda.org/schema/1.0/dmn">
+  <decision id="some_table_id_1" name="Some Table Name">
+    <extensionElements>
+      <biodi:bounds x="664" y="260" width="180" height="80" />
+    </extensionElements>
+    <decisionTable id="decisionTable_1" hitPolicy="FIRST">
+      <input id="InputClause_03bkdz8" camunda:inputVariable=" ">
+        <inputExpression id="LiteralExpression_10aewft" typeRef="string">
+          <text></text>
+        </inputExpression>
+        <inputValues id="UnaryTests_1snl8hh">
+          <text>"one","two","blue","purple","red"</text>
+        </inputValues>
+      </input>
+      <output id="output_1" label="Some Output 1 Description" name="outputOne" typeRef="boolean" />
+      <output id="OutputClause_0t3ypt2" label="Some Output 2 Description" name="outputTwo" typeRef="string">
+        <outputValues id="UnaryTests_11t32y5" >
+          <text>"test","jest"</text>
+        </outputValues>
+      </output>
+      <rule id="DecisionRule_1ugy0yf">
+        <description>Some Rule 1 Description</description>
+        <inputEntry id="UnaryTests_0bwfl4p">
+          <text>not("blue", "purple")</text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_0k7rvml" expressionLanguage="groovy">
+          <text>someVariable1 || someVariable2</text>
+        </outputEntry>
+        <outputEntry id="LiteralExpression_0v2xpmc">
+          <text></text>
+        </outputEntry>
+      </rule>
+    </decisionTable>
+  </decision>
+</definitions>
