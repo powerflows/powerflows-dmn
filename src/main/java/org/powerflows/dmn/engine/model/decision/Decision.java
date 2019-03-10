@@ -137,7 +137,6 @@ public class Decision implements Serializable {
 
         @Override
         protected Decision assembleProduct() {
-            validateIsNonEmpty(product.inputs, "At least one input is required");
             validateIsNonEmpty(product.outputs, "At least one output is required");
             validateIsNonEmpty(product.rules, "At least one rule is required");
 

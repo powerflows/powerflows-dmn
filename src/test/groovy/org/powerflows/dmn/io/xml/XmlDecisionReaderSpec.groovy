@@ -33,6 +33,7 @@ class XmlDecisionReaderSpec extends Specification {
     final String camundaExampleXmlDuplicateIds = 'camunda-dmn-1.1-example-duplicate-ids.dmn'
     final String camundaExampleXmlDuplicateLabels = 'camunda-dmn-1.1-example-duplicate-labels.dmn'
     final String camundaExampleXmlUnknownTypeRef = 'camunda-dmn-1.1-example-unknown-type-ref.dmn'
+    final String camundaExampleXmlNoInputs = 'camunda-dmn-1.1-example-no-inputs.dmn'
 
     @Shared
     private XmlDecisionReader reader
@@ -135,6 +136,20 @@ class XmlDecisionReaderSpec extends Specification {
         with(result.get()) {
             getInputs()[0].name == 'duplicate'
             getInputs()[1].name == 'input_0'
+        }
+    }
+
+    void 'should read if no inputs'() {
+        given:
+        final InputStream inputStream = this.class.getResourceAsStream(camundaExampleXmlNoInputs)
+
+        when:
+        final Optional<Decision> result = reader.read(inputStream)
+
+        then:
+        result.isPresent()
+        with(result.get()) {
+            getInputs().isEmpty()
         }
     }
 
