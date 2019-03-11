@@ -23,6 +23,7 @@ import org.powerflows.dmn.engine.evaluator.exception.EvaluationException;
 import org.powerflows.dmn.engine.evaluator.rule.RuleEvaluator;
 import org.powerflows.dmn.engine.model.decision.Decision;
 import org.powerflows.dmn.engine.model.decision.HitPolicy;
+import org.powerflows.dmn.engine.model.decision.expression.Expression;
 import org.powerflows.dmn.engine.model.decision.expression.ExpressionType;
 import org.powerflows.dmn.engine.model.decision.field.Input;
 import org.powerflows.dmn.engine.model.decision.field.Output;
@@ -112,7 +113,7 @@ public class DecisionEvaluator {
     private void validateDecisionVariables(final List<Input> inputs, final DecisionVariables decisionVariables) {
         final String invalidInputNames = inputs
                 .stream()
-                .filter(input -> input.getExpression().getValue() != null && !ExpressionType.LITERAL.equals(input.getExpression().getType()))
+                .filter(input -> !isLiteral(input.getExpression()))
                 .filter(input -> decisionVariables.isPresent(input.getName()))
                 .map(Input::getName)
                 .collect(Collectors.joining(","));
@@ -120,6 +121,10 @@ public class DecisionEvaluator {
         if (!invalidInputNames.isEmpty()) {
             throw new EvaluationException("Can not apply decision variables to inputs '" + invalidInputNames + "'. Only to inputs with literal expression possible.");
         }
+    }
+
+    private boolean isLiteral(final Expression expression) {
+        return ExpressionType.LITERAL.equals(expression.getType()) || ExpressionType.FEEL.equals(expression.getType());
     }
 
     private boolean isSingleNonUniqueRuleResultExpected(final Decision decision) {
