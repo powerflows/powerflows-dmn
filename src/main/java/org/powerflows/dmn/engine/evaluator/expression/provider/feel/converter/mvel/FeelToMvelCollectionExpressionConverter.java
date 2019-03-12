@@ -34,6 +34,10 @@ public class FeelToMvelCollectionExpressionConverter implements ExpressionConver
 
     @Override
     public String convert(final String feelExpression, final String inputName) {
+        if(inputName == null){
+            throw new ExpressionEvaluationException("Can not evaluate feel expression '" + feelExpression + "', due to applicable only for input entry expressions");
+        }
+
         final String[] expressions = feelExpression.split(collectionPattern, -1);
         final List<String> mvelExpressions = new ArrayList<>();
         for (String expression : expressions) {

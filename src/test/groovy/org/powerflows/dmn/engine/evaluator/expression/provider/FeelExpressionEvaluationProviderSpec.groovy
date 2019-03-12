@@ -114,13 +114,13 @@ class FeelExpressionEvaluationProviderSpec extends Specification {
     }
 
     @Unroll
-    void 'should evaluate input feel expression value #inputExpression and variables #contextVariable with #expectedInputResult'(
-            final Object inputExpression, final Object contextVariable, final Serializable expectedInputResult) {
+    void 'should evaluate input feel expression value #inputExpression with #expectedInputResult'(
+            final Object inputExpression, final Serializable expectedInputResult) {
         given:
         final Expression expression = [value: inputExpression, type: ExpressionType.FEEL]
         final Input input = [name: 'TestInputName', expression: expression]
 
-        final DecisionVariables decisionVariables = new DecisionVariables([TestInputName: contextVariable])
+        final DecisionVariables decisionVariables = new DecisionVariables([:])
         final EvaluationContext contextVariables = new EvaluationContext(decisionVariables)
 
         when:
@@ -130,9 +130,9 @@ class FeelExpressionEvaluationProviderSpec extends Specification {
         inputEntryResult == expectedInputResult
 
         where:
-        inputExpression | contextVariable || expectedInputResult
-        'not(4)'        | 4               || false
-        'not(4)'        | 2               || true
+        inputExpression                        || expectedInputResult
+        '"aaa"'                                || 'aaa'
+        'date and time("2015-11-30T12:00:00")' || format.parse('2015-11-30T12:00:00')
     }
 
     @Unroll
@@ -160,23 +160,6 @@ class FeelExpressionEvaluationProviderSpec extends Specification {
         2.3d                 || 2.3d
         true                 || true
         false                || false
-    }
-
-    void 'should throw exception for evaluate output entry if string no literal'() {
-        given:
-        final Expression entryExpression = [value: 'not(4)', type: ExpressionType.FEEL]
-        final OutputEntry outputEntry = [expression: entryExpression, name: 'TestOutputName']
-
-        final DecisionVariables decisionVariables = new DecisionVariables([:])
-        final EvaluationContext evaluationContext = new EvaluationContext(decisionVariables)
-
-        when:
-        expressionEvaluationProvider.evaluateOutputEntry(outputEntry, evaluationContext)
-
-        then:
-        final ExpressionEvaluationException exception = thrown()
-        exception != null
-        exception.getMessage() == "Can not evaluate expression 'not(4)'. Only literals can be evaluated for output entry with FEEL expression"
     }
 
     void 'should throw exception for empty value of collection'() {
@@ -211,5 +194,73 @@ class FeelExpressionEvaluationProviderSpec extends Specification {
         final ExpressionEvaluationException exception = thrown()
         exception != null
         exception.getMessage() == "Can not evaluate feel expression '>=='"
+    }
+
+    void 'should throw exception for evaluate output entry for "not" expression'() {
+        given:
+        final Expression entryExpression = [value: 'not(4)', type: ExpressionType.FEEL]
+        final OutputEntry outputEntry = [expression: entryExpression, name: 'TestOutputName']
+
+        final DecisionVariables decisionVariables = new DecisionVariables([:])
+        final EvaluationContext evaluationContext = new EvaluationContext(decisionVariables)
+
+        when:
+        expressionEvaluationProvider.evaluateOutputEntry(outputEntry, evaluationContext)
+
+        then:
+        final ExpressionEvaluationException exception = thrown()
+        exception != null
+        exception.getMessage() == "Can not evaluate feel expression 'not(4)', due to applicable only for input entry expressions"
+    }
+
+    void 'should throw exception for evaluate output entry for "comparison" expression'() {
+        given:
+        final Expression entryExpression = [value: '>=4', type: ExpressionType.FEEL]
+        final OutputEntry outputEntry = [expression: entryExpression, name: 'TestOutputName']
+
+        final DecisionVariables decisionVariables = new DecisionVariables([:])
+        final EvaluationContext evaluationContext = new EvaluationContext(decisionVariables)
+
+        when:
+        expressionEvaluationProvider.evaluateOutputEntry(outputEntry, evaluationContext)
+
+        then:
+        final ExpressionEvaluationException exception = thrown()
+        exception != null
+        exception.getMessage() == "Can not evaluate feel expression '>=4', due to applicable only for input entry expressions"
+    }
+
+    void 'should throw exception for evaluate output entry for "collection" expression'() {
+        given:
+        final Expression entryExpression = [value: '1,2', type: ExpressionType.FEEL]
+        final OutputEntry outputEntry = [expression: entryExpression, name: 'TestOutputName']
+
+        final DecisionVariables decisionVariables = new DecisionVariables([:])
+        final EvaluationContext evaluationContext = new EvaluationContext(decisionVariables)
+
+        when:
+        expressionEvaluationProvider.evaluateOutputEntry(outputEntry, evaluationContext)
+
+        then:
+        final ExpressionEvaluationException exception = thrown()
+        exception != null
+        exception.getMessage() == "Can not evaluate feel expression '1,2', due to applicable only for input entry expressions"
+    }
+
+    void 'should throw exception for evaluate output entry for "range" expression'() {
+        given:
+        final Expression entryExpression = [value: '[1..2]', type: ExpressionType.FEEL]
+        final OutputEntry outputEntry = [expression: entryExpression, name: 'TestOutputName']
+
+        final DecisionVariables decisionVariables = new DecisionVariables([:])
+        final EvaluationContext evaluationContext = new EvaluationContext(decisionVariables)
+
+        when:
+        expressionEvaluationProvider.evaluateOutputEntry(outputEntry, evaluationContext)
+
+        then:
+        final ExpressionEvaluationException exception = thrown()
+        exception != null
+        exception.getMessage() == "Can not evaluate feel expression '[1..2]', due to applicable only for input entry expressions"
     }
 }
