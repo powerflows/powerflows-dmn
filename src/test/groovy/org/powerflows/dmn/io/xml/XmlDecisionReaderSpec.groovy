@@ -295,7 +295,7 @@ class XmlDecisionReaderSpec extends Specification {
 
         with(result.getRules()[0]) {
             getInputEntries().size() == 2
-            getOutputEntries().size() == 1
+            getOutputEntries().size() == 2
         }
 
         with(result.getRules()[0].getInputEntries()[0]) {
@@ -318,7 +318,7 @@ class XmlDecisionReaderSpec extends Specification {
 
         with(result.getRules()[1]) {
             getInputEntries().size() == 2
-            getOutputEntries().size() == 1
+            getOutputEntries().size() == 2
         }
 
         with(result.getRules()[1].getInputEntries()[0]) {
@@ -334,6 +334,12 @@ class XmlDecisionReaderSpec extends Specification {
         }
 
         with(result.getRules()[1].getOutputEntries()[0]) {
+            getName() == 'Some_Output_1_Description'
+            getExpression().getType() == ExpressionType.FEEL
+            getExpression().getValue() == null
+        }
+
+        with(result.getRules()[1].getOutputEntries()[1]) {
             getName() == 'output_0'
             getExpression().getType() == ExpressionType.FEEL
             getExpression().getValue() == '"The output"'
