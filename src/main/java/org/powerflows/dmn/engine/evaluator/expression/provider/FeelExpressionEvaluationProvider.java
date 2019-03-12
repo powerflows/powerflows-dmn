@@ -46,7 +46,7 @@ class FeelExpressionEvaluationProvider extends MvelExpressionEvaluationProvider 
     public Serializable evaluateInput(final Input input, final EvaluationContext evaluationContext) {
         log.debug("Starting evaluation of input: {} with evaluation context: {}", input, evaluationContext);
 
-        final String mvelInputExpressionValue = expressionConverter.convert((String) input.getExpression().getValue(), input.getName());
+        final String mvelInputExpressionValue = expressionConverter.convert((String) input.getExpression().getValue(), null);
         final Expression mvelInputExpression = Expression.builder().type(input.getExpression().getType()).value(mvelInputExpressionValue).build();
 
         final Serializable result = evaluate(mvelInputExpression, evaluationContext);
@@ -60,13 +60,10 @@ class FeelExpressionEvaluationProvider extends MvelExpressionEvaluationProvider 
     public Serializable evaluateOutputEntry(final OutputEntry outputEntry, final EvaluationContext evaluationContext) {
         log.debug("Starting evaluation of output entry with evaluation context: {}", outputEntry, evaluationContext);
 
-        Serializable result = outputEntry.getExpression().getValue();
+        final String mvelInputExpressionValue = expressionConverter.convert(String.valueOf(outputEntry.getExpression().getValue()), null);
+        final Expression mvelInputExpression = Expression.builder().type(outputEntry.getExpression().getType()).value(mvelInputExpressionValue).build();
 
-        if (result instanceof String && ((String) result).startsWith("\"") && ((String) result).endsWith("\"")) {
-            result = ((String) result).substring(1, ((String) result).length() - 1);
-        } else if (result instanceof String) {
-            throw new ExpressionEvaluationException("Can not evaluate expression '" + outputEntry.getExpression().getValue() + "'. Only literals can be evaluated for output entry with FEEL expression");
-        }
+        final Serializable result = evaluate(mvelInputExpression, evaluationContext);
 
         log.debug("Evaluated output entry result: {}", result);
 

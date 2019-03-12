@@ -21,6 +21,10 @@ public class FeelToMvelEqualExpressionConverter implements ExpressionConverter {
 
     @Override
     public String convert(final String feelExpression, final String inputName) {
+        if (inputName == null) {
+            return feelExpression;
+        }
+
         return inputName + "==" + feelExpression;
     }
 
