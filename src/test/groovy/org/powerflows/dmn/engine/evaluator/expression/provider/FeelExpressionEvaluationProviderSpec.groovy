@@ -69,12 +69,16 @@ class FeelExpressionEvaluationProviderSpec extends Specification {
         'not("A")'                                                                     | 'B'                                 || true
         'not(1,2,3)'                                                                   | 4                                   || true
         'not(1,2,3)'                                                                   | 3                                   || false
+        'not("a","b","c")'                                                             | 'd'                                 || true
+        'not("a","b","c")'                                                             | 'c'                                 || false
         'not([1..3])'                                                                  | 4                                   || true
         'not([1..3])'                                                                  | 3                                   || false
         'not(>=3, <=1)'                                                                | 2                                   || true
         'not(>=3, <=1)'                                                                | 1                                   || false
         '4'                                                                            | 4                                   || true
         '4'                                                                            | 2                                   || false
+        '"abc"'                                                                        | 'abc'                               || true
+        '"abc"'                                                                        | 'abb'                               || false
         '<4'                                                                           | 4                                   || false
         '<4'                                                                           | 3                                   || true
         '<=4'                                                                          | 4                                   || true
@@ -85,6 +89,8 @@ class FeelExpressionEvaluationProviderSpec extends Specification {
         '>= 4'                                                                         | 4                                   || true
         '1,2,3'                                                                        | 4                                   || false
         '1,2,3'                                                                        | 3                                   || true
+        '"a","b","c"'                                                                  | 'd'                                 || false
+        '"a","b","c"'                                                                  | 'c'                                 || true
         '>10,5,<=3'                                                                    | 4                                   || false
         '>10,5,<=3'                                                                    | 11                                  || true
         '>10,5,<=3'                                                                    | 5                                   || true
