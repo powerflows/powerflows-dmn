@@ -65,6 +65,7 @@ class GroovyExpressionEvaluationProviderSpec extends Specification {
         '2 == x'             | 2               || true
         '2 == x'             | 3               || false
         '(2 + 5) == x'       | 7               || true
+        '"abc"'              | 7               || 'abc'
     }
 
     void 'should evaluate input entry groovy expression with default alias usage'() {
@@ -105,6 +106,7 @@ class GroovyExpressionEvaluationProviderSpec extends Specification {
         '2 == x'             | 2               || true
         '2 == x'             | 3               || false
         '(2 + 5) == x'       | 7               || true
+        '"abc"'              | 7               || 'abc'
     }
 
     @Unroll
@@ -128,6 +130,7 @@ class GroovyExpressionEvaluationProviderSpec extends Specification {
         '2 < x'         | 4               || true
         '2 + x'         | 3               || 5
         '"a" + 4'       | null            || 'a4'
+        '"abc"'         | 7               || 'abc'
     }
 
     void 'should throw exception when missing variable evaluating groovy expression'() {

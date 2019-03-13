@@ -45,7 +45,8 @@ class JuelExpressionEvaluationProviderSpec extends Specification {
 
     @Unroll
     void 'should evaluate input entry juel expression value #entryExpressionValue and variables #contextVariable with #expectedEntryResult'(
-            final Object entryExpressionValue, final Serializable contextVariable, final Serializable expectedEntryResult) {
+            final Object entryExpressionValue,
+            final Serializable contextVariable, final Serializable expectedEntryResult) {
         given:
         final Expression entryExpression = [value: entryExpressionValue, type: ExpressionType.JUEL]
         final InputEntry inputEntry = [expression: entryExpression, nameAlias: 'cellInput']
@@ -66,6 +67,7 @@ class JuelExpressionEvaluationProviderSpec extends Specification {
         '2 == x'             | 2               || true
         '2 == x'             | 3               || false
         '(2 + 5) == x'       | 7               || true
+        '"abc"'              | 7               || 'abc'
     }
 
     void 'should evaluate input entry juel expression with default alias usage'() {
@@ -85,7 +87,8 @@ class JuelExpressionEvaluationProviderSpec extends Specification {
 
     @Unroll
     void 'should evaluate output entry juel expression value #entryExpressionValue and variables #contextVariable with #expectedEntryResult'(
-            final Object entryExpressionValue, final Serializable contextVariable, final Serializable expectedEntryResult) {
+            final Object entryExpressionValue,
+            final Serializable contextVariable, final Serializable expectedEntryResult) {
         given:
         final Expression entryExpression = [value: entryExpressionValue, type: ExpressionType.JUEL]
         final OutputEntry outputEntry = [expression: entryExpression]
@@ -106,11 +109,13 @@ class JuelExpressionEvaluationProviderSpec extends Specification {
         '2 == x'             | 2               || true
         '2 == x'             | 3               || false
         '(2 + 5) == x'       | 7               || true
+        '"abc"'              | 7               || 'abc'
     }
 
     @Unroll
     void 'should evaluate input juel expression value #inputExpression and variables #contextVariable with #expectedInputResult'(
-            final Object inputExpression, final ValueType inputType, final Serializable contextVariable, final Serializable expectedInputResult) {
+            final Object inputExpression,
+            final ValueType inputType, final Serializable contextVariable, final Serializable expectedInputResult) {
         given:
         final Expression expression = [value: inputExpression, type: ExpressionType.JUEL]
         final Input input = [name: 'TestInputName', expression: expression, type: inputType]
@@ -129,6 +134,7 @@ class JuelExpressionEvaluationProviderSpec extends Specification {
         '2 < x'         | ValueType.BOOLEAN | 4               || true
         '2 + x'         | ValueType.INTEGER | 3               || 5
         '4 * x'         | ValueType.STRING  | 4               || '16'
+        '"abc"'         | ValueType.STRING  | 7               || 'abc'
     }
 
     void 'should bind static method and make it available in expression'() {
