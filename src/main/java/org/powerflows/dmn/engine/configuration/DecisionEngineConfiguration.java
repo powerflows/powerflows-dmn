@@ -19,8 +19,17 @@ package org.powerflows.dmn.engine.configuration;
 
 import org.powerflows.dmn.engine.DecisionEngine;
 
+/**
+ * Interface for DecisionEngine configurers.
+ * @see DefaultDecisionEngineConfiguration
+ */
 public interface DecisionEngineConfiguration {
 
+    /**
+     * Create ready to use decision engine.
+     *
+     * @return DecisionEngine instance
+     */
     DecisionEngine configure();
 
 }

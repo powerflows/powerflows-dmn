@@ -15,6 +15,9 @@
  */
 package org.powerflows.dmn.engine.evaluator.expression.provider.binding;
 
+/**
+ * Functional interface to allow executing functions having any number of arguments and returning any results.
+ */
 @FunctionalInterface
 public interface BoundMethod {
     Object execute(Object... args);

@@ -24,6 +24,10 @@ import org.powerflows.dmn.engine.model.evaluation.variable.DecisionVariables;
 import java.io.Serializable;
 import java.util.HashMap;
 
+/**
+ * Container for values available to {@link org.powerflows.dmn.engine.DecisionEngine} during evaluation.
+ * {@link EvaluationContext} is mutable, it's content is shaped by decision table being evaluated
+ */
 @ToString(callSuper = true)
 public class EvaluationContext extends AbstractDecisionVariables implements Serializable {
 

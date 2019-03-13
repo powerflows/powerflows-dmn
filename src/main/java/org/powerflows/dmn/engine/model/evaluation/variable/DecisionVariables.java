@@ -24,6 +24,10 @@ import java.util.Map;
 
 import static java.util.Collections.unmodifiableMap;
 
+/**
+ * Variables container used to pass values to decision engine.
+ * {@link DecisionVariables} is immutable.
+ */
 @ToString(callSuper = true)
 public class DecisionVariables extends AbstractDecisionVariables implements Serializable {
 

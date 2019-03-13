@@ -30,6 +30,10 @@ import java.util.function.Function;
 
 import static java.util.Collections.unmodifiableList;
 
+/**
+ * Represents single decision rule.
+ * Contains lists of input and output entries that get evaluated by decision engine.
+ */
 @EqualsAndHashCode
 @ToString
 public class Rule implements Serializable {

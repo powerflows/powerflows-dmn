@@ -19,8 +19,23 @@ import org.powerflows.dmn.engine.model.decision.Decision;
 
 import java.io.OutputStream;
 
+/**
+ * Defines decision writing contract.
+ */
 public interface DecisionWriter {
+    /**
+     * Writes single Decision.
+     *
+     * @param decision to write
+     * @param outputStream target where decision is written to
+     */
     void write(Decision decision, OutputStream outputStream);
 
+    /**
+     * Writes multiple decisions.
+     *
+     * @param decisions collection of decisions to write. Writing is performed in the order provided by {@link Iterable}
+     * @param outputStream target where decisions are written to
+     */
     void writeAll(Iterable<Decision> decisions, OutputStream outputStream);
 }

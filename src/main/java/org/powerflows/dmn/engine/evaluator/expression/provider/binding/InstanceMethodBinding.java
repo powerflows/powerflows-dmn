@@ -19,8 +19,16 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.function.Supplier;
 
+/**
+ * Configures given instance {@link Method} to be executed as function in expression.
+ */
 public class InstanceMethodBinding extends AbstractMethodBinding {
 
+    /**
+     * @param name             of bound function
+     * @param method           the call is delegated to
+     * @param instanceSupplier supplies instance on which the method is called
+     */
     public InstanceMethodBinding(final String name, final Method method, final Supplier<Object> instanceSupplier) {
         super(name, method, instanceSupplier);
         if ((method.getModifiers() & Modifier.STATIC) != 0) {

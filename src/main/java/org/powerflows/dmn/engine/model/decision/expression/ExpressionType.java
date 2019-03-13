@@ -16,11 +16,38 @@
 
 package org.powerflows.dmn.engine.model.decision.expression;
 
+/**
+ * Types of expressions that the engine understands.
+ */
 public enum ExpressionType {
+    /**
+     * Not an expression.
+     * Literal value of given type.
+     */
     LITERAL,
+    /**
+     * Subset of OMG S-FEEL (Friendly Enough Expression Language).
+     * https://www.omg.org/spec/DMN/1.1
+     */
     FEEL,
+    /**
+     * Java Unified Expression Language.
+     * http://juel.sourceforge.net/
+     */
     JUEL,
+    /**
+     * Groovy executed with {@link javax.script.ScriptEngine}
+     * http://groovy-lang.org/
+     */
     GROOVY,
+    /**
+     * Javascript executed with {@link javax.script.ScriptEngine}
+     * Since JDK8 its Nashorn https://wiki.openjdk.java.net/display/Nashorn/Main
+     */
     JAVASCRIPT,
+    /**
+     * MVEL Expression language
+     * http://mvel.documentnode.com/
+     */
     MVEL
 }
