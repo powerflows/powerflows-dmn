@@ -1,0 +1,13 @@
+id: sample_decision_1
+name: Sample Decision One
+hit-policy: UNIQUE
+expression-type: GROOVY
+fields:
+  out:
+    allow:
+      type: BOOLEAN
+      description: We expect a decision, if we have access to do it
+rules:
+  - description: 3 allows always
+    out:
+      allow: true

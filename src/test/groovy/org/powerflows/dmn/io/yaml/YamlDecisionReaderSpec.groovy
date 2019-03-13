@@ -25,6 +25,7 @@ import spock.lang.Specification
 
 class YamlDecisionReaderSpec extends Specification {
     final String singleDecision = 'test-single-decision.yml'
+    final String singleDecisionNoInputs = 'test-single-decision-no-inputs.yml'
     final String multipleDecisions = 'test-multiple-decisions.yml'
     final String decisionNamePrefix = 'sample_decision_'
     final String decisionId = 'sample_decision_2'
@@ -51,6 +52,21 @@ class YamlDecisionReaderSpec extends Specification {
         result != null
         result.isPresent()
         assertDecision(result.get(), decisionNamePrefix + 1)
+    }
+
+    void 'should read decision with no inputs using InputStream'() {
+        given:
+        final InputStream inputStream = this.class.getResourceAsStream(singleDecisionNoInputs)
+
+        when:
+        final Optional<Decision> result = new YamlDecisionReader().read(inputStream)
+
+        then:
+        result != null
+        result.isPresent()
+        with(result.get()) {
+            getInputs().isEmpty()
+        }
     }
 
     void 'should read decision by id using InputStream'() {
@@ -98,7 +114,7 @@ class YamlDecisionReaderSpec extends Specification {
             expressionType == ExpressionType.GROOVY
             inputs.size() == 2
             outputs.size() == 1
-            rules.size() == 5
+            rules.size() == 6
         }
 
         with(decision.inputs[0]) {
@@ -192,5 +208,13 @@ class YamlDecisionReaderSpec extends Specification {
             outputEntries[0].expression.value == true
         }
 
+        with(decision.rules[5]) {
+            description == 'No input entry'
+
+            inputEntries.isEmpty()
+            outputEntries[0].name == 'allow'
+            outputEntries[0].expression.type == ExpressionType.GROOVY
+            outputEntries[0].expression.value == true
+        }
     }
 }

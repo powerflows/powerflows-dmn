@@ -31,8 +31,10 @@ public class BooleanConverter implements TypeConverter<Boolean> {
     @Override
     public SpecifiedTypeValue<Boolean> convert(final Object unspecifiedValue) {
         final SpecifiedTypeValue<Boolean> booleanTypeValue;
-
-        if (unspecifiedValue instanceof Collection) {
+        if (unspecifiedValue == null) {
+            final Boolean booleanValue = null;
+            booleanTypeValue = new BooleanValue(booleanValue);
+        } else if (unspecifiedValue instanceof Collection) {
             final List<Boolean> booleanValues = convertCollection((Collection<Object>) unspecifiedValue);
             booleanTypeValue = new BooleanValue(booleanValues);
         } else if (unspecifiedValue.getClass().isArray()) {

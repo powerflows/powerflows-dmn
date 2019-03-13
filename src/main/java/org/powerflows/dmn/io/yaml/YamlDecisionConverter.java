@@ -191,25 +191,27 @@ public class YamlDecisionConverter implements DecisionToExternalModelConverter<Y
             builder.hitPolicy(model.getHitPolicy());
         }
 
-        model.getFields().getIn().forEach((name, input) -> builder
-                .withInput(inputBuilder -> {
-                            if (input.getNameAlias() != null) {
-                                inputBuilder.nameAlias(input.getNameAlias());
-                            }
+        if (model.getFields().getIn() != null) {
+            model.getFields().getIn().forEach((name, input) -> builder
+                    .withInput(inputBuilder -> {
+                                if (input.getNameAlias() != null) {
+                                    inputBuilder.nameAlias(input.getNameAlias());
+                                }
 
-                            return inputBuilder
-                                    .name(name)
-                                    .type(input.getType())
-                                    .evaluationMode(input.getEvaluationMode())
-                                    .description(input.getDescription())
-                                    .withExpression(expressionBuilder -> expressionBuilder
-                                            .type(input.getExpressionType())
-                                            .value((Serializable) input.getExpression())
-                                            .build())
-                                    .build();
-                        }
-                )
-        );
+                                return inputBuilder
+                                        .name(name)
+                                        .type(input.getType())
+                                        .evaluationMode(input.getEvaluationMode())
+                                        .description(input.getDescription())
+                                        .withExpression(expressionBuilder -> expressionBuilder
+                                                .type(input.getExpressionType())
+                                                .value((Serializable) input.getExpression())
+                                                .build())
+                                        .build();
+                            }
+                    )
+            );
+        }
 
         model.getFields().getOut().forEach((name, output) -> builder
                 .withOutput(outpBuilder -> outpBuilder
@@ -219,16 +221,18 @@ public class YamlDecisionConverter implements DecisionToExternalModelConverter<Y
                         .build()));
 
         model.getRules().forEach(rule -> builder.withRule(ruleBuilder -> {
-            rule.getIn().forEach((name, inputEntry) -> ruleBuilder
-                    .withInputEntry(inputEntryBuilder -> inputEntryBuilder
-                            .name(name)
-                            .nameAlias(inputEntry.getNameAlias())
-                            .evaluationMode(inputEntry.getEvaluationMode())
-                            .withExpression(expressionBuilder -> expressionBuilder
-                                    .type(inputEntry.getExpressionType())
-                                    .value((Serializable) inputEntry.getExpression())
-                                    .build())
-                            .build()));
+            if (rule.getIn() != null) {
+                rule.getIn().forEach((name, inputEntry) -> ruleBuilder
+                        .withInputEntry(inputEntryBuilder -> inputEntryBuilder
+                                .name(name)
+                                .nameAlias(inputEntry.getNameAlias())
+                                .evaluationMode(inputEntry.getEvaluationMode())
+                                .withExpression(expressionBuilder -> expressionBuilder
+                                        .type(inputEntry.getExpressionType())
+                                        .value((Serializable) inputEntry.getExpression())
+                                        .build())
+                                .build()));
+            }
 
             rule.getOut().forEach((name, outputEntry) -> ruleBuilder
                     .withOutputEntry(outputEntryBuilder -> outputEntryBuilder

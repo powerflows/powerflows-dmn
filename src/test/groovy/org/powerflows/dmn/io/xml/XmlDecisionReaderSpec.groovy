@@ -20,6 +20,7 @@ import org.powerflows.dmn.engine.model.decision.Decision
 import org.powerflows.dmn.engine.model.decision.DecisionBuildException
 import org.powerflows.dmn.engine.model.decision.HitPolicy
 import org.powerflows.dmn.engine.model.decision.expression.ExpressionType
+import org.powerflows.dmn.engine.model.decision.field.Input
 import org.powerflows.dmn.engine.model.decision.field.ValueType
 import org.powerflows.dmn.engine.reader.DecisionReadException
 import spock.lang.Shared
@@ -33,6 +34,8 @@ class XmlDecisionReaderSpec extends Specification {
     final String camundaExampleXmlDuplicateIds = 'camunda-dmn-1.1-example-duplicate-ids.dmn'
     final String camundaExampleXmlDuplicateLabels = 'camunda-dmn-1.1-example-duplicate-labels.dmn'
     final String camundaExampleXmlUnknownTypeRef = 'camunda-dmn-1.1-example-unknown-type-ref.dmn'
+    final String camundaExampleXmlNoInputs = 'camunda-dmn-1.1-example-no-inputs.dmn'
+    final String camundaExampleXmlEmptyInputVariable = 'camunda-dmn-1.1-example-empty-input-variable.dmn'
 
     @Shared
     private XmlDecisionReader reader
@@ -138,6 +141,35 @@ class XmlDecisionReaderSpec extends Specification {
         }
     }
 
+    void 'should read if no inputs'() {
+        given:
+        final InputStream inputStream = this.class.getResourceAsStream(camundaExampleXmlNoInputs)
+
+        when:
+        final Optional<Decision> result = reader.read(inputStream)
+
+        then:
+        result.isPresent()
+        with(result.get()) {
+            getInputs().isEmpty()
+        }
+    }
+
+    void 'should read and set default name alias if empty Camunda input variable'() {
+        given:
+        final InputStream inputStream = this.class.getResourceAsStream(camundaExampleXmlEmptyInputVariable)
+
+        when:
+        final Optional<Decision> result = reader.read(inputStream)
+
+        then:
+        result.isPresent()
+        with(result.get()) {
+            getInputs().size() == 1
+            getInputs()[0].nameAlias == Input.DEFAULT_NAME_ALIAS
+        }
+    }
+
     void 'should read single decision by id from Camunda example stream'() {
         given:
         final InputStream inputStream = this.class.getResourceAsStream(camundaExampleXml)
@@ -225,7 +257,7 @@ class XmlDecisionReaderSpec extends Specification {
             getHitPolicy() == HitPolicy.FIRST
             getInputs().size() == 3
             getOutputs().size() == 2
-            getRules().size() == 2
+            getRules().size() == 3
         }
 
         with(result.getInputs()[0]) {
@@ -263,7 +295,7 @@ class XmlDecisionReaderSpec extends Specification {
 
         with(result.getRules()[0]) {
             getInputEntries().size() == 2
-            getOutputEntries().size() == 1
+            getOutputEntries().size() == 2
         }
 
         with(result.getRules()[0].getInputEntries()[0]) {
@@ -286,7 +318,7 @@ class XmlDecisionReaderSpec extends Specification {
 
         with(result.getRules()[1]) {
             getInputEntries().size() == 2
-            getOutputEntries().size() == 1
+            getOutputEntries().size() == 2
         }
 
         with(result.getRules()[1].getInputEntries()[0]) {
@@ -302,9 +334,17 @@ class XmlDecisionReaderSpec extends Specification {
         }
 
         with(result.getRules()[1].getOutputEntries()[0]) {
+            getName() == 'Some_Output_1_Description'
+            getExpression().getType() == ExpressionType.FEEL
+            getExpression().getValue() == null
+        }
+
+        with(result.getRules()[1].getOutputEntries()[1]) {
             getName() == 'output_0'
             getExpression().getType() == ExpressionType.FEEL
             getExpression().getValue() == '"The output"'
         }
+
+        result.getRules()[1].getInputEntries().isEmpty()
     }
 }

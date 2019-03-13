@@ -122,7 +122,7 @@ public class XMLDecisionConverter implements DecisionToExternalModelConverter<XM
             final String name = selectOrCreateUniqueName(inputNames, input.getId(), null, input.getLabel(), inputNameSequence);
 
             builder.withInput(inputBuilder -> {
-                if (input.getInputVariable() != null) {
+                if (input.getInputVariable() != null && !input.getInputVariable().trim().isEmpty()) {
                     inputBuilder.nameAlias(input.getInputVariable());
                 }
 
@@ -221,17 +221,15 @@ public class XMLDecisionConverter implements DecisionToExternalModelConverter<XM
 
         for (int idx = 0; idx < outputEntries.size(); idx++) {
             XMLOutputEntry outputEntry = outputEntries.get(idx);
-            if (isNotBlank(outputEntry.getExpression())) {
-                final String name = outputNames.get(idx);
-                ruleBuilder.withOutputEntry(entryBuilder -> entryBuilder
-                        .name(name)
-                        .withExpression(expressionBuilder ->
-                                expressionBuilder
-                                        .type(resolveExpressionType(outputEntry.getExpressionLanguage()))
-                                        .value(outputEntry.getExpression())
-                                        .build())
-                        .build());
-            }
+            final String name = outputNames.get(idx);
+            ruleBuilder.withOutputEntry(entryBuilder -> entryBuilder
+                    .name(name)
+                    .withExpression(expressionBuilder ->
+                            expressionBuilder
+                                    .type(resolveExpressionType(outputEntry.getExpressionLanguage()))
+                                    .value(isNotBlank(outputEntry.getExpression()) ? outputEntry.getExpression() : null)
+                                    .build())
+                    .build());
         }
     }
 
@@ -241,15 +239,15 @@ public class XMLDecisionConverter implements DecisionToExternalModelConverter<XM
             throw new DecisionReadException("Invalid number of inputs in rule " + id);
         }
         for (int idx = 0; idx < inputEntries.size(); idx++) {
-            XMLInputEntry outputEntry = inputEntries.get(idx);
-            if (isNotBlank(outputEntry.getExpression())) {
+            XMLInputEntry inputEntry = inputEntries.get(idx);
+            if (isNotBlank(inputEntry.getExpression())) {
                 final String name = inputNames.get(idx);
                 ruleBuilder.withInputEntry(entryBuilder -> entryBuilder
                         .name(name)
                         .withExpression(expressionBuilder ->
                                 expressionBuilder
-                                        .type(resolveExpressionType(outputEntry.getExpressionLanguage()))
-                                        .value(outputEntry.getExpression())
+                                        .type(resolveExpressionType(inputEntry.getExpressionLanguage()))
+                                        .value(inputEntry.getExpression())
                                         .build())
                         .build());
             }

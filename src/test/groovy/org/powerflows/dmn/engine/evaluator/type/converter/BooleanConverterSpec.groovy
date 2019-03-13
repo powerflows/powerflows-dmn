@@ -32,6 +32,21 @@ class BooleanConverterSpec extends Specification {
     }
 
 
+    void 'should convert single null value'() {
+        given:
+        final Object singleValue = null
+        final Boolean expectedSingleValue = null
+
+        when:
+        final BooleanValue booleanValue = booleanTypeConverter.convert(singleValue) as BooleanValue
+
+        then:
+        booleanValue != null
+        booleanValue.isSingleValue()
+        booleanValue.getValue() == expectedSingleValue
+        booleanValue.getValues() == null
+    }
+
     void 'should convert single boolean value'() {
         given:
         final Object singleValue = true

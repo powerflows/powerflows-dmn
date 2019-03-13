@@ -34,6 +34,13 @@ import org.powerflows.dmn.engine.evaluator.type.converter.TypeConverterFactory;
 import java.util.Collections;
 import java.util.List;
 
+/**
+ * Default DecisionEngine configurer.
+ * Builds and configures {@link DefaultDecisionEngine} instances.
+ * Allows for customisation of method binding configuration.
+ *
+ * @see MethodBinding
+ */
 @Accessors(chain = true, fluent = true)
 public class DefaultDecisionEngineConfiguration implements DecisionEngineConfiguration {
 

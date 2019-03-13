@@ -37,6 +37,9 @@ import java.util.stream.Collectors;
 import static java.util.Collections.unmodifiableList;
 import static org.powerflows.dmn.engine.model.decision.DecisionUtil.assignDefaults;
 
+/**
+ * Represents decision table.
+ */
 @EqualsAndHashCode
 @ToString
 public class Decision implements Serializable {
@@ -137,7 +140,6 @@ public class Decision implements Serializable {
 
         @Override
         protected Decision assembleProduct() {
-            validateIsNonEmpty(product.inputs, "At least one input is required");
             validateIsNonEmpty(product.outputs, "At least one output is required");
             validateIsNonEmpty(product.rules, "At least one rule is required");
 

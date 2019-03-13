@@ -17,7 +17,20 @@ package org.powerflows.dmn.engine.evaluator.expression.provider.binding;
 
 import java.lang.reflect.Method;
 
+/**
+ * Defines custom functions usable in expressions.
+ */
 public interface MethodBinding extends BoundMethod {
+    /**
+     * Name under which function will be available in expression.
+     *
+     * @return any string value compatible with method naming conventions of used expression languages
+     */
     String name();
+
+    /**
+     * Reference to real method to which function call will be forwarded.
+     * @return
+     */
     Method method();
 }

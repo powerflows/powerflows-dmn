@@ -20,6 +20,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.mvel2.integration.VariableResolverFactory;
 import org.mvel2.integration.impl.MapVariableResolverFactory;
 import org.powerflows.dmn.engine.evaluator.context.EvaluationContext;
+import org.powerflows.dmn.engine.evaluator.expression.provider.binding.ExpressionEvaluationException;
 import org.powerflows.dmn.engine.evaluator.expression.provider.feel.converter.ExpressionConverter;
 import org.powerflows.dmn.engine.evaluator.expression.provider.feel.converter.mvel.FeelToMvelExpressionConverter;
 import org.powerflows.dmn.engine.model.decision.expression.Expression;
@@ -45,7 +46,7 @@ class FeelExpressionEvaluationProvider extends MvelExpressionEvaluationProvider 
     public Serializable evaluateInput(final Input input, final EvaluationContext evaluationContext) {
         log.debug("Starting evaluation of input: {} with evaluation context: {}", input, evaluationContext);
 
-        final String mvelInputExpressionValue = expressionConverter.convert((String) input.getExpression().getValue(), input.getName());
+        final String mvelInputExpressionValue = expressionConverter.convert((String) input.getExpression().getValue(), null);
         final Expression mvelInputExpression = Expression.builder().type(input.getExpression().getType()).value(mvelInputExpressionValue).build();
 
         final Serializable result = evaluate(mvelInputExpression, evaluationContext);
@@ -57,7 +58,16 @@ class FeelExpressionEvaluationProvider extends MvelExpressionEvaluationProvider 
 
     @Override
     public Serializable evaluateOutputEntry(final OutputEntry outputEntry, final EvaluationContext evaluationContext) {
-        throw new UnsupportedOperationException("Evaluation of FEEL expressions for output entry is not supported");
+        log.debug("Starting evaluation of output entry with evaluation context: {}", outputEntry, evaluationContext);
+
+        final String mvelInputExpressionValue = expressionConverter.convert(String.valueOf(outputEntry.getExpression().getValue()), null);
+        final Expression mvelInputExpression = Expression.builder().type(outputEntry.getExpression().getType()).value(mvelInputExpressionValue).build();
+
+        final Serializable result = evaluate(mvelInputExpression, evaluationContext);
+
+        log.debug("Evaluated output entry result: {}", result);
+
+        return result;
     }
 
     @Override

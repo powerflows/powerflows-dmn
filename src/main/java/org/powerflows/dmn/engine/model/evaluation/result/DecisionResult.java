@@ -27,6 +27,9 @@ import java.util.List;
 
 import static java.util.Collections.unmodifiableList;
 
+/**
+ * Decision result representation.
+ */
 @ToString
 public class DecisionResult implements Serializable {
 
