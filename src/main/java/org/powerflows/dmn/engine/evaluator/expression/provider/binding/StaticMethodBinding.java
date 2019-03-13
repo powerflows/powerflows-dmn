@@ -19,9 +19,16 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.function.Supplier;
 
+/**
+ * Configures given static {@link Method} to be executed as function in expression.
+ */
 public class StaticMethodBinding extends AbstractMethodBinding {
     private static final Supplier<Object> NULL_SUPPLIER = () -> null;
 
+    /**
+     * @param name   of bound function
+     * @param method the call is delegated to
+     */
     public StaticMethodBinding(final String name, final Method method) {
         super(name, method, NULL_SUPPLIER);
         if ((method.getModifiers() & Modifier.STATIC) == 0) {

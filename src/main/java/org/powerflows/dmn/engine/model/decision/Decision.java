@@ -37,6 +37,9 @@ import java.util.stream.Collectors;
 import static java.util.Collections.unmodifiableList;
 import static org.powerflows.dmn.engine.model.decision.DecisionUtil.assignDefaults;
 
+/**
+ * Represents decision table.
+ */
 @EqualsAndHashCode
 @ToString
 public class Decision implements Serializable {

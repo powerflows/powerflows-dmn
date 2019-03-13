@@ -23,6 +23,11 @@ import org.powerflows.dmn.engine.model.evaluation.result.DecisionResult;
 
 public interface DecisionEngine {
 
+    /**
+     * @param decision Definition of decision
+     * @param decisionVariables Variables used in evaluation
+     * @return
+     */
     DecisionResult evaluate(Decision decision, DecisionVariables decisionVariables);
 
 }

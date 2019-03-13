@@ -23,12 +23,32 @@ import java.io.InputStream;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * Decision reading contract.
+ */
 public interface DecisionReader {
 
+    /**
+     * Reads first found decision in the given stream.
+     * Convenient for example for files defining single decision table.
+     * @param inputStream stream with data
+     * @return empty optional if no decision found
+     */
     Optional<Decision> read(InputStream inputStream);
 
+    /**
+     * Finds single decision with given identifier in provided data.
+     * @param inputStream stream with data
+     * @param decisionId decision identifier
+     * @return empty optional if no decision found
+     */
     Optional<Decision> read(InputStream inputStream, String decisionId);
 
+    /**
+     * Reads all decisions present in given data.
+     * @param inputStream stream with data
+     * @return collection of decisions ordered as they are in source data
+     */
     List<Decision> readAll(InputStream inputStream);
 
 }

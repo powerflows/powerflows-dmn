@@ -19,6 +19,10 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.function.Supplier;
 
+/**
+ * Base class for implementors of {@link MethodBinding}.
+ * Handles basic method call delegation.
+ */
 public abstract class AbstractMethodBinding implements MethodBinding {
     private final String name;
     private final Supplier<Object> instanceSupplier;

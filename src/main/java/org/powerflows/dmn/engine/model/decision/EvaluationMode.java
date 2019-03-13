@@ -16,7 +16,19 @@
 
 package org.powerflows.dmn.engine.model.decision;
 
+/**
+ * Determines how evaluation of input entry is handled.
+ */
 public enum EvaluationMode {
+    /**
+     * Boolean mode is default and represents pure OMG defined behavior.
+     * Each not empty entry is evaluated and must produce boolean value.
+     * Logical sum of all entry results produces rule result.
+     */
     BOOLEAN,
+    /**
+     * Input comparison behavior treats all entry evaluation results as value to compare to the input.
+     * This way expression may evaluate to any literal value including collection.
+     */
     INPUT_COMPARISON
 }
