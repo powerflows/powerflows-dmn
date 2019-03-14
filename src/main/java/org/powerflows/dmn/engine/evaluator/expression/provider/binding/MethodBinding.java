@@ -30,7 +30,7 @@ public interface MethodBinding extends BoundMethod {
 
     /**
      * Reference to real method to which function call will be forwarded.
-     * @return
+     * @return method
      */
     Method method();
 }

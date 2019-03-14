@@ -26,7 +26,7 @@ public interface DecisionEngine {
     /**
      * @param decision Definition of decision
      * @param decisionVariables Variables used in evaluation
-     * @return
+     * @return evaluation result
      */
     DecisionResult evaluate(Decision decision, DecisionVariables decisionVariables);
 
