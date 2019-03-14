@@ -1,11 +1,11 @@
 /**
  * Contains powerflows human friendly YAML decision table format reading and writing capabilities.
  *
- * Reading: <br/>
+ * Reading: <br>
  * <pre>
  *     new YamlDecisionReader().readAll(inputStream)
  * </pre>
- * Writing:<br/>
+ * Writing:<br>
  * <pre>
  *     new YamlDecisionWriter().write(decision, outputStream)
  * </pre>

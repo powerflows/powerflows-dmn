@@ -1,6 +1,6 @@
 /**
  * Contains OMG DMN 1.1 file format reading capabilities.
- * Reading:<br/>
+ * Reading:<br>
  * <pre>
  *     new XmlDecisionReader().readAll(inputStream)
  * </pre>
