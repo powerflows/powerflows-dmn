@@ -70,7 +70,15 @@ public class YamlDecisionConverter implements DecisionToExternalModelConverter<Y
     }
 
     private ExpressionType findDecisionExpressionType(final Decision decision) {
-        final ExpressionType expressionType = decision.getRules().get(0).getInputEntries().get(0).getExpression().getType();
+        final ExpressionType expressionType;
+
+        if (decision.getRules().isEmpty()) {
+            expressionType = decision.getExpressionType();
+        } else if (decision.getRules().get(0).getInputEntries().isEmpty()) {
+            expressionType = decision.getExpressionType();
+        } else {
+            expressionType = decision.getRules().get(0).getInputEntries().get(0).getExpression().getType();
+        }
 
         for (Rule rule : decision.getRules()) {
             for (InputEntry inputEntry : rule.getInputEntries()) {
