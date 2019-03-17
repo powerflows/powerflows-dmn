@@ -14,13 +14,6 @@
  * limitations under the License.
  */
 /**
- * Contains JAXBModel mapping OMG DMN 1.1 Specification.
+ * Expression model.
  */
-@XmlSchema(
-        namespace = "http://www.omg.org/spec/DMN/20151101/dmn.xsd",
-        elementFormDefault = XmlNsForm.QUALIFIED)
-package org.powerflows.dmn.io.xml.model;
-
-
-import javax.xml.bind.annotation.XmlNsForm;
-import javax.xml.bind.annotation.XmlSchema;
+package org.powerflows.dmn.engine.model.decision.expression;
