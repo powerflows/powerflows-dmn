@@ -321,6 +321,13 @@
                         <goals>
                             <goal>jar</goal>
                         </goals>
+                        <configuration>
+                            <doctitle>Powerflows ${project.name} ${project.version} API</doctitle>
+                            <header>Powerflows ${project.name} ${project.version} API</header>
+                            <windowtitle>Powerflows ${project.name} ${project.version} API</windowtitle>
+                            <isOffline>false</isOffline>
+                            <splitindex>true</splitindex>
+                        </configuration>
                     </execution>
                 </executions>
             </plugin>
