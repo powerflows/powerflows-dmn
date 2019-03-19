@@ -6,8 +6,37 @@
 # About Power Flows DMN
 Power Flows DMN - a powerful decision engine.
 
-# DMN model
-Power Flows model has been designed as an easy to describe and maintain file. The file contains information about input and output data. The additional division is sections with fields and rules.
+
+# Getting Started
+The Power Flows DMN can be imported as a dependency via:
+
+## Maven
+```xml
+<dependency>
+    <groupId>org.powerflows</groupId>
+    <artifactId>dmn</artifactId>
+    <version>1.0.0</version>
+</dependency>
+```
+
+## Gradle
+```gradle    
+compile group: 'org.powerflows', name: 'dmn', version: '1.0.0'
+```
+
+## Grape
+```groovy
+@Grapes(
+    @Grab(group='org.powerflows', module='dmn', version='1.0.0')
+)
+```   
+ 
+Other ways to import, visit Maven Central repo [https://mvnrepository.com/artifact/org.powerflows/dmn](https://mvnrepository.com/artifact/org.powerflows/dmn) 
+
+
+
+# Describe your DMN model
+Power Flows model has been designed as an easy to describe and maintain file. The file contains information about input and output data. The additional division is section with rules and their input and output entries.
 
 Power Flows supports the model in the following formats:
 * YAML file;
@@ -18,334 +47,293 @@ Power Flows supports the model in the following formats:
 ## YAML file
 
 ```yaml
-id: sample_decision_id
-name: Sample Decision Name
-hit-policy: UNIQUE
-expression-type: GROOVY
+id: loan_qualifier
+name: Loan qualifier
+hit-policy: COLLECT
+expression-type: FEEL
 fields:
   in:
     age:
-      expression-type: FEEL
-      expression: toYear(now()) - toYear(birthDate)
       type: INTEGER
-      description: This is something about age
-    colour:
-      type: STRING
-      description: This is something about colour
+    activeLoansNumber:
+      description: Number of active loans on user's account
+      type: INTEGER
+      expression-type: LITERAL
+    startDate:
+      type: DATE
   out:
-    allow:
-      type: BOOLEAN
-      description: We expect a decision, if we have access to do it
+    loanAmount:
+      description: Loan amount in Euro
+      type: DOUBLE
+    loanTerm:
+      description: Loan term in months
+      type: INTEGER
 rules:
-  - description: 3 allows always
-    in:
-      age: 3
-    out:
-      allow: true
-  - in:
-      age: 8
-      colour: red
-    out:
-      allow: true
-  - description: Green allows always
-    in:
-      colour: green
-    out:
-      allow: true
-  - description: Expression usage
-    in:
-      colour:
-        expression-type: FEEL
-        expression: not("blue", "purple")
-      age: 10
-    out:
-      allow: true
-  - description: Formatted expression usage
-    in:
-      colour:
-        expression-type: FEEL
-        expression: not(
-            "red",
-            "pink"
-          )
-      age: 20
-    out:
-      allow: true
+- description: Loan for 18 years
+  in:
+    age: 18
+    activeLoansNumber: 0
+    startDate: '[date and time("2019-01-01T12:00:00")..date and time("2019-12-31T12:00:00")]'
+  out:
+    loanAmount: 10000
+    loanTerm: 12
+- in:
+    age: 18
+    startDate: '[date and time("2019-03-01T12:00:00")..date and time("2019-03-31T12:00:00")]'
+  out:
+    loanAmount: 15000
+    loanTerm: 6
+- description: Loan for older than 18 years
+  in:
+    age: '>18'
+  out:
+    loanAmount: 20000
+    loanTerm: 12
+
 ```
 
 ## Java / Groovy file
 #### Using fluent style
 ```groovy
-
-Decision decision = Decision.builder()
-                .id("sample_decision_id")
-                .name("Sample Decision Name")
-                .hitPolicy(HitPolicy.UNIQUE)
-                .expressionType(ExpressionType.GROOVY)
-                .withInputs()
-                    .name("age")
-                    .description("This is something about age")
-                    .type(ValueType.STRING)
-                    .withExpression()
-                        .type(ExpressionType.FEEL)
-                        .value("toYear(now()) - toYear(birthDate)")
-                        .and()
-                    .next()
-                    .name("colour")
-                    .description("This is something about colour")
-                    .type(ValueType.STRING)
-                    .end()
-                .withOutputs()
-                    .name("allow")
-                    .description("We expect a decision, if we have access to do it")
-                    .type(ValueType.BOOLEAN)
-                    .end()
-                .withRules()
-                    .description("3 allows always")
-                    .withInputEntries()
-                        .name("age")
-                        .withExpression()
-                            .type(ExpressionType.LITERAL)
-                            .value(3)
-                            .and()
-                        .end()
-                    .withOutputEntries()
-                        .name("allow")
-                        .withExpression()
-                            .type(ExpressionType.LITERAL)
-                            .value(true)
-                            .and()
-                        .end()
-                    .next()
-                    .withInputEntries()
-                        .name("age")
-                        .withExpression()
-                            .type(ExpressionType.LITERAL)
-                            .value(8)
-                            .and()
-                        .next()
-                        .name("colour")
-                        .withExpression()
-                            .type(ExpressionType.LITERAL)
-                            .value("red")
-                            .and()
-                        .end()
-                    .withOutputEntries()
-                        .name("allow")
-                        .withExpression()
-                            .type(ExpressionType.LITERAL)
-                            .value(true)
-                            .and()
-                        .end()
-                    .next()
-                    .description("Green allows always")
-                    .withInputEntries()
-                        .name("colour")
-                        .withExpression()
-                            .type(ExpressionType.LITERAL)
-                            .value("green")
-                            .and()
-                        .end()
-                    .withOutputEntries()
-                        .name("allow")
-                        .withExpression()
-                            .type(ExpressionType.LITERAL)
-                            .value(true)
-                            .and()
-                        .end()
-                    .next()
-                    .description("Expression usage")
-                    .withInputEntries()
-                        .name("colour")
-                        .withExpression()
-                            .type(ExpressionType.FEEL)
-                            .value("not('blue', 'purple')")
-                            .and()
-                        .next()
-                       .name("age")
-                        .withExpression()
-                            .type(ExpressionType.LITERAL)
-                            .value(10)
-                            .and()
-                        .end()
-                    .withOutputEntries()
-                        .name("allow")
-                        .withExpression()
-                            .type(ExpressionType.LITERAL)
-                            .value(true)
-                            .and()
-                        .end()
-                    .next()
-                    .description("Formatted expression usage")
-                    .withInputEntries()
-                        .name("colour")
-                        .withExpression()
-                            .type(ExpressionType.FEEL)
-                            .value("not("+
-                                "'red',"+
-                                "'pink'"+
-                                ")")
-                            .and()
-                        .next()
-                        .name("age")
-                        .withExpression()
-                            .type(ExpressionType.LITERAL)
-                            .value(20)
-                            .and()
-                        .end()
-                    .withOutputEntries()
-                        .name("allow")
-                        .withExpression()
-                            .type(ExpressionType.LITERAL)
-                            .value(true)
-                            .and()
-                        .end()
-                    .end()
-                .build()
+Decision decision = Decision.fluentBuilder()
+.id("loan_qualifier")
+.name("Loan qualifier")
+.hitPolicy(HitPolicy.COLLECT)
+.expressionType(ExpressionType.FEEL)
+.withInputs()
+    .name("age")
+    .type(ValueType.INTEGER)
+    .withExpression()
+        .value("age")
+        .type(ExpressionType.FEEL)
+    .and()
+    .next()
+    .name("activeLoansNumber")
+    .description("Number of active loans on user's account")
+    .type(ValueType.INTEGER)
+    .next()
+    .name("startDate")
+    .type(ValueType.DATE)
+    .end()
+.withOutputs()
+    .name("loanAmount")
+    .description("Loan amount in Euro")
+    .type(ValueType.DOUBLE)
+    .next()
+    .name("loanTerm")
+    .description("Loan term in months")
+    .type(ValueType.INTEGER)
+    .end()
+.withRules()
+    .description("Loan for 18 years")
+    .withInputEntries()
+        .name("age")
+        .withExpression()
+            .type(ExpressionType.LITERAL)
+            .value(18)
+        .and()
+        .name("activeLoansNumber")
+        .withExpression()
+            .type(ExpressionType.LITERAL)
+            .value(0)
+        .and()
+        .name("startDate")
+        .withExpression()
+            .type(ExpressionType.FEEL)
+            .value("[date and time(\"2019-01-01T12:00:00\")..date and time(\"2019-12-31T12:00:00\")]")
+        .and()
+        .end()
+    .withOutputEntries()
+        .name("loanAmount")
+        .withExpression()
+            .type(ExpressionType.LITERAL)
+            .value(10000)
+         .and()
+         .name("loanTerm")
+        .withExpression()
+            .type(ExpressionType.LITERAL)
+            .value(12)
+        .and()
+        .end()
+    .next()
+    .withInputEntries()
+        .name("age")
+        .withExpression()
+            .type(ExpressionType.LITERAL)
+            .value(18)
+        .and()
+        .name("startDate")
+        .withExpression()
+            .type(ExpressionType.FEEL)
+            .value("[date and time(\"2019-03-01T12:00:00\")..date and time(\"2019-03-31T12:00:00\")]")
+        .and()
+        .end()
+    .withOutputEntries()
+        .name("loanAmount")
+        .withExpression()
+            .type(ExpressionType.LITERAL)
+            .value(15000)
+        .and()
+        .name("loanTerm")
+        .withExpression()
+            .type(ExpressionType.LITERAL)
+            .value(6)
+        .and()
+        .end()
+    .next()
+    .withInputEntries()
+        .name("age")
+        .withExpression()
+            .type(ExpressionType.FEEL)
+            .value(">18")
+        .and()
+        .end()
+    .withOutputEntries()
+        .name("loanAmount")
+        .withExpression()
+            .type(ExpressionType.LITERAL)
+            .value(20000)
+        .and()
+        .name("loanTerm")
+        .withExpression()
+            .type(ExpressionType.LITERAL)
+            .value(12)
+        .and()
+        .end()
+    .end()
+.build();
 ```
 #### Using functional style
 ```java
 Decision decision = Decision.builder()
-                .id("sample_decision_id")
-                .name("Sample Decision Name")
-                .hitPolicy(HitPolicy.UNIQUE)
-                .expressionType(ExpressionType.GROOVY)
-                .withInput(in -> in
-                        .name("age")
-                        .description("This is something about age")
-                        .type(ValueType.STRING)
-                        .withExpression(ex -> ex
-                                .type(ExpressionType.FEEL)
-                                .value("toYear(now()) - toYear(birthDate)")
-                                .build())
+.id("loan_qualifier")
+.name("Loan qualifier")
+.hitPolicy(HitPolicy.COLLECT)
+.expressionType(ExpressionType.FEEL)
+.withInput(in -> in
+        .name("age")
+        .type(ValueType.INTEGER)
+        .withExpression(ex -> ex
+                .value("age")
+                .type(ExpressionType.FEEL)
+                .build())
+        .build())
+.withInput(in -> in
+        .name("activeLoansNumber")
+        .description("Number of active loans on user's account")
+        .type(ValueType.INTEGER)
+        .build())
+.withInput(in -> in
+        .name("startDate")
+        .type(ValueType.DATE)
+        .build())
+.withOutput(out -> out
+        .name("loanAmount")
+        .description("Loan amount in Euro")
+        .type(ValueType.DOUBLE)
+        .build())
+.withOutput(out -> out
+        .name("loanTerm")
+        .description("Loan term in months")
+        .type(ValueType.INTEGER)
+        .build())
+.withRule(rule -> rule
+        .description("Loan for 18 years")
+        .withInputEntry(in -> in
+                .name("age")
+                .withExpression(ex -> ex
+                        .type(ExpressionType.LITERAL)
+                        .value(18)
                         .build())
-                .withInput(in -> in
-                        .name("colour")
-                        .description("This is something about colour")
-                        .type(ValueType.STRING)
+                .build())
+        .withInputEntry(in -> in
+                .name("activeLoansNumber")
+                .withExpression(ex -> ex
+                        .type(ExpressionType.LITERAL)
+                        .value(0)
                         .build())
-                .withOutput(out -> out
-                        .name("allow")
-                        .description("We expect a decision, if we have access to do it")
-                        .type(ValueType.BOOLEAN)
+                .build())
+        .withInputEntry(in -> in
+                .name("startDate")
+                .withExpression(ex -> ex
+                        .type(ExpressionType.FEEL)
+                        .value("[date and time(\"2019-01-01T12:00:00\")..date and time(\"2019-12-31T12:00:00\")]")
                         .build())
-                .withRule(rule -> rule
-                        .description("3 allows always")
-                        .withInputEntry(in -> in
-                                .name("age")
-                                .withExpression(ex -> ex
-                                        .type(ExpressionType.LITERAL)
-                                        .value(3)
-                                        .build())
-                                .build())
-                        .withOutputEntry(out -> out
-                                .name("allow")
-                                .withExpression(ex -> ex
-                                        .type(ExpressionType.LITERAL)
-                                        .value(true)
-                                        .build())
-                                .build())
-
+                .build())
+        .withOutputEntry(out -> out
+                .name("loanAmount")
+                .withExpression(ex -> ex
+                        .type(ExpressionType.LITERAL)
+                        .value(10000)
                         .build())
-                .withRule(rule -> rule
-                        .withInputEntry(out -> out
-                                .name("age")
-                                .withExpression(ex -> ex
-                                        .type(ExpressionType.LITERAL)
-                                        .value(8)
-                                        .build())
-                                .build())
-                        .withInputEntry(in -> in
-
-                                .name("colour")
-                                .withExpression(ex -> ex
-                                        .type(ExpressionType.LITERAL)
-                                        .value("red")
-                                        .build())
-                                .build()).withOutputEntry(out -> out
-
-
-                                .name("allow")
-                                .withExpression(ex -> ex
-                                        .type(ExpressionType.LITERAL)
-                                        .value(true)
-                                        .build())
-                                .build())
+                .build())
+        .withOutputEntry(out -> out
+                .name("loanTerm")
+                .withExpression(ex -> ex
+                        .type(ExpressionType.LITERAL)
+                        .value(12)
                         .build())
-                .withRule(rule -> rule
-                        .description("Green allows always")
-                        .withInputEntry(in -> in
-                                .name("colour")
-                                .withExpression(ex -> ex
-                                        .type(ExpressionType.LITERAL)
-                                        .value("green")
-                                        .build())
-                                .build())
-                        .withOutputEntry(out -> out
-                                .name("allow")
-                                .withExpression(ex -> ex
-                                        .type(ExpressionType.LITERAL)
-                                        .value(true)
-                                        .build())
-                                .build())
+                .build())
+        .build())
+.withRule(rule -> rule
+        .withInputEntry(in -> in
+                .name("age")
+                .withExpression(ex -> ex
+                        .type(ExpressionType.LITERAL)
+                        .value(18)
                         .build())
-                .withRule(rule -> rule
-                        .description("Expression usage")
-                        .withInputEntry(in -> in
-                                .name("colour")
-                                .withExpression(ex -> ex
-                                        .type(ExpressionType.FEEL)
-                                        .value("not('blue', 'purple')")
-                                        .build())
-                                .build())
-                        .withInputEntry(in -> in
-                                .name("age")
-                                .withExpression(ex -> ex
-                                        .type(ExpressionType.LITERAL)
-                                        .value(10)
-                                        .build())
-                                .build())
-                        .withOutputEntry(out -> out
-                                .name("allow")
-                                .withExpression(ex -> ex
-                                        .type(ExpressionType.LITERAL)
-                                        .value(true)
-                                        .build())
-                                .build())
+                .build())
+        .withInputEntry(in -> in
+                .name("startDate")
+                .withExpression(ex -> ex
+                        .type(ExpressionType.FEEL)
+                        .value("[date and time(\"2019-03-01T12:00:00\")..date and time(\"2019-03-31T12:00:00\")]")
                         .build())
-                .withRule(rule -> rule
-                        .description("Formatted expression usage")
-                        .withInputEntry(in -> in
-                                .name("colour")
-                                .withExpression(ex -> ex
-                                        .type(ExpressionType.FEEL)
-                                        .value("not(" +
-                                                "'red'," +
-                                                "'pink'" +
-                                                ")")
-                                        .build())
-                                .build())
-                        .withInputEntry(in -> in
-                                .name("age")
-                                .withExpression(ex -> ex
-                                        .type(ExpressionType.LITERAL)
-                                        .value(20)
-                                        .build())
-                                .build())
-                        .withOutputEntry(out -> out
-                                .name("allow")
-                                .withExpression(ex -> ex
-                                        .type(ExpressionType.LITERAL)
-                                        .value(true)
-                                        .build())
-                                .build())
+                .build())
+        .withOutputEntry(out -> out
+                .name("loanAmount")
+                .withExpression(ex -> ex
+                        .type(ExpressionType.LITERAL)
+                        .value(15000)
                         .build())
-                .build();
+                .build())
+        .withOutputEntry(out -> out
+                .name("loanTerm")
+                .withExpression(ex -> ex
+                        .type(ExpressionType.LITERAL)
+                        .value(6)
+                        .build())
+                .build())
+        .build())
+.withRule(rule -> rule
+        .withInputEntry(in -> in
+                .name("age")
+                .withExpression(ex -> ex
+                        .type(ExpressionType.FEEL)
+                        .value(">18")
+                        .build())
+                .build())
+        .withOutputEntry(out -> out
+                .name("loanAmount")
+                .withExpression(ex -> ex
+                        .type(ExpressionType.LITERAL)
+                        .value(20000)
+                        .build())
+                .build())
+        .withOutputEntry(out -> out
+                .name("loanTerm")
+                .withExpression(ex -> ex
+                        .type(ExpressionType.LITERAL)
+                        .value(12)
+                        .build())
+                .build())
+        .build())
+.build();
 ```
 
-# IO
+# Use IO to import/export your model
 Thanks to IO module there is a possibility to:
-* Read decisions from _powerflows_ *.yml files;
+* Read decisions from Power Flows *.yml files;
 * Read decisions from DMN 1.1 *.xml files;
 * Write decisions to *.yml files.
 
@@ -353,15 +341,44 @@ Thanks to IO module there is a possibility to:
 The follow example shows how to read *.yml file and get decision object.
 First of all input stream is needed. Then, using YamlDecisionReader class a developer can read the decision from the input stream.
 
-```java
-InputStream inputStream = this.class.getResourceAsStream("sample-decision.yml");
-Optional<Decision> result = new YamlDecisionReader().read(inputStream);
-```
-Another source of Decision may be OMG defined DMN 1.1 compatible XML file.
+Create input stream from file:
 
 ```java
-InputStream inputStream = this.class.getResourceAsStream("sample-decision.xml");
-List<Decision> result = new XMLDecisionReader.readAll(inputStream);
+File loanQualifierFile = new File("loan-qualifier.yml");
+InputStream loanQualifierInputStream = new FileInputStream(loanQualifierFile);
+```
+
+or from resource:
+
+```java
+InputStream loanQualifierInputStream = this.class.getResourceAsStream("loan-qualifier.yml");
+```
+
+And read the input stream:
+
+```java
+Optional<Decision> loanQualifierDecision = new YamlDecisionReader().read(loanQualifierInputStream);
+```
+
+Another source of Decision may be OMG defined DMN 1.1 compatible XML file.
+
+Create input stream from file:
+
+```java
+File loanQualifierFile = new File("loan-qualifier.xml");
+InputStream loanQualifierInputStream = new FileInputStream(loanQualifierFile);
+```
+
+or from resource:
+
+```java
+InputStream loanQualifierInputStream = this.class.getResourceAsStream("loan-qualifier.xml");
+```
+
+And read the input stream:
+
+```java
+Optional<Decision> loanQualifierDecision = new XmlDecisionReader().read(loanQualifierInputStream);
 ```
 Currently only reading of decision tables from _decision_ tags is supported.
 
@@ -369,25 +386,31 @@ Currently only reading of decision tables from _decision_ tags is supported.
 The IO module can be used to conversion between different formats. For now the only one supported is *.yml.
 
 ```java
-Decision decision = Decision.builder().build(); //here developer has to build a valid decision object
+Decision decision = ... //here developer has to build a valid decision object or read from *.yml or *.xml file
 
-YamlDecisionWriter writer = new YamlDecisionWriter();
-FileOutputStream outputStream = new FileOutputStream("sample-decision.yml");
+DecisionWriter writer = new YamlDecisionWriter();
+FileOutputStream outputStream = new FileOutputStream("your-decision-file-name.yml");
 
 writer.write(decision, outputStream);
 ```
 
-# Decision Engine
+# Decision Engine for decisions evaluation
 A decision engine is a service that allows evaluation of decision tables. Default decision engine instance can be created using
 DefaultDecisionEngineConfiguration class. Decision engine expects decision object and decision variables.
+
+## Evaluation
 The result of an evaluation process is decision result object.
+
 ```java
-Decision decision = Decision.builder().build(); //here developer has to build a valid decision object
+Decision decision = ... //here developer has to build a valid decision object or read from *.yml or *.xml file
 DecisionEngine decisionEngine = new DefaultDecisionEngineConfiguration().configure();
 
+SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+
 Map<String, Serializable> variables = new HashMap<>();
-variables.put("inputOne", 2);
-variables.put("inputTwo", "five");
+variables.put("age", 18);
+variables.put("activeLoansNumber", 0);
+variables.put("startDate", format.parse("2019-01-05"));
 DecisionVariables decisionVariables = new DecisionVariables(variables);
 
 DecisionResult decisionResult = decisionEngine.evaluate(decision, decisionVariables);
@@ -401,6 +424,21 @@ decisionResult.getSingleEntryResult();
 decisionResult.getSingleRuleResult();
 decisionResult.getCollectionRulesResult();
 ```
+
+## Supported languages
+Power Flows supports evaluation in following languages:
+* FEEL
+* JUEL
+* Groovy
+* MVEL
+* JavaScript
+
+Also in order to complain the highest performance it is possible to evaluate only literals
+without using any language evaluators. However thanks to solid and thoughtful architecture, Power Flows delivers
+extraordinary performance for all the evaluated languages. 
+
+## Much more features
+Power Flows brings with it lots of features described in [WIKI](https://github.com/powerflows/powerflows-dmn/wiki).
 
 # How to contribute to the repository
 Contributors wishing to join Power Flows project have to comply with a few rules: 
