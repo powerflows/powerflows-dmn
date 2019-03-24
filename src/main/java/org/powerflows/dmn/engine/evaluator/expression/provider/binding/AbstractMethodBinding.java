@@ -15,6 +15,8 @@
  */
 package org.powerflows.dmn.engine.evaluator.expression.provider.binding;
 
+import org.powerflows.dmn.engine.evaluator.expression.ExpressionEvaluationException;
+
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.function.Supplier;

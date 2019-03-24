@@ -22,6 +22,9 @@ import org.powerflows.dmn.engine.model.builder.AbstractBuilder;
 
 import java.io.Serializable;
 
+/**
+ * Represents entry evaluation result.
+ */
 @ToString
 public class EntryResult implements Serializable {
 

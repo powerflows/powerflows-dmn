@@ -23,6 +23,9 @@ import org.powerflows.dmn.engine.model.builder.AbstractBuilder;
 import java.io.Serializable;
 import java.util.function.Consumer;
 
+/**
+ * Represents decision output declaration.
+ */
 @EqualsAndHashCode
 @ToString
 public class Output implements Serializable {

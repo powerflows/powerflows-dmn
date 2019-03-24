@@ -16,7 +16,9 @@
 
 package org.powerflows.dmn.engine.evaluator.exception;
 
-
+/**
+ * Exception related to decision evaluation.
+ */
 public class EvaluationException extends RuntimeException {
 
     public EvaluationException(final String message) {

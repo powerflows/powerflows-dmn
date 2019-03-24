@@ -15,6 +15,7 @@
  */
 package org.powerflows.dmn.engine.evaluator.expression.provider.binding
 
+import org.powerflows.dmn.engine.evaluator.expression.ExpressionEvaluationException
 import org.powerflows.dmn.engine.evaluator.expression.provider.sample.MethodSource
 import spock.lang.Specification
 

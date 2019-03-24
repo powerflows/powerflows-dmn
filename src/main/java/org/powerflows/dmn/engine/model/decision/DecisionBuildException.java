@@ -16,7 +16,9 @@
 
 package org.powerflows.dmn.engine.model.decision;
 
-
+/**
+ * Exception related to decision creation.
+ */
 public class DecisionBuildException extends RuntimeException {
 
     public DecisionBuildException(String message) {

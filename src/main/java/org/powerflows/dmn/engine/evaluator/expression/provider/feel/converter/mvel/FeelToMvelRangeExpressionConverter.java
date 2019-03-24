@@ -15,12 +15,15 @@
  */
 package org.powerflows.dmn.engine.evaluator.expression.provider.feel.converter.mvel;
 
-import org.powerflows.dmn.engine.evaluator.expression.provider.binding.ExpressionEvaluationException;
+import org.powerflows.dmn.engine.evaluator.expression.ExpressionEvaluationException;
 import org.powerflows.dmn.engine.evaluator.expression.provider.feel.converter.ExpressionConverter;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+/**
+ * Converts FEEL range expression into MVEL compatible range expression.
+ */
 public class FeelToMvelRangeExpressionConverter implements ExpressionConverter {
     private final Pattern rangePattern = Pattern.compile("^(\\(|\\]|\\[)(.*[^\\.])\\.\\.(.+)(\\)|\\[|\\])$");
 

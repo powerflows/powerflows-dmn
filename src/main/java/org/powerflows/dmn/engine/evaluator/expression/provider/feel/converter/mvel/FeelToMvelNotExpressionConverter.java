@@ -15,12 +15,15 @@
  */
 package org.powerflows.dmn.engine.evaluator.expression.provider.feel.converter.mvel;
 
-import org.powerflows.dmn.engine.evaluator.expression.provider.binding.ExpressionEvaluationException;
+import org.powerflows.dmn.engine.evaluator.expression.ExpressionEvaluationException;
 import org.powerflows.dmn.engine.evaluator.expression.provider.feel.converter.ExpressionConverter;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+/**
+ * Converts FEEL invert expression into MVEL invert expression.
+ */
 public class FeelToMvelNotExpressionConverter implements ExpressionConverter {
 
     private final Pattern notPattern = Pattern.compile("^not\\((.+)\\)$");

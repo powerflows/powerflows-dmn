@@ -16,9 +16,23 @@
 
 package org.powerflows.dmn.engine.evaluator.expression.provider.feel.converter;
 
+/**
+ * Converter for changing declared expression into syntax understandable by expression engine.
+ */
 public interface ExpressionConverter {
 
+    /**
+     * Converts expression syntax.
+     * @param expression input expression
+     * @param inputName name of input containing this expression
+     * @return new expression syntax
+     */
     String convert(String expression, String inputName);
 
+    /**
+     * Verifies if given text is convertible into expression compatible with expression engine.
+     * @param expression to verify
+     * @return true if convertible
+     */
     boolean isConvertible(String expression);
 }

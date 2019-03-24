@@ -19,6 +19,9 @@ package org.powerflows.dmn.engine.evaluator.type.value;
 import java.util.Date;
 import java.util.List;
 
+/**
+ * {@link Date} value holder.
+ */
 public class DateValue extends AbstractSpecifiedTypeValues<Date> {
 
     public DateValue(final Date value) {

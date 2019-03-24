@@ -26,40 +26,23 @@ import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class BooleanConverter implements TypeConverter<Boolean> {
+/**
+ * Handles value conversion to {@link Boolean} or {@link Boolean} collections.
+ */
+public class BooleanConverter extends BaseTypeConverter<Boolean> {
+
 
     @Override
-    public SpecifiedTypeValue<Boolean> convert(final Object unspecifiedValue) {
-        final SpecifiedTypeValue<Boolean> booleanTypeValue;
-        if (unspecifiedValue == null) {
-            final Boolean booleanValue = null;
-            booleanTypeValue = new BooleanValue(booleanValue);
-        } else if (unspecifiedValue instanceof Collection) {
-            final List<Boolean> booleanValues = convertCollection((Collection<Object>) unspecifiedValue);
-            booleanTypeValue = new BooleanValue(booleanValues);
-        } else if (unspecifiedValue.getClass().isArray()) {
-            final List<Boolean> booleanValues = convertArray((Object[]) unspecifiedValue);
-            booleanTypeValue = new BooleanValue(booleanValues);
-        } else {
-            final Boolean booleanValue = convertSingleObject(unspecifiedValue);
-            booleanTypeValue = new BooleanValue(booleanValue);
-        }
-
-        return booleanTypeValue;
+    protected SpecifiedTypeValue<Boolean> createValue(final Boolean value) {
+        return new BooleanValue(value);
     }
 
-    private List<Boolean> convertCollection(final Collection<Object> unspecifiedValues) {
-        return unspecifiedValues
-                .stream()
-                .map(this::convertSingleObject)
-                .collect(Collectors.toList());
+    @Override
+    protected SpecifiedTypeValue<Boolean> createValue(final List<Boolean> values) {
+        return new BooleanValue(values);
     }
 
-    private List<Boolean> convertArray(final Object[] unspecifiedValues) {
-        return convertCollection(new ArrayList<>(Arrays.asList(unspecifiedValues)));
-    }
-
-    private Boolean convertSingleObject(final Object unspecifiedValue) {
+    protected Boolean convertSingleObject(final Object unspecifiedValue) {
         final boolean booleanValue;
 
         if (unspecifiedValue instanceof Boolean) {

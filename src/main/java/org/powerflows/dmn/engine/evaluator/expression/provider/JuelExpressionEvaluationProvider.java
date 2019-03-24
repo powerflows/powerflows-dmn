@@ -19,8 +19,8 @@ package org.powerflows.dmn.engine.evaluator.expression.provider;
 import de.odysseus.el.ExpressionFactoryImpl;
 import lombok.extern.slf4j.Slf4j;
 import org.powerflows.dmn.engine.evaluator.context.EvaluationContext;
-import org.powerflows.dmn.engine.evaluator.expression.provider.binding.ExpressionEvaluationException;
-import org.powerflows.dmn.engine.evaluator.expression.provider.juel.ContextFunctionMapper;
+import org.powerflows.dmn.engine.evaluator.expression.ExpressionEvaluationException;
+import org.powerflows.dmn.engine.evaluator.expression.provider.juel.MethodBindingListFunctionMapper;
 import org.powerflows.dmn.engine.evaluator.expression.provider.juel.BasicELContext;
 import org.powerflows.dmn.engine.model.decision.field.Input;
 import org.powerflows.dmn.engine.model.decision.rule.entry.InputEntry;
@@ -32,6 +32,10 @@ import javax.el.ExpressionFactory;
 import javax.el.FunctionMapper;
 import java.io.Serializable;
 
+/**
+ * Provides JUEL expression evaluation.
+ * Doesn't support instance method binding.
+ */
 @Slf4j
 class JuelExpressionEvaluationProvider implements ExpressionEvaluationProvider {
 
@@ -40,7 +44,7 @@ class JuelExpressionEvaluationProvider implements ExpressionEvaluationProvider {
 
     JuelExpressionEvaluationProvider(final ExpressionEvaluationConfiguration configuration) {
         this.expressionFactory = new ExpressionFactoryImpl();
-        rootFunctionMapper = new ContextFunctionMapper(configuration.getMethodBindings());
+        rootFunctionMapper = new MethodBindingListFunctionMapper(configuration.getMethodBindings());
     }
 
     @Override

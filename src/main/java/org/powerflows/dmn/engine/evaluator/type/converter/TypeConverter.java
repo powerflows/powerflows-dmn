@@ -18,6 +18,11 @@ package org.powerflows.dmn.engine.evaluator.type.converter;
 
 import org.powerflows.dmn.engine.evaluator.type.value.SpecifiedTypeValue;
 
+/**
+ * Type converter.
+ * Implementations must be stateless.
+ * @param <T> target type
+ */
 public interface TypeConverter<T> {
 
     SpecifiedTypeValue<T> convert(Object object);

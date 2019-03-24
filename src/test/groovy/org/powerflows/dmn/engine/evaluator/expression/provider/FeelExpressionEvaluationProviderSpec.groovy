@@ -17,7 +17,7 @@
 package org.powerflows.dmn.engine.evaluator.expression.provider
 
 import org.powerflows.dmn.engine.evaluator.context.EvaluationContext
-import org.powerflows.dmn.engine.evaluator.expression.provider.binding.ExpressionEvaluationException
+import org.powerflows.dmn.engine.evaluator.expression.ExpressionEvaluationException
 import org.powerflows.dmn.engine.model.decision.expression.Expression
 import org.powerflows.dmn.engine.model.decision.expression.ExpressionType
 import org.powerflows.dmn.engine.model.decision.field.Input

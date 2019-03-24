@@ -21,6 +21,9 @@ import org.powerflows.dmn.engine.model.decision.Decision;
 import org.powerflows.dmn.engine.model.evaluation.variable.DecisionVariables;
 import org.powerflows.dmn.engine.model.evaluation.result.DecisionResult;
 
+/**
+ * Decision engine contract.
+ */
 public interface DecisionEngine {
 
     /**

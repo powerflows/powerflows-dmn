@@ -17,6 +17,9 @@ package org.powerflows.dmn.engine.evaluator.expression.provider.feel.converter.m
 
 import org.powerflows.dmn.engine.evaluator.expression.provider.feel.converter.ExpressionConverter;
 
+/**
+ * Converts FEEL equality check into MVEL equality check.
+ */
 public class FeelToMvelEqualExpressionConverter implements ExpressionConverter {
 
     @Override

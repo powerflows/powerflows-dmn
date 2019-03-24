@@ -29,6 +29,9 @@ import org.powerflows.dmn.engine.model.decision.rule.entry.OutputEntry;
 
 import java.io.Serializable;
 
+/**
+ * Provides S-FEEL expression evaluation.
+ */
 @Slf4j
 class FeelExpressionEvaluationProvider extends MvelExpressionEvaluationProvider {
 

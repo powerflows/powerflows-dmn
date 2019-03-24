@@ -29,7 +29,10 @@ import java.util.Map;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-class DecisionUtil {
+/**
+ * Decision utility methods.
+ */
+final class DecisionUtil {
 
     private DecisionUtil() {
     }

@@ -18,6 +18,9 @@ package org.powerflows.dmn.engine.evaluator.type.value;
 
 import java.util.List;
 
+/**
+ * {@link Boolean} value holder.
+ */
 public class BooleanValue extends AbstractSpecifiedTypeValues<Boolean> {
 
     public BooleanValue(final Boolean value) {

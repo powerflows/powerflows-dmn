@@ -19,6 +19,9 @@ import org.powerflows.dmn.engine.evaluator.type.converter.DateConverter;
 
 import java.util.Date;
 
+/**
+ * FEEL date and time function provider.
+ */
 public class DateAndTime {
     private static final DateConverter DATE_CONVERTER = new DateConverter();
 

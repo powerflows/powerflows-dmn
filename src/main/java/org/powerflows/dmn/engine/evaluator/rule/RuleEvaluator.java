@@ -35,6 +35,10 @@ import java.util.Map;
 
 import static java.util.Collections.unmodifiableList;
 
+/**
+ * Evaluates decision rule.
+ * Delegates to {@link InputEntryEvaluator} and {@link OutputEntryEvaluator}
+ */
 @Slf4j
 public class RuleEvaluator {
 

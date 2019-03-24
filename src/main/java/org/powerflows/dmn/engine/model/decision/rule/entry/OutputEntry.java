@@ -26,6 +26,9 @@ import java.io.Serializable;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
+/**
+ * Represents decision rule output entry.
+ */
 @EqualsAndHashCode
 @ToString
 public class OutputEntry implements Serializable {

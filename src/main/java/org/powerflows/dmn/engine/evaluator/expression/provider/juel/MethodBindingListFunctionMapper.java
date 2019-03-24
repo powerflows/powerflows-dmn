@@ -16,7 +16,7 @@
 package org.powerflows.dmn.engine.evaluator.expression.provider.juel;
 
 import lombok.extern.slf4j.Slf4j;
-import org.powerflows.dmn.engine.evaluator.expression.provider.binding.ExpressionEvaluationException;
+import org.powerflows.dmn.engine.evaluator.expression.ExpressionEvaluationException;
 import org.powerflows.dmn.engine.evaluator.expression.provider.binding.InstanceMethodBinding;
 import org.powerflows.dmn.engine.evaluator.expression.provider.binding.MethodBinding;
 import org.powerflows.dmn.engine.evaluator.expression.provider.binding.StaticMethodBinding;
@@ -27,11 +27,15 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * Maps functions from {@link MethodBinding} collection.
+ * Only static methods are supported with JUEL.
+ */
 @Slf4j
-public class ContextFunctionMapper extends FunctionMapper {
+public class MethodBindingListFunctionMapper extends FunctionMapper {
     private final Map<String, Method> functions;
 
-    public ContextFunctionMapper(final List<MethodBinding> methodBindings) {
+    public MethodBindingListFunctionMapper(final List<MethodBinding> methodBindings) {
         functions = new HashMap<>();
         methodBindings.forEach(methodBinding -> {
             if (methodBinding instanceof InstanceMethodBinding) {

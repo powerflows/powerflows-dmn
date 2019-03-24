@@ -18,6 +18,9 @@ package org.powerflows.dmn.engine.evaluator.type.value;
 
 import java.util.List;
 
+/**
+ * {@link String} value holder.
+ */
 public class StringValue extends AbstractSpecifiedTypeValues<String> {
 
     public StringValue(final String value) {
