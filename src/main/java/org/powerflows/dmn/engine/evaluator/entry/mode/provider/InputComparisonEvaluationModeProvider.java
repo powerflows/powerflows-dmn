@@ -22,6 +22,12 @@ import org.powerflows.dmn.engine.model.decision.field.ValueType;
 import java.util.Collection;
 import java.util.Collections;
 
+/**
+ * Value comparison entry evaluation provider.
+ * This mode allows for entry result expression to produce any type of value as result. This value is then compared to input value without any transformation.
+ *
+ * Gracefully handles single values as well as collections.
+ */
 class InputComparisonEvaluationModeProvider implements EvaluationModeProvider {
 
     @Override

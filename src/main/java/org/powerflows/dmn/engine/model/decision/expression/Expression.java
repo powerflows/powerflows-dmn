@@ -23,6 +23,9 @@ import org.powerflows.dmn.engine.model.builder.AbstractBuilder;
 import java.io.Serializable;
 import java.util.function.Consumer;
 
+/**
+ * Represents expression.
+ */
 @EqualsAndHashCode
 @ToString
 public class Expression implements Serializable {

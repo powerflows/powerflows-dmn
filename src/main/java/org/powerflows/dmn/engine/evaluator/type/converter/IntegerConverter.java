@@ -26,26 +26,19 @@ import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class IntegerConverter implements TypeConverter<Integer> {
+/**
+ * Handles value conversion to {@link Integer} or {@link Integer} collections.
+ */
+public class IntegerConverter extends BaseTypeConverter<Integer> {
 
     @Override
-    public SpecifiedTypeValue<Integer> convert(final Object unspecifiedValue) {
-        final SpecifiedTypeValue<Integer> integerTypeValue;
-        if (unspecifiedValue == null) {
-            final Integer integerValue = null;
-            integerTypeValue = new IntegerValue(integerValue);
-        } else if (unspecifiedValue instanceof Collection) {
-            final List<Integer> integerValues = convertCollection((Collection<Object>) unspecifiedValue);
-            integerTypeValue = new IntegerValue(integerValues);
-        } else if (unspecifiedValue.getClass().isArray()) {
-            final List<Integer> integerValues = convertArray((Object[]) unspecifiedValue);
-            integerTypeValue = new IntegerValue(integerValues);
-        } else {
-            final Integer integerValue = convertSingleObject(unspecifiedValue);
-            integerTypeValue = new IntegerValue(integerValue);
-        }
+    protected SpecifiedTypeValue<Integer> createValue(final Integer value) {
+        return new IntegerValue(value);
+    }
 
-        return integerTypeValue;
+    @Override
+    protected SpecifiedTypeValue<Integer> createValue(final List<Integer> values) {
+        return new IntegerValue(values);
     }
 
     private boolean isInteger(final Number value) {
@@ -54,18 +47,8 @@ public class IntegerConverter implements TypeConverter<Integer> {
         return doubleValue == (int) doubleValue;
     }
 
-    private List<Integer> convertCollection(final Collection<Object> unspecifiedValues) {
-        return unspecifiedValues
-                .stream()
-                .map(this::convertSingleObject)
-                .collect(Collectors.toList());
-    }
-
-    private List<Integer> convertArray(final Object[] unspecifiedValues) {
-        return convertCollection(new ArrayList<>(Arrays.asList(unspecifiedValues)));
-    }
-
-    private Integer convertSingleObject(final Object unspecifiedValue) {
+    @Override
+    protected Integer convertSingleObject(final Object unspecifiedValue) {
         final int intValue;
 
         if (unspecifiedValue instanceof Number) {

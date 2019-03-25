@@ -33,6 +33,9 @@ import org.powerflows.dmn.engine.model.decision.rule.entry.InputEntry;
 
 import java.io.Serializable;
 
+/**
+ * Evaluator for rule entry expressions.
+ */
 @Slf4j
 public class InputEntryEvaluator {
 
@@ -49,6 +52,14 @@ public class InputEntryEvaluator {
         this.evaluationModeProviderFactory = evaluationModeProviderFactory;
     }
 
+    /**
+     * Performs entry expression evaluation.
+     *
+     * @param inputEntry entry expression defined in decision
+     * @param input value evaluated as decision entry input
+     * @param evaluationContext decision variable context
+     * @return evaluation result
+     */
     public boolean evaluate(final InputEntry inputEntry,
                             final Input input,
                             final EvaluationContext evaluationContext) {

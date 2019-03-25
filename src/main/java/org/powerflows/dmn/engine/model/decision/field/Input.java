@@ -26,6 +26,9 @@ import java.io.Serializable;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
+/**
+ * Represents decision input declaration.
+ */
 @EqualsAndHashCode
 @ToString
 public class Input implements Serializable {

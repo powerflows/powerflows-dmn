@@ -23,6 +23,9 @@ import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * Base class for decision variable holders.
+ */
 @ToString
 public class AbstractDecisionVariables {
 

@@ -20,6 +20,9 @@ import org.powerflows.dmn.engine.model.decision.expression.ExpressionType;
 import java.util.Collections;
 import java.util.List;
 
+/**
+ * Creates MVEL expression evaluation provider.
+ */
 public class MvelExpressionEvaluationProviderFactory implements ExpressionEvaluationProviderFactory {
     private static final List<ExpressionType> SUPPORTED = Collections.singletonList(ExpressionType.MVEL);
 

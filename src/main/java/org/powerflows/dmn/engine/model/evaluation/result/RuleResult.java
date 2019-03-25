@@ -24,6 +24,9 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Represents rule evaluation result.
+ */
 @ToString
 public class RuleResult implements Serializable {
 

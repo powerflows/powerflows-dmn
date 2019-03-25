@@ -20,46 +20,25 @@ import org.powerflows.dmn.engine.evaluator.exception.EvaluationException;
 import org.powerflows.dmn.engine.evaluator.type.value.DoubleValue;
 import org.powerflows.dmn.engine.evaluator.type.value.SpecifiedTypeValue;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
 import java.util.List;
-import java.util.stream.Collectors;
 
-public class DoubleConverter implements TypeConverter<Double> {
+/**
+ * Handles value conversion to {@link Double} or {@link Double} collections.
+ */
+public class DoubleConverter extends BaseTypeConverter<Double> {
 
     @Override
-    public SpecifiedTypeValue<Double> convert(final Object unspecifiedValue) {
-        final SpecifiedTypeValue<Double> doubleTypeValue;
-        if (unspecifiedValue == null) {
-            final Double doubleValue = null;
-            doubleTypeValue = new DoubleValue(doubleValue);
-        } else if (unspecifiedValue instanceof Collection) {
-            final List<Double> doubleValues = convertCollection((Collection<Object>) unspecifiedValue);
-            doubleTypeValue = new DoubleValue(doubleValues);
-        } else if (unspecifiedValue.getClass().isArray()) {
-            final List<Double> doubleValues = convertArray((Object[]) unspecifiedValue);
-            doubleTypeValue = new DoubleValue(doubleValues);
-        } else {
-            final Double doubleValue = convertSingleObject(unspecifiedValue);
-            doubleTypeValue = new DoubleValue(doubleValue);
-        }
-
-        return doubleTypeValue;
+    protected SpecifiedTypeValue<Double> createValue(final Double value) {
+        return new DoubleValue(value);
     }
 
-    private List<Double> convertCollection(final Collection<Object> unspecifiedValues) {
-        return unspecifiedValues
-                .stream()
-                .map(this::convertSingleObject)
-                .collect(Collectors.toList());
+    @Override
+    protected SpecifiedTypeValue<Double> createValue(final List<Double> values) {
+        return new DoubleValue(values);
     }
 
-    private List<Double> convertArray(final Object[] unspecifiedValues) {
-        return convertCollection(new ArrayList<>(Arrays.asList(unspecifiedValues)));
-    }
-
-    private Double convertSingleObject(final Object unspecifiedValue) {
+    @Override
+    protected Double convertSingleObject(final Object unspecifiedValue) {
         final double doubleValue;
 
         if (unspecifiedValue instanceof Number) {

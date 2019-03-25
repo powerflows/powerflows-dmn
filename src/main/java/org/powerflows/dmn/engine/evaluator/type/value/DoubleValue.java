@@ -18,6 +18,9 @@ package org.powerflows.dmn.engine.evaluator.type.value;
 
 import java.util.List;
 
+/**
+ * {@link Double} value holder.
+ */
 public class DoubleValue extends AbstractSpecifiedTypeValues<Double> {
 
     public DoubleValue(final Double value) {

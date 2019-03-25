@@ -20,5 +20,11 @@ package org.powerflows.dmn.engine.evaluator.expression.provider.binding;
  */
 @FunctionalInterface
 public interface BoundMethod {
+
+    /**
+     * Execute function.
+     * @param args any number of arguments
+     * @return call result
+     */
     Object execute(Object... args);
 }

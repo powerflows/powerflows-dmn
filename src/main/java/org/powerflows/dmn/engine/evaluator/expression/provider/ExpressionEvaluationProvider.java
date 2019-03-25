@@ -23,6 +23,9 @@ import org.powerflows.dmn.engine.model.decision.rule.entry.OutputEntry;
 
 import java.io.Serializable;
 
+/**
+ * Defines expression evaluation provider contract.
+ */
 public interface ExpressionEvaluationProvider {
 
     Serializable evaluateInput(Input input, EvaluationContext evaluationContext);

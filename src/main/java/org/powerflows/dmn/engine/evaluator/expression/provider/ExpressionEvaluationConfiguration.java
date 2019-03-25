@@ -23,6 +23,9 @@ import javax.script.ScriptEngineManager;
 import java.util.Collections;
 import java.util.List;
 
+/**
+ * Configures expression evaluation.
+ */
 @Getter
 @Builder
 public class ExpressionEvaluationConfiguration {
@@ -35,6 +38,10 @@ public class ExpressionEvaluationConfiguration {
         this.scriptEngineManager = scriptEngineManager == null ? new ScriptEngineManager() : scriptEngineManager;
     }
 
+    /**
+     * Creates simple configuration using default {@link ScriptEngineManager} and empty {@link MethodBinding} collection.
+     * @return configuration instance
+     */
     public static ExpressionEvaluationConfiguration simpleConfiguration() {
         return ExpressionEvaluationConfiguration.builder().build();
     }

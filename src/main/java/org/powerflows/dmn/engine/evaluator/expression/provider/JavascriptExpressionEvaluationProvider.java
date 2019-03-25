@@ -19,6 +19,9 @@ package org.powerflows.dmn.engine.evaluator.expression.provider;
 import org.powerflows.dmn.engine.evaluator.expression.provider.binding.BoundMethod;
 import org.powerflows.dmn.engine.evaluator.expression.provider.binding.MethodBinding;
 
+/**
+ * Provides Javascript expression evaluation.
+ */
 class JavascriptExpressionEvaluationProvider extends ScriptEngineExpressionEvaluationProvider {
 
     public JavascriptExpressionEvaluationProvider(final ExpressionEvaluationConfiguration configuration) {

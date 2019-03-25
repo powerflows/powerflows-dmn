@@ -18,6 +18,10 @@ package org.powerflows.dmn.engine.evaluator.type.value;
 
 import java.util.List;
 
+/**
+ * Typed value holder contract.
+ * @param <T> held value type
+ */
 public interface SpecifiedTypeValue<T> {
 
     boolean isSingleValue();

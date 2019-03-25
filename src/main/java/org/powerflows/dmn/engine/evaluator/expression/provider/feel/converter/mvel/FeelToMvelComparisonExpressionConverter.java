@@ -15,12 +15,15 @@
  */
 package org.powerflows.dmn.engine.evaluator.expression.provider.feel.converter.mvel;
 
-import org.powerflows.dmn.engine.evaluator.expression.provider.binding.ExpressionEvaluationException;
+import org.powerflows.dmn.engine.evaluator.expression.ExpressionEvaluationException;
 import org.powerflows.dmn.engine.evaluator.expression.provider.feel.converter.ExpressionConverter;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+/**
+ * Converts FEEL comparison into MVEL comparison expression.
+ */
 public class FeelToMvelComparisonExpressionConverter implements ExpressionConverter {
 
     private final Pattern comparisonPattern = Pattern.compile("^(<|<=|>|>=)([^=].*)$");

@@ -18,6 +18,9 @@ package org.powerflows.dmn.engine.evaluator.type.value;
 
 import java.util.List;
 
+/**
+ * {@link Integer} value holder.
+ */
 public class IntegerValue extends AbstractSpecifiedTypeValues<Integer> {
 
     public IntegerValue(final Integer value) {

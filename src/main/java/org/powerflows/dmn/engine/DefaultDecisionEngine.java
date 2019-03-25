@@ -22,6 +22,9 @@ import org.powerflows.dmn.engine.model.decision.Decision;
 import org.powerflows.dmn.engine.model.evaluation.result.DecisionResult;
 import org.powerflows.dmn.engine.model.evaluation.variable.DecisionVariables;
 
+/**
+ * Default decision engine implementation.
+ */
 public class DefaultDecisionEngine implements DecisionEngine {
 
     private final DecisionEvaluator decisionEvaluator;
