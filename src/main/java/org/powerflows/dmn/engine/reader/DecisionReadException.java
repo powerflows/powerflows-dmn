@@ -16,6 +16,9 @@
 
 package org.powerflows.dmn.engine.reader;
 
+/**
+ * Exception related to decision reading.
+ */
 public class DecisionReadException extends RuntimeException {
     public DecisionReadException(final String message, final Throwable cause) {
         super(message, cause);

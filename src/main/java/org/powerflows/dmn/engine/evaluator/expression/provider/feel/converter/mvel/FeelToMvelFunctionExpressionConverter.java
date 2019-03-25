@@ -15,12 +15,15 @@
  */
 package org.powerflows.dmn.engine.evaluator.expression.provider.feel.converter.mvel;
 
-import org.powerflows.dmn.engine.evaluator.expression.provider.binding.ExpressionEvaluationException;
+import org.powerflows.dmn.engine.evaluator.expression.ExpressionEvaluationException;
 import org.powerflows.dmn.engine.evaluator.expression.provider.binding.MethodBinding;
 import org.powerflows.dmn.engine.evaluator.expression.provider.feel.converter.ExpressionConverter;
 
 import java.util.List;
 
+/**
+ * Converts FEEL function expression into MVEL function call.
+ */
 public class FeelToMvelFunctionExpressionConverter implements ExpressionConverter {
 
     private final List<MethodBinding> functions;

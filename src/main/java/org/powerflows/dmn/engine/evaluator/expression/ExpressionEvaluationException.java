@@ -13,8 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.powerflows.dmn.engine.evaluator.expression.provider.binding;
+package org.powerflows.dmn.engine.evaluator.expression;
 
+/**
+ * Exception related to expression evaluation.
+ */
 public class ExpressionEvaluationException extends RuntimeException {
     public ExpressionEvaluationException(final Exception e) {
         super(e);

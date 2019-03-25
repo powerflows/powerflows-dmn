@@ -22,7 +22,7 @@ import org.mvel2.integration.VariableResolverFactory;
 import org.mvel2.integration.impl.MapVariableResolverFactory;
 import org.powerflows.dmn.engine.evaluator.context.EvaluationContext;
 import org.powerflows.dmn.engine.evaluator.exception.EvaluationException;
-import org.powerflows.dmn.engine.evaluator.expression.provider.binding.ExpressionEvaluationException;
+import org.powerflows.dmn.engine.evaluator.expression.ExpressionEvaluationException;
 import org.powerflows.dmn.engine.evaluator.expression.provider.binding.InstanceMethodBinding;
 import org.powerflows.dmn.engine.evaluator.expression.provider.binding.MethodBinding;
 import org.powerflows.dmn.engine.model.decision.expression.Expression;
@@ -32,6 +32,11 @@ import org.powerflows.dmn.engine.model.decision.rule.entry.OutputEntry;
 
 import java.io.Serializable;
 
+/**
+ * Provides MVEL expression evaluation.
+ *
+ * Doesn't support instance method binding.
+ */
 @Slf4j
 class MvelExpressionEvaluationProvider implements ExpressionEvaluationProvider {
     private final VariableResolverFactory functionResolverFactory = new MapVariableResolverFactory();

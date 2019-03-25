@@ -24,7 +24,9 @@ import org.powerflows.dmn.engine.model.decision.rule.entry.OutputEntry;
 
 import java.io.Serializable;
 
-
+/**
+ * Provides literal expression evaluation.
+ */
 @Slf4j
 class LiteralExpressionEvaluationProvider implements ExpressionEvaluationProvider {
 

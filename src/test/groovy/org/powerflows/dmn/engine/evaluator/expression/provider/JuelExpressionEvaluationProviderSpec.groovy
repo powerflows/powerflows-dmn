@@ -18,7 +18,7 @@ package org.powerflows.dmn.engine.evaluator.expression.provider
 
 
 import org.powerflows.dmn.engine.evaluator.context.EvaluationContext
-import org.powerflows.dmn.engine.evaluator.expression.provider.binding.ExpressionEvaluationException
+import org.powerflows.dmn.engine.evaluator.expression.ExpressionEvaluationException
 import org.powerflows.dmn.engine.evaluator.expression.provider.binding.InstanceMethodBinding
 import org.powerflows.dmn.engine.evaluator.expression.provider.binding.MethodBinding
 import org.powerflows.dmn.engine.evaluator.expression.provider.binding.StaticMethodBinding

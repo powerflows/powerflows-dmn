@@ -4,7 +4,7 @@
 
     <groupId>org.powerflows</groupId>
     <artifactId>dmn</artifactId>
-    <version>0.11.0-SNAPSHOT</version>
+    <version>1.0.0-SNAPSHOT</version>
     <packaging>jar</packaging>
     <name>DMN</name>
     <description>Power Flows DMN</description>
@@ -81,19 +81,20 @@
         <spock.version>1.1-groovy-2.4</spock.version>
         <cglib.version>3.2.5</cglib.version>
         <groovy.version>2.4.15</groovy.version>
-        <mvel.version>2.4.3.Final</mvel.version>
-        <snakeyaml.version>1.21</snakeyaml.version>
-        <lombok.version>1.18.2</lombok.version>
-        <objenesis.version>2.6</objenesis.version>
+        <mvel.version>2.4.4.Final</mvel.version>
+        <snakeyaml.version>1.24</snakeyaml.version>
+        <lombok.version>1.18.6</lombok.version>
+        <objenesis.version>3.0.1</objenesis.version>
         <maven.release.version>2.5.3</maven.release.version>
         <nexus.staging.maven.version>1.6.8</nexus.staging.maven.version>
         <maven.source.version>3.0.1</maven.source.version>
         <maven.javadoc.version>3.0.1</maven.javadoc.version>
         <maven.deploy.version>2.8.2</maven.deploy.version>
         <maven.gpg.version>1.6</maven.gpg.version>
-        <slf4j.version>1.7.25</slf4j.version>
-        <log4j.version>2.11.1</log4j.version>
+        <slf4j.version>1.7.26</slf4j.version>
+        <log4j.version>2.11.2</log4j.version>
         <juel.version>2.2.7</juel.version>
+        <jaxb.version>2.3.1</jaxb.version>
     </properties>
 
     <dependencies>
@@ -108,6 +109,18 @@
             <artifactId>lombok</artifactId>
             <version>${lombok.version}</version>
             <scope>provided</scope>
+        </dependency>
+
+        <!-- XML Reading -->
+        <dependency>
+            <groupId>javax.xml.bind</groupId>
+            <artifactId>jaxb-api</artifactId>
+            <version>${jaxb.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.glassfish.jaxb</groupId>
+            <artifactId>jaxb-runtime</artifactId>
+            <version>${jaxb.version}</version>
         </dependency>
 
         <!-- Groovy -->
@@ -321,6 +334,13 @@
                         <goals>
                             <goal>jar</goal>
                         </goals>
+                        <configuration>
+                            <doctitle>Powerflows ${project.name} ${project.version} API</doctitle>
+                            <header>Powerflows ${project.name} ${project.version} API</header>
+                            <windowtitle>Powerflows ${project.name} ${project.version} API</windowtitle>
+                            <isOffline>false</isOffline>
+                            <splitindex>true</splitindex>
+                        </configuration>
                     </execution>
                 </executions>
             </plugin>

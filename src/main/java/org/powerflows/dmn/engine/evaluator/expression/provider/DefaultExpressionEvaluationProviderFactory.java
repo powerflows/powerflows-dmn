@@ -23,6 +23,10 @@ import java.util.EnumMap;
 import java.util.Optional;
 import java.util.ServiceLoader;
 
+/**
+ * Default expression evaluation provider factory.
+ * Provides instances of {@link ExpressionEvaluationProvider} obtained from {@link ExpressionEvaluationProviderFactory} gathered from classpath via {@link ServiceLoader}.
+ */
 @Slf4j
 public class DefaultExpressionEvaluationProviderFactory {
 

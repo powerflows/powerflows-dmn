@@ -20,6 +20,9 @@ import org.powerflows.dmn.engine.model.decision.expression.ExpressionType;
 import java.util.Collections;
 import java.util.List;
 
+/**
+ * Creates literal expression evaluation provider.
+ */
 public class LiteralExpressionEvaluationProviderFactory implements ExpressionEvaluationProviderFactory {
     private static final List<ExpressionType> SUPPORTED = Collections.singletonList(ExpressionType.LITERAL);
 

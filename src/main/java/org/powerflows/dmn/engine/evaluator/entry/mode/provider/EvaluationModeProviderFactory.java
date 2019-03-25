@@ -20,6 +20,10 @@ import org.powerflows.dmn.engine.model.decision.EvaluationMode;
 
 import java.util.EnumMap;
 
+/**
+ * Factory for entry evaluation mode providers.
+ * Instantiates and caches {@link BooleanEvaluationModeProvider} and {@link InputComparisonEvaluationModeProvider}
+ */
 public class EvaluationModeProviderFactory {
 
     private final EnumMap<EvaluationMode, EvaluationModeProvider> factories = new EnumMap<>(EvaluationMode.class);

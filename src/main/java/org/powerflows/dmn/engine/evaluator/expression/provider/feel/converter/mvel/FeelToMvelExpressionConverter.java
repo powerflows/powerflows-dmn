@@ -21,6 +21,9 @@ import org.powerflows.dmn.engine.evaluator.expression.provider.feel.converter.Ex
 
 import java.util.List;
 
+/**
+ * Converts FEEL expression into MVEL expression.
+ */
 @Slf4j
 public class FeelToMvelExpressionConverter implements ExpressionConverter {
     private final ExpressionConverter feelToMvelCollectionExpressionConverter;

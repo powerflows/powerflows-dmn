@@ -20,6 +20,9 @@ import org.powerflows.dmn.engine.model.decision.field.ValueType;
 
 import java.util.EnumMap;
 
+/**
+ * Factory for obtaining instances of type converters.
+ */
 public class TypeConverterFactory {
 
     private final EnumMap<ValueType, TypeConverter> factories = new EnumMap<>(ValueType.class);

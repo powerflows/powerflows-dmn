@@ -17,6 +17,9 @@ package org.powerflows.dmn.engine.evaluator.expression.provider.feel.converter.m
 
 import org.powerflows.dmn.engine.evaluator.expression.provider.feel.converter.ExpressionConverter;
 
+/**
+ * Converts FEEL unary expression into MVEL compatible expression.
+ */
 public class FeelToMvelUnaryExpressionConverter implements ExpressionConverter {
 
     private final ExpressionConverter feelToMvelComparisonExpressionConverter;

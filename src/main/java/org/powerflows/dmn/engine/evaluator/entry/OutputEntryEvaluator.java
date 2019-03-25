@@ -29,6 +29,9 @@ import org.powerflows.dmn.engine.model.evaluation.result.EntryResult;
 
 import java.io.Serializable;
 
+/**
+ * Evaluator for output entry expressions.
+ */
 @Slf4j
 public class OutputEntryEvaluator {
 
@@ -41,6 +44,13 @@ public class OutputEntryEvaluator {
         this.typeConverterFactory = typeConverterFactory;
     }
 
+    /**
+     *
+     * @param outputEntry output entry expression defined in decision
+     * @param output output definition
+     * @param evaluationContext decision variable context
+     * @return entry evaluation result
+     */
     public EntryResult evaluate(final OutputEntry outputEntry, final Output output, final EvaluationContext evaluationContext) {
         final ExpressionEvaluationProvider expressionEvaluator = expressionEvaluationProviderFactory.getInstance(outputEntry.getExpression().getType());
         final TypeConverter typeConverter = typeConverterFactory.getInstance(output.getType());

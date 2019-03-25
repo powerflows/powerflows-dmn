@@ -19,7 +19,22 @@ package org.powerflows.dmn.engine.evaluator.entry.mode.provider;
 import org.powerflows.dmn.engine.evaluator.type.value.SpecifiedTypeValue;
 import org.powerflows.dmn.engine.model.decision.field.ValueType;
 
+/**
+ * Provider for entry result evaluation.
+ * Implementation is transforming entry input and entry expression evaluation result into final rule entry result according to configured mode.
+ * Implementations must be stateless.
+ */
 public interface EvaluationModeProvider {
 
+    /**
+     * Evaluates entry to boolean value.
+     *
+     * @param inputType rule input declared type
+     * @param inputEntryValue input entry value from decision configuration
+     * @param inputValue value from context
+     * @param <T> declared type of input entry value
+     * @param <P> declared type of input value
+     * @return if evaluation result is positive
+     */
     <T, P> boolean isPositive(ValueType inputType, SpecifiedTypeValue<T> inputEntryValue, SpecifiedTypeValue<P> inputValue);
 }

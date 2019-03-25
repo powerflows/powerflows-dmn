@@ -22,6 +22,10 @@ import java.io.Serializable;
 import java.util.List;
 import java.util.Objects;
 
+/**
+ * Base class for those implementing {@link Buildable}
+ * @param <T> built type
+ */
 public abstract class AbstractBuilder<T> implements Buildable<T> {
     protected T product;
 

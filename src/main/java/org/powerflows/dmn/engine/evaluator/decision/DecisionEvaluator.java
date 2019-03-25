@@ -41,16 +41,30 @@ import java.util.Set;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
+/**
+ * Evaluates decisions.
+ */
 @Slf4j
 public class DecisionEvaluator {
 
     private static final Set<HitPolicy> UNSUPPORTED_HIT_POLICIES = Collections.unmodifiableSet(EnumSet.of(HitPolicy.OUTPUT_ORDER, HitPolicy.RULE_ORDER, HitPolicy.PRIORITY));
     private final RuleEvaluator ruleEvaluator;
 
+    /**
+     *
+     * @param ruleEvaluator rule evaluator to use.
+     */
     public DecisionEvaluator(RuleEvaluator ruleEvaluator) {
         this.ruleEvaluator = ruleEvaluator;
     }
 
+    /**
+     * Evaluates decision using given variables context.
+     *
+     * @param decision decision to evaluate
+     * @param decisionVariables variables to use during evaluation
+     * @return decision evaluation result
+     */
     public DecisionResult evaluate(final Decision decision, final DecisionVariables decisionVariables) {
         if (decision == null) {
             throw new NullPointerException("Decision can not be null");

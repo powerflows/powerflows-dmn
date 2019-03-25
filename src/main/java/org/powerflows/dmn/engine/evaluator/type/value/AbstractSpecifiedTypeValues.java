@@ -18,6 +18,10 @@ package org.powerflows.dmn.engine.evaluator.type.value;
 
 import java.util.List;
 
+/**
+ * Base classfor all typed value holders.
+ * @param <T> type of value
+ */
 public abstract class AbstractSpecifiedTypeValues<T> implements SpecifiedTypeValue<T> {
 
     private T value;

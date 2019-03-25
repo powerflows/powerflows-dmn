@@ -15,13 +15,16 @@
  */
 package org.powerflows.dmn.engine.evaluator.expression.provider.feel.converter.mvel;
 
-import org.powerflows.dmn.engine.evaluator.expression.provider.binding.ExpressionEvaluationException;
+import org.powerflows.dmn.engine.evaluator.expression.ExpressionEvaluationException;
 import org.powerflows.dmn.engine.evaluator.expression.provider.feel.converter.ExpressionConverter;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+/**
+ * Converts FEEL collecion declaration into MVEL collection declaration.
+ */
 public class FeelToMvelCollectionExpressionConverter implements ExpressionConverter {
 
     private final String collectionPattern = ",(?=([^\"]*\"[^\"]*\")*[^\"]*$)";

@@ -20,6 +20,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.codehaus.groovy.runtime.MethodClosure;
 import org.powerflows.dmn.engine.evaluator.expression.provider.binding.MethodBinding;
 
+/**
+ * Provides Groovy expression evaluation.
+ */
 @Slf4j
 class GroovyExpressionEvaluationProvider extends ScriptEngineExpressionEvaluationProvider {
 

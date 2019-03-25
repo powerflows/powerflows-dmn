@@ -25,40 +25,23 @@ import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class StringConverter implements TypeConverter<String> {
+/**
+ *
+ */
+public class StringConverter extends BaseTypeConverter<String> {
+
 
     @Override
-    public SpecifiedTypeValue<String> convert(final Object unspecifiedValue) {
-        final SpecifiedTypeValue<String> stringTypeValue;
-        if (unspecifiedValue == null) {
-            final String stringValues = null;
-            stringTypeValue = new StringValue(stringValues);
-        } else if (unspecifiedValue instanceof Collection) {
-            final List<String> stringValues = convertCollection((Collection<Object>) unspecifiedValue);
-            stringTypeValue = new StringValue(stringValues);
-        } else if (unspecifiedValue.getClass().isArray()) {
-            final List<String> stringValues = convertArray((Object[]) unspecifiedValue);
-            stringTypeValue = new StringValue(stringValues);
-        } else {
-            final String stringValue = convertSingleObject(unspecifiedValue);
-            stringTypeValue = new StringValue(stringValue);
-        }
-
-        return stringTypeValue;
+    protected SpecifiedTypeValue<String> createValue(final String value) {
+        return new StringValue(value);
     }
 
-    private List<String> convertCollection(final Collection<Object> unspecifiedValues) {
-        return unspecifiedValues
-                .stream()
-                .map(this::convertSingleObject)
-                .collect(Collectors.toList());
+    @Override
+    protected SpecifiedTypeValue<String> createValue(final List<String> values) {
+        return new StringValue(values);
     }
 
-    private List<String> convertArray(final Object[] unspecifiedValues) {
-        return convertCollection(new ArrayList<>(Arrays.asList(unspecifiedValues)));
-    }
-
-    private String convertSingleObject(final Object unspecifiedValue) {
+    protected String convertSingleObject(final Object unspecifiedValue) {
         return String.valueOf(unspecifiedValue);
     }
 }

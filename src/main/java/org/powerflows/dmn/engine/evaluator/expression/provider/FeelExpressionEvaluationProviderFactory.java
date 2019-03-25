@@ -25,6 +25,9 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+/**
+ * Creates S-FEEL expression evaluation provider.
+ */
 public class FeelExpressionEvaluationProviderFactory implements ExpressionEvaluationProviderFactory {
     private static final List<ExpressionType> SUPPORTED = Collections.singletonList(ExpressionType.FEEL);
 

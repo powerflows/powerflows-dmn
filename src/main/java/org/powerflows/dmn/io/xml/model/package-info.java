@@ -13,6 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+/**
+ * Contains JAXBModel mapping OMG DMN 1.1 Specification.
+ */
 @XmlSchema(
         namespace = "http://www.omg.org/spec/DMN/20151101/dmn.xsd",
         elementFormDefault = XmlNsForm.QUALIFIED)

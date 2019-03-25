@@ -20,6 +20,9 @@ import org.powerflows.dmn.engine.model.decision.expression.ExpressionType;
 import java.util.Collections;
 import java.util.List;
 
+/**
+ * Creates Groovy expression evaluation provider.
+ */
 public class GroovyExpressionEvaluationProviderFactory implements ExpressionEvaluationProviderFactory {
     private static final List<ExpressionType> SUPPORTED = Collections.singletonList(ExpressionType.GROOVY);
 

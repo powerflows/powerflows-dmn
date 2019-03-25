@@ -19,6 +19,10 @@ package org.powerflows.dmn.engine.evaluator.entry.mode.provider;
 import org.powerflows.dmn.engine.evaluator.type.value.SpecifiedTypeValue;
 import org.powerflows.dmn.engine.model.decision.field.ValueType;
 
+/**
+ * Boolean based entry evaluation provider.
+ * Handles default S-FEEL behavior, entry evaluation is expected to be boolean which becomes the result.
+ */
 class BooleanEvaluationModeProvider implements EvaluationModeProvider {
 
     @Override

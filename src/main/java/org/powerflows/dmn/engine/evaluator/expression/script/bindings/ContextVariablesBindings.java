@@ -24,6 +24,9 @@ import java.util.Collection;
 import java.util.Map;
 import java.util.Set;
 
+/**
+ * Context variable holder for use with {@link javax.script.ScriptEngine}.
+ */
 public class ContextVariablesBindings implements Bindings {
 
     private final Bindings bindings;

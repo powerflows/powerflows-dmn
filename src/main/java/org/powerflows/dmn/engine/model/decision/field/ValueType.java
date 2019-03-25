@@ -21,6 +21,9 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.Optional;
 
+/**
+ * Lists value types that can be used in expressions.
+ */
 public enum ValueType {
     STRING(String.class),
     INTEGER(Integer.class),

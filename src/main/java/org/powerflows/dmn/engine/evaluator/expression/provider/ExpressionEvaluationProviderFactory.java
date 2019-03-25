@@ -19,8 +19,23 @@ import org.powerflows.dmn.engine.model.decision.expression.ExpressionType;
 
 import java.util.List;
 
+/**
+ * Defines Expression evaluation provider factory contract.
+ *
+ * Implementation must be stateless with default constructor as instances are created by JRE {@link java.util.ServiceLoader} infrastructure.
+ */
 public interface ExpressionEvaluationProviderFactory {
+
+    /**
+     * Creates provider instance with given configuration.
+     * @param configuration to use
+     * @return expression evaluation provider instance
+     */
     ExpressionEvaluationProvider createProvider(ExpressionEvaluationConfiguration configuration);
 
+    /**
+     * Enums supported expression types.
+     * @return list of expression types
+     */
     List<ExpressionType> supportedExpressionTypes();
 }

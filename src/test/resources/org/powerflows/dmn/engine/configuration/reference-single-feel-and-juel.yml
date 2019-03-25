@@ -1,0 +1,115 @@
+id: some_table_id_1
+name: Some Table Name
+hit-policy: COLLECT
+expression-type: FEEL
+fields:
+  in:
+    age:
+      description: Some Input 1 Description
+      type: INTEGER
+      expression-type: FEEL
+      expression: age
+    sex:
+      type: STRING
+      expression-type: JUEL
+      expression: sexExpression
+    activeLoansNumber:
+      type: INTEGER
+      expression-type: LITERAL
+    startDate:
+      type: DATE
+  out:
+    loanAmount:
+      description: Loan amount in Euro
+      type: DOUBLE
+    loanTerm:
+      description: Loan term in months
+      type: INTEGER
+rules:
+- description: Some rule 1 for man
+  in:
+    age: 18
+    sex:
+      expression-type: JUEL
+      expression: 'sex == "man"'
+    activeLoansNumber: 0
+    startDate: '[date and time("2015-11-30T12:00:00")..date and time("2016-11-30T12:00:00")]'
+  out:
+    loanAmount: 10000
+    loanTerm: 12
+- description: Some rule 2 for man
+  in:
+    age: 18
+    sex:
+      expression-type: JUEL
+      expression: 'sex == "man"'
+    activeLoansNumber: 0
+    startDate: '[date and time("2016-11-30T12:00:00")..date and time("2017-11-30T12:00:00")]'
+  out:
+    loanAmount: 15000
+    loanTerm: 6
+- description: Some rule 3 for man
+  in:
+    age: '>=18'
+    sex:
+      expression-type: JUEL
+      expression: 'sex == "man"'
+    activeLoansNumber: 0
+    startDate: '[date and time("2015-11-30T12:00:00")..date and time("2016-11-30T12:00:00")]'
+  out:
+    loanAmount: 20000
+    loanTerm: 12
+- description: Some rule 4 for man
+  in:
+    age: '>=18'
+    sex:
+      expression-type: JUEL
+      expression: 'sex == "man"'
+    activeLoansNumber: 0
+  out:
+    loanAmount: 25000
+    loanTerm: 6
+- description: Some rule 1 for woman
+  in:
+    age: 18
+    sex:
+      expression-type: JUEL
+      expression: 'sex == "woman"'
+    activeLoansNumber: 0
+    startDate: '[date and time("2015-11-30T12:00:00")..date and time("2016-11-30T12:00:00")]'
+  out:
+    loanAmount: 9000
+    loanTerm: 10
+- description: Some rule 2 for woman
+  in:
+    age: 18
+    sex:
+      expression-type: JUEL
+      expression: 'sex == "woman"'
+    activeLoansNumber: 0
+    startDate: '[date and time("2016-11-30T12:00:00")..date and time("2017-11-30T12:00:00")]'
+  out:
+    loanAmount: 12000
+    loanTerm: 4
+- description: Some rule 3 for woman
+  in:
+    age: '>18'
+    sex:
+      expression-type: JUEL
+      expression: 'sex == "woman"'
+    activeLoansNumber: 0
+    startDate: '[date and time("2015-11-30T12:00:00")..date and time("2016-11-30T12:00:00")]'
+  out:
+    loanAmount: 18000
+    loanTerm: 10
+- description: Some rule 4 for woman
+  in:
+    age: '>18'
+    sex:
+      expression-type: JUEL
+      expression: 'sex == "woman"'
+    activeLoansNumber: 0
+    startDate: '[date and time("2016-11-30T12:00:00")..date and time("2017-11-30T12:00:00")]'
+  out:
+    loanAmount: 24000
+    loanTerm: 4

@@ -29,12 +29,20 @@ import javax.el.VariableMapper;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * Provides JUEL expression evaluation context implementation.
+ */
 public class BasicELContext extends ELContext {
 
     private final ELResolver resolver;
     private final FunctionMapper functionMapper;
     private final VariableMapper variableMapper;
 
+    /**
+     * Single constructor.
+     *
+     * @param functionMapper mapper for custom functions
+     */
     public BasicELContext(final FunctionMapper functionMapper) {
         final CompositeELResolver localResolver = new CompositeELResolver();
         localResolver.add(new ArrayELResolver(true));

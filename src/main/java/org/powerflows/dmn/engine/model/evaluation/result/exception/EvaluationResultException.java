@@ -16,7 +16,9 @@
 
 package org.powerflows.dmn.engine.model.evaluation.result.exception;
 
-
+/**
+ * Exception related to evaluation result handling.
+ */
 public class EvaluationResultException extends RuntimeException {
 
     public EvaluationResultException(String message) {

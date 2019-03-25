@@ -33,6 +33,11 @@ import javax.script.ScriptException;
 import java.io.Serializable;
 import java.util.stream.Collectors;
 
+/**
+ * Script engine based expression evaluation provider base class.
+ *
+ * Supports binding instance methods as expression functions.
+ */
 @Slf4j
 public abstract class ScriptEngineExpressionEvaluationProvider implements ExpressionEvaluationProvider {
     protected final ScriptEngine scriptEngine;

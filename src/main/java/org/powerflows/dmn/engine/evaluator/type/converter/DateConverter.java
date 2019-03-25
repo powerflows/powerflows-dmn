@@ -20,18 +20,17 @@ import org.powerflows.dmn.engine.evaluator.exception.EvaluationException;
 import org.powerflows.dmn.engine.evaluator.type.value.DateValue;
 import org.powerflows.dmn.engine.evaluator.type.value.SpecifiedTypeValue;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Calendar;
-import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 import java.util.TimeZone;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import java.util.stream.Collectors;
 
-public class DateConverter implements TypeConverter<Date> {
+/**
+ * Converts date values.
+ */
+public class DateConverter extends BaseTypeConverter<Date> {
 
     /**
      * To ensure compatibility with the reading from YAML model, the following patterns are the same like in SnakeYAML library.
@@ -41,40 +40,18 @@ public class DateConverter implements TypeConverter<Date> {
     private final Pattern dateTimeRegexp = Pattern.compile(
             "^([0-9][0-9][0-9][0-9])-([0-9][0-9]?)-([0-9][0-9]?)(?:(?:[Tt]|[ \t]+)([0-9][0-9]?):([0-9][0-9]):([0-9][0-9])(?:\\.([0-9]*))?(?:[ \t]*(?:Z|([-+][0-9][0-9]?)(?::([0-9][0-9])?)?))?)?$");
 
+    @Override
+    protected SpecifiedTypeValue<Date> createValue(final Date value) {
+        return new DateValue(value);
+    }
 
     @Override
-    public SpecifiedTypeValue<Date> convert(final Object unspecifiedValue) {
-        final SpecifiedTypeValue<Date> dateTypeValue;
-
-        if (unspecifiedValue == null) {
-            final Date dateValue = null;
-            dateTypeValue = new DateValue(dateValue);
-        } else if (unspecifiedValue instanceof Collection) {
-            final List<Date> dateValues = convertCollection((Collection<Object>) unspecifiedValue);
-            dateTypeValue = new DateValue(dateValues);
-        } else if (unspecifiedValue.getClass().isArray()) {
-            final List<Date> dateValues = convertArray((Object[]) unspecifiedValue);
-            dateTypeValue = new DateValue(dateValues);
-        } else {
-            final Date dateValue = convertSingleObject(unspecifiedValue);
-            dateTypeValue = new DateValue(dateValue);
-        }
-
-        return dateTypeValue;
+    protected SpecifiedTypeValue<Date> createValue(final List<Date> values) {
+        return new DateValue(values);
     }
 
-    private List<Date> convertCollection(final Collection<Object> unspecifiedValues) {
-        return unspecifiedValues
-                .stream()
-                .map(this::convertSingleObject)
-                .collect(Collectors.toList());
-    }
-
-    private List<Date> convertArray(final Object[] unspecifiedValues) {
-        return convertCollection(new ArrayList<>(Arrays.asList(unspecifiedValues)));
-    }
-
-    private Date convertSingleObject(final Object unspecifiedValue) {
+    @Override
+    protected Date convertSingleObject(final Object unspecifiedValue) {
         final Date dateValue;
 
         if (unspecifiedValue instanceof Date) {

@@ -20,7 +20,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.mvel2.integration.VariableResolverFactory;
 import org.mvel2.integration.impl.MapVariableResolverFactory;
 import org.powerflows.dmn.engine.evaluator.context.EvaluationContext;
-import org.powerflows.dmn.engine.evaluator.expression.provider.binding.ExpressionEvaluationException;
 import org.powerflows.dmn.engine.evaluator.expression.provider.feel.converter.ExpressionConverter;
 import org.powerflows.dmn.engine.evaluator.expression.provider.feel.converter.mvel.FeelToMvelExpressionConverter;
 import org.powerflows.dmn.engine.model.decision.expression.Expression;
@@ -30,6 +29,9 @@ import org.powerflows.dmn.engine.model.decision.rule.entry.OutputEntry;
 
 import java.io.Serializable;
 
+/**
+ * Provides S-FEEL expression evaluation.
+ */
 @Slf4j
 class FeelExpressionEvaluationProvider extends MvelExpressionEvaluationProvider {
 
@@ -46,7 +48,7 @@ class FeelExpressionEvaluationProvider extends MvelExpressionEvaluationProvider 
     public Serializable evaluateInput(final Input input, final EvaluationContext evaluationContext) {
         log.debug("Starting evaluation of input: {} with evaluation context: {}", input, evaluationContext);
 
-        final String mvelInputExpressionValue = expressionConverter.convert((String) input.getExpression().getValue(), null);
+        final String mvelInputExpressionValue = expressionConverter.convert(String.valueOf(input.getExpression().getValue()), null);
         final Expression mvelInputExpression = Expression.builder().type(input.getExpression().getType()).value(mvelInputExpressionValue).build();
 
         final Serializable result = evaluate(mvelInputExpression, evaluationContext);
@@ -77,7 +79,7 @@ class FeelExpressionEvaluationProvider extends MvelExpressionEvaluationProvider 
         fillVariables(evaluationContext, mapVariableResolverFactory);
         mapVariableResolverFactory.createVariable(inputEntry.getNameAlias(), evaluationContext.get(inputEntry.getName()));
 
-        final String mvelExpressionValue = expressionConverter.convert((String) inputEntry.getExpression().getValue(), inputEntry.getName());
+        final String mvelExpressionValue = expressionConverter.convert(String.valueOf(inputEntry.getExpression().getValue()), inputEntry.getName());
         final Expression mvelInputEntryExpression = Expression.builder().type(inputEntry.getExpression().getType()).value(mvelExpressionValue).build();
 
         return evaluate(mvelInputEntryExpression, mapVariableResolverFactory);
