@@ -441,10 +441,6 @@ Power Flows supports evaluation in following languages:
 * MVEL
 * JavaScript
 
-Also in order to complain the highest performance it is possible to evaluate only literals
-without using any language evaluators. However thanks to solid and thoughtful architecture, Power Flows delivers
-extraordinary performance for all the evaluated languages. 
-
 ## Much more features
 Power Flows brings with it lots of features described in [WIKI](https://github.com/powerflows/powerflows-dmn/wiki).
 
