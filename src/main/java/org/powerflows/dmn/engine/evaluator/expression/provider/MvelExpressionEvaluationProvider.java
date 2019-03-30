@@ -25,12 +25,14 @@ import org.powerflows.dmn.engine.evaluator.exception.EvaluationException;
 import org.powerflows.dmn.engine.evaluator.expression.ExpressionEvaluationException;
 import org.powerflows.dmn.engine.evaluator.expression.provider.binding.InstanceMethodBinding;
 import org.powerflows.dmn.engine.evaluator.expression.provider.binding.MethodBinding;
+import org.powerflows.dmn.engine.evaluator.expression.provider.mvel.FastCachingMapVariableResolverFactory;
 import org.powerflows.dmn.engine.model.decision.expression.Expression;
 import org.powerflows.dmn.engine.model.decision.field.Input;
 import org.powerflows.dmn.engine.model.decision.rule.entry.InputEntry;
 import org.powerflows.dmn.engine.model.decision.rule.entry.OutputEntry;
 
 import java.io.Serializable;
+import java.util.WeakHashMap;
 
 /**
  * Provides MVEL expression evaluation.
@@ -40,6 +42,7 @@ import java.io.Serializable;
 @Slf4j
 class MvelExpressionEvaluationProvider implements ExpressionEvaluationProvider {
     private final VariableResolverFactory functionResolverFactory = new MapVariableResolverFactory();
+    private WeakHashMap<String, Object> expressionCache = new WeakHashMap<>();
 
     MvelExpressionEvaluationProvider(final ExpressionEvaluationConfiguration configuration) {
         configuration.getMethodBindings().forEach(methodBinding -> functionResolverFactory.createVariable(methodBinding.name().replaceAll("\\s", ""), createMethodBinding(methodBinding)));
@@ -88,26 +91,18 @@ class MvelExpressionEvaluationProvider implements ExpressionEvaluationProvider {
     }
 
     Serializable evaluate(final InputEntry inputEntry, final EvaluationContext evaluationContext) {
-        final VariableResolverFactory mapVariableResolverFactory = new MapVariableResolverFactory();
-
-        fillVariables(evaluationContext, mapVariableResolverFactory);
+        final VariableResolverFactory mapVariableResolverFactory = fillVariables(evaluationContext);
         mapVariableResolverFactory.createVariable(inputEntry.getNameAlias(), evaluationContext.get(inputEntry.getName()));
 
         return evaluate(inputEntry.getExpression(), mapVariableResolverFactory);
     }
 
     final Serializable evaluate(final Expression expression, final EvaluationContext evaluationContext) {
-        final VariableResolverFactory mapVariableResolverFactory = new MapVariableResolverFactory();
-
-        fillVariables(evaluationContext, mapVariableResolverFactory);
-        return evaluate(expression, mapVariableResolverFactory);
+        return evaluate(expression, fillVariables(evaluationContext));
     }
 
-    final void fillVariables(final EvaluationContext evaluationContext, final VariableResolverFactory mapVariableResolverFactory) {
-        evaluationContext
-                .getAll()
-                .keySet()
-                .forEach(variableName -> mapVariableResolverFactory.createVariable(variableName, evaluationContext.get(variableName)));
+    final VariableResolverFactory fillVariables(final EvaluationContext evaluationContext) {
+        return new FastCachingMapVariableResolverFactory(evaluationContext.getAll());
     }
 
     final Serializable evaluate(final Expression expression, final VariableResolverFactory variableResolverFactory) {
@@ -115,11 +110,14 @@ class MvelExpressionEvaluationProvider implements ExpressionEvaluationProvider {
         variableResolverFactory.setNextFactory(functionResolverFactory);
 
         try {
-            result = (Serializable) MVEL.eval((String) expression.getValue(), variableResolverFactory);
+            final String expressionString = (String) expression.getValue();
+            final Object compiledExpression = expressionCache.computeIfAbsent(expressionString, MVEL::compileExpression);
+            result = (Serializable) MVEL.executeExpression(compiledExpression, variableResolverFactory);
         } catch (Exception e) {
             throw new ExpressionEvaluationException("Can not evaluate feel expression '" + expression.getValue() + "'", e);
         }
 
         return result;
     }
+
 }
