@@ -15,19 +15,19 @@ The Power Flows DMN can be imported as a dependency via:
 <dependency>
     <groupId>org.powerflows</groupId>
     <artifactId>dmn</artifactId>
-    <version>1.0.0</version>
+    <version>1.1.1</version>
 </dependency>
 ```
 
 ## Gradle
 ```gradle    
-compile group: 'org.powerflows', name: 'dmn', version: '1.0.0'
+compile group: 'org.powerflows', name: 'dmn', version: '1.1.1'
 ```
 
 ## Grape
 ```groovy
 @Grapes(
-    @Grab(group='org.powerflows', module='dmn', version='1.0.0')
+    @Grab(group='org.powerflows', module='dmn', version='1.1.1')
 )
 ```   
  

@@ -131,7 +131,7 @@ public class XMLDecisionConverter implements DecisionToExternalModelConverter<XM
                         .name(name)
                         .withExpression(expressionBuilder ->
                                 expressionBuilder
-                                        .value(input.getInputExpression().getText())
+                                        .value(sanitizeExpressionValue(input.getInputExpression().getText()))
                                         .type(resolveExpressionType(input.getInputExpression().getExpressionLanguage()))
                                         .build())
                         .type(resolveType(input.getInputExpression().getTypeRef()))
@@ -227,7 +227,7 @@ public class XMLDecisionConverter implements DecisionToExternalModelConverter<XM
                     .withExpression(expressionBuilder ->
                             expressionBuilder
                                     .type(resolveExpressionType(outputEntry.getExpressionLanguage()))
-                                    .value(isNotBlank(outputEntry.getExpression()) ? outputEntry.getExpression() : null)
+                                    .value(sanitizeExpressionValue(outputEntry.getExpression()))
                                     .build())
                     .build());
         }
@@ -240,7 +240,7 @@ public class XMLDecisionConverter implements DecisionToExternalModelConverter<XM
         }
         for (int idx = 0; idx < inputEntries.size(); idx++) {
             XMLInputEntry inputEntry = inputEntries.get(idx);
-            if (isNotBlank(inputEntry.getExpression())) {
+            if (sanitizeExpressionValue(inputEntry.getExpression()) != null) {
                 final String name = inputNames.get(idx);
                 ruleBuilder.withInputEntry(entryBuilder -> entryBuilder
                         .name(name)
@@ -262,10 +262,6 @@ public class XMLDecisionConverter implements DecisionToExternalModelConverter<XM
         }
     }
 
-    private boolean isNotBlank(final String text) {
-        return text != null && !text.trim().isEmpty();
-    }
-
     private ValueType resolveType(final String typeRef) {
         if (typeRef == null) {
             return ValueType.STRING;
@@ -283,5 +279,22 @@ public class XMLDecisionConverter implements DecisionToExternalModelConverter<XM
         final String hitPolicy = externalModel.getDecisionTable().getHitPolicy();
 
         return OMG_HITPOLICY_MAPPING.getOrDefault(hitPolicy, defaultHitPolicy);
+    }
+
+    private String sanitizeExpressionValue(final String value) {
+        final String sanitized;
+
+        if (value == null) {
+            sanitized = null;
+        } else {
+            final String trimmed = value.trim();
+            if (trimmed.isEmpty() || trimmed.equals("-")) {
+                sanitized = null;
+            } else {
+                sanitized = value;
+            }
+        }
+
+        return sanitized;
     }
 }
