@@ -36,6 +36,7 @@ class XmlDecisionReaderSpec extends Specification {
     final String camundaExampleXmlUnknownTypeRef = 'camunda-dmn-1.1-example-unknown-type-ref.dmn'
     final String camundaExampleXmlNoInputs = 'camunda-dmn-1.1-example-no-inputs.dmn'
     final String camundaExampleXmlEmptyInputVariable = 'camunda-dmn-1.1-example-empty-input-variable.dmn'
+    final String camundaExampleXmlDashAsExpression = 'camunda-dmn-1.1-example-dash-as-expression.dmn'
 
     @Shared
     private XmlDecisionReader reader
@@ -170,6 +171,23 @@ class XmlDecisionReaderSpec extends Specification {
         }
     }
 
+    void 'should read and set null value in expression where originally is single dash as value'() {
+        given:
+        final InputStream inputStream = this.class.getResourceAsStream(camundaExampleXmlDashAsExpression)
+
+        when:
+        final Optional<Decision> result = reader.read(inputStream)
+
+        then:
+        result.isPresent()
+        with(result.get()) {
+            getInputs().size() == 1
+            getInputs()[0].expression.value == null
+            getRules()[0].inputEntries.isEmpty()
+            getRules()[0].outputEntries[0].expression.value == null
+        }
+    }
+
     void 'should read single decision by id from Camunda example stream'() {
         given:
         final InputStream inputStream = this.class.getResourceAsStream(camundaExampleXml)
@@ -272,7 +290,7 @@ class XmlDecisionReaderSpec extends Specification {
             getName() == 'InputClause_03bkdz8'
             getType() == ValueType.STRING
             getExpression().getType() == ExpressionType.FEEL
-            getExpression().getValue() == '' //How do we handle lists of possible values?
+            getExpression().getValue() == null //How do we handle lists of possible values?
         }
 
         with(result.getInputs()[2]) {
