@@ -13,6 +13,7 @@
     <modules>
         <module>dmn-model</module>
         <module>dmn-engine</module>
+        <module>dmn-kotlin-dsl</module>
     </modules>
 
     <licenses>
@@ -64,6 +65,14 @@
         </repository>
     </distributionManagement>
 
+    <pluginRepositories>
+        <pluginRepository>
+            <id>jcenter</id>
+            <name>JCenter</name>
+            <url>https://jcenter.bintray.com/</url>
+        </pluginRepository>
+    </pluginRepositories>
+
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
@@ -71,6 +80,11 @@
         <maven.failsafe.version>2.22.0</maven.failsafe.version>
         <maven.surefire.version>2.22.0</maven.surefire.version>
         <maven.compiler.version>3.2</maven.compiler.version>
+        <maven.deploy.version>2.8.2</maven.deploy.version>
+        <maven.gpg.version>1.6</maven.gpg.version>
+        <maven.javadoc.version>3.0.1</maven.javadoc.version>
+        <maven.release.version>2.5.3</maven.release.version>
+        <maven.source.version>3.0.1</maven.source.version>
         <gmavenplus.version>1.5</gmavenplus.version>
         <gmaven.plugin.version>1.5</gmaven.plugin.version>
         <jacoco.maven.plugin>0.8.2</jacoco.maven.plugin>
@@ -84,23 +98,26 @@
         <sonar.sourceEncoding>${project.build.sourceEncoding}</sonar.sourceEncoding>
         <skipITs>false</skipITs>
         <skipUTs>false</skipUTs>
-        <spock.version>1.1-groovy-2.4</spock.version>
+        <!-- Dependency versions -->
         <cglib.version>3.2.5</cglib.version>
+        <dokka.version>0.9.17</dokka.version>
         <groovy.version>2.4.15</groovy.version>
-        <mvel.version>2.4.4.Final</mvel.version>
-        <snakeyaml.version>1.24</snakeyaml.version>
-        <lombok.version>1.18.6</lombok.version>
-        <objenesis.version>3.0.1</objenesis.version>
-        <maven.release.version>2.5.3</maven.release.version>
-        <nexus.staging.maven.version>1.6.8</nexus.staging.maven.version>
-        <maven.source.version>3.0.1</maven.source.version>
-        <maven.javadoc.version>3.0.1</maven.javadoc.version>
-        <maven.deploy.version>2.8.2</maven.deploy.version>
-        <maven.gpg.version>1.6</maven.gpg.version>
-        <slf4j.version>1.7.26</slf4j.version>
-        <log4j.version>2.11.2</log4j.version>
-        <juel.version>2.2.7</juel.version>
         <jaxb.version>2.3.1</jaxb.version>
+        <juel.version>2.2.7</juel.version>
+        <junit.version>5.4.1</junit.version>
+        <kotlin.code.style>official</kotlin.code.style>
+        <kotlin.version>1.3.21</kotlin.version>
+        <kotlintest.version>3.3.2</kotlintest.version>
+        <log4j.version>2.11.2</log4j.version>
+        <lombok.version>1.18.6</lombok.version>
+        <mockk.version>1.9</mockk.version>
+        <mvel.version>2.4.4.Final</mvel.version>
+        <nexus.staging.maven.version>1.6.8</nexus.staging.maven.version>
+        <objenesis.version>3.0.1</objenesis.version>
+        <slf4j.version>1.7.26</slf4j.version>
+        <snakeyaml.version>1.24</snakeyaml.version>
+        <sonar.language>kotlin</sonar.language>
+        <spock.version>1.1-groovy-2.4</spock.version>
     </properties>
 
     <build>
