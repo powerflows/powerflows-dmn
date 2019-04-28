@@ -338,7 +338,81 @@ Decision decision = Decision.builder()
         .build())
 .build();
 ```
-
+#### Using Kotlin DSL
+```kotlin
+decision {
+    id = "loan_qualifier"
+    name = "Loan qualifier"
+    hitPolicy = HitPolicy.COLLECT
+    expressionType = ExpressionType.FEEL
+    inputs {
+        input("age") {
+            type = ValueType.INTEGER
+        }
+        input("activeLoansNumber") {
+            description = "Number of active loans on user's account"
+            type = ValueType.INTEGER
+            expression(ExpressionType.LITERAL)
+        }
+        input("startDate") {
+            type = ValueType.DATE
+        }
+    }
+    outputs {
+        output("loanAmount") {
+            description = "Loan amount in Euro"
+            type = ValueType.DOUBLE
+        }
+        output("loanTerm") {
+            description = "Loan term in months"
+            type = ValueType.INTEGER
+        }
+    }
+    rules {
+        rule {
+            input("age") {
+                value = 18
+            }
+            input("activeLoansNumber")
+            input("startDate") {
+                expression("[date and time(\"2019-01-01T12:00:00\")..date and time(\"2019-12-31T12:00:00\")]")
+            }
+            output("loanAmount") {
+                value = 10000
+            }
+            output("loanTerm") {
+                value = 12
+            }
+        }
+        rule {
+            input("age") {
+                value = 18
+            }
+            input("startDate") {
+                expression("[date and time(\"2019-03-01T12:00:00\")..date and time(\"2019-03-31T12:00:00\")]")
+            }
+            output("loanAmount") {
+                value = 15000
+            }
+            output("loanTerm") {
+                value = 6
+            }
+        }
+        rule {
+            description = "Loan for older than 18 years"
+            input("age") {
+                expression(">18")
+            }
+            output("loanAmount") {
+                value = 20000
+            }
+            output("loanTerm") {
+                value = 12
+            }
+        }
+    }
+}
+```
 # Use IO to import/export your model
 Thanks to IO module there is a possibility to:
 * Read decisions from Power Flows *.yml files;
