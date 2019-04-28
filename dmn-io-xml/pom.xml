@@ -9,7 +9,7 @@
     </parent>
 
     <modelVersion>4.0.0</modelVersion>
-    <artifactId>dmn-engine</artifactId>
+    <artifactId>dmn-io-xml</artifactId>
 
     <dependencies>
         <dependency>
@@ -17,17 +17,26 @@
             <artifactId>dmn-model</artifactId>
             <version>${parent.version}</version>
         </dependency>
+
         <dependency>
             <groupId>org.powerflows</groupId>
-            <artifactId>dmn-engine-api</artifactId>
-            <version>${parent.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.powerflows</groupId>
-            <artifactId>dmn-io-api</artifactId>
+            <artifactId>dmn-engine</artifactId>
             <version>${parent.version}</version>
         </dependency>
 
+        <!-- XML Reading -->
+        <dependency>
+            <groupId>javax.xml.bind</groupId>
+            <artifactId>jaxb-api</artifactId>
+            <version>${jaxb.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.glassfish.jaxb</groupId>
+            <artifactId>jaxb-runtime</artifactId>
+            <version>${jaxb.version}</version>
+        </dependency>
+
+        <!-- Lombok -->
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
@@ -35,39 +44,7 @@
             <scope>provided</scope>
         </dependency>
 
-        <!-- Groovy -->
-        <dependency>
-            <groupId>org.codehaus.groovy</groupId>
-            <artifactId>groovy-all</artifactId>
-            <version>${groovy.version}</version>
-        </dependency>
-
-        <!-- MVEL -->
-        <dependency>
-            <groupId>org.mvel</groupId>
-            <artifactId>mvel2</artifactId>
-            <version>${mvel.version}</version>
-        </dependency>
-
-        <!-- JUEL -->
-        <dependency>
-            <groupId>de.odysseus.juel</groupId>
-            <artifactId>juel-api</artifactId>
-            <version>${juel.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>de.odysseus.juel</groupId>
-            <artifactId>juel-impl</artifactId>
-            <version>${juel.version}</version>
-        </dependency>
-
         <!-- Tests -->
-        <dependency>
-            <groupId>org.powerflows</groupId>
-            <artifactId>dmn-io-yaml</artifactId>
-            <version>${parent.version}</version>
-            <scope>test</scope>
-        </dependency>
         <dependency>
             <groupId>org.spockframework</groupId>
             <artifactId>spock-core</artifactId>
@@ -84,6 +61,12 @@
             <groupId>org.objenesis</groupId>
             <artifactId>objenesis</artifactId>
             <version>${objenesis.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.codehaus.groovy</groupId>
+            <artifactId>groovy-all</artifactId>
+            <version>${groovy.version}</version>
             <scope>test</scope>
         </dependency>
 
