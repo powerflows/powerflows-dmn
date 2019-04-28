@@ -19,8 +19,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.powerflows.dmn.engine.model.decision.Decision;
 import org.powerflows.dmn.engine.reader.DecisionReadException;
 import org.powerflows.dmn.engine.reader.DecisionReader;
-import org.powerflows.dmn.io.xml.model.XMLDecision;
-import org.powerflows.dmn.io.xml.model.XMLDefinitions;
+import org.powerflows.dmn.io.xml.model.XmlDecision;
+import org.powerflows.dmn.io.xml.model.XmlDefinitions;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
@@ -43,7 +43,7 @@ public class XmlDecisionReader implements DecisionReader {
 
     private final XMLInputFactory factory;
     private final JAXBContext decisionContext;
-    private final XMLDecisionConverter converter = new XMLDecisionConverter();
+    private final XmlDecisionConverter converter = new XmlDecisionConverter();
     private final boolean strict;
 
     public XmlDecisionReader() {
@@ -55,7 +55,7 @@ public class XmlDecisionReader implements DecisionReader {
         this.strict = strict;
 
         try {
-            this.decisionContext = JAXBContext.newInstance(XMLDefinitions.class);
+            this.decisionContext = JAXBContext.newInstance(XmlDefinitions.class);
         } catch (JAXBException e) {
             throw new DecisionReadException("Unable to instantiate JAXB context", e);
         }
@@ -74,7 +74,7 @@ public class XmlDecisionReader implements DecisionReader {
     @Override
     public List<Decision> readAll(final InputStream inputStream) {
         try {
-            final List<XMLDecision> results = new ArrayList<>();
+            final List<XmlDecision> results = new ArrayList<>();
             doReadDecisionsStream(factory.createXMLStreamReader(inputStream), results::add);
 
             return convert(results);
@@ -83,7 +83,7 @@ public class XmlDecisionReader implements DecisionReader {
         }
     }
 
-    private List<Decision> convert(final List<XMLDecision> results) {
+    private List<Decision> convert(final List<XmlDecision> results) {
         return results.stream()
                 .filter(d -> d.getDecisionTable() != null)
                 .map(converter::from)
@@ -104,10 +104,10 @@ public class XmlDecisionReader implements DecisionReader {
     }
 
     private void doReadDecisionsStream(final XMLStreamReader r,
-                                       final Consumer<XMLDecision> decisionConsumer) throws XMLStreamException, JAXBException {
+                                       final Consumer<XmlDecision> decisionConsumer) throws XMLStreamException, JAXBException {
         final Unmarshaller decisionUnmarshaller = getUnmarshaller();
-        final XMLDefinitions definitions = (XMLDefinitions) JAXBIntrospector
-                .getValue(decisionUnmarshaller.unmarshal(r, XMLDefinitions.class));
+        final XmlDefinitions definitions = (XmlDefinitions) JAXBIntrospector
+                .getValue(decisionUnmarshaller.unmarshal(r, XmlDefinitions.class));
         log.trace("Read XML document: {}", definitions);
         definitions.getDecisions().forEach(decisionConsumer);
 

@@ -13,27 +13,20 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.powerflows.dmn.io.xml.model;
+package org.powerflows.dmn.io.xml
 
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import org.powerflows.dmn.engine.model.decision.Decision
+import spock.lang.Specification
 
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlAttribute;
+class XmlDecisionConverterSpec extends Specification {
+    void 'should fail on conversion to XML model'() {
+        given:
+        final XmlDecisionConverter converter = new XmlDecisionConverter()
 
-@XmlAccessorType(XmlAccessType.FIELD)
-@Data
-@NoArgsConstructor
-public class XMLExpression {
-    @XmlAttribute
-    private String id;
+        when:
+        converter.to([] as Decision)
 
-    @XmlAttribute
-    private String typeRef;
-
-    @XmlAttribute
-    private String expressionLanguage;
-
-    private String text;
+        then:
+        thrown(UnsupportedOperationException)
+    }
 }

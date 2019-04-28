@@ -23,24 +23,24 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
+import java.util.ArrayList;
+import java.util.List;
 
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlRootElement(name = "output", namespace = "http://www.omg.org/spec/DMN/20151101/dmn.xsd")
+@XmlRootElement(name = "rule", namespace = "http://www.omg.org/spec/DMN/20151101/dmn.xsd")
 @Data
 @NoArgsConstructor
-public class XMLOutput {
+public class XmlRule {
     @XmlAttribute
     private String id;
 
-    @XmlAttribute
-    private String label;
-
-    @XmlAttribute
-    private String typeRef;
-
-    @XmlAttribute
-    private String name;
-
     @XmlElement
-    private XMLOutputValues outputValues;
+    private String description;
+
+    @XmlElement(name = "inputEntry")
+    private List<XmlInputEntry> inputEntries = new ArrayList<>();
+
+    @XmlElement(name = "outputEntry")
+    private List<XmlOutputEntry> outputEntries = new ArrayList<>();
+
 }
