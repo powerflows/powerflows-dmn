@@ -15,6 +15,7 @@
         <module>dmn-engine-api</module>
         <module>dmn-model</module>
         <module>dmn-io-yaml</module>
+        <module>dmn-io-xml</module>
         <module>dmn-engine</module>
         <module>dmn-kotlin-dsl</module>
     </modules>
