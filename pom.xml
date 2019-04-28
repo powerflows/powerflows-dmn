@@ -11,7 +11,10 @@
     <url>https://powerflows.org</url>
 
     <modules>
+        <module>dmn-io-api</module>
+        <module>dmn-engine-api</module>
         <module>dmn-model</module>
+        <module>dmn-io-yaml</module>
         <module>dmn-engine</module>
         <module>dmn-kotlin-dsl</module>
     </modules>
