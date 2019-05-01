@@ -15,75 +15,80 @@
         <dependency>
             <groupId>org.powerflows</groupId>
             <artifactId>dmn-model</artifactId>
-            <version>${parent.version}</version>
         </dependency>
         <dependency>
             <groupId>org.powerflows</groupId>
-            <artifactId>dmn-engine-api</artifactId>
-            <version>${parent.version}</version>
+            <artifactId>dmn-evaluation-provider-api</artifactId>
         </dependency>
         <dependency>
             <groupId>org.powerflows</groupId>
             <artifactId>dmn-io-api</artifactId>
-            <version>${parent.version}</version>
         </dependency>
 
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
-            <version>${lombok.version}</version>
-            <scope>provided</scope>
-        </dependency>
-
-        <!-- Groovy -->
-        <dependency>
-            <groupId>org.codehaus.groovy</groupId>
-            <artifactId>groovy-all</artifactId>
-            <version>${groovy.version}</version>
-        </dependency>
-
-        <!-- MVEL -->
-        <dependency>
-            <groupId>org.mvel</groupId>
-            <artifactId>mvel2</artifactId>
-            <version>${mvel.version}</version>
-        </dependency>
-
-        <!-- JUEL -->
-        <dependency>
-            <groupId>de.odysseus.juel</groupId>
-            <artifactId>juel-api</artifactId>
-            <version>${juel.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>de.odysseus.juel</groupId>
-            <artifactId>juel-impl</artifactId>
-            <version>${juel.version}</version>
         </dependency>
 
         <!-- Tests -->
         <dependency>
             <groupId>org.powerflows</groupId>
             <artifactId>dmn-io-yaml</artifactId>
-            <version>${parent.version}</version>
+            <version>${project.parent.version}</version>
             <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.powerflows</groupId>
+            <artifactId>dmn-javascript-evaluation-provider</artifactId>
+            <version>${project.parent.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.powerflows</groupId>
+            <artifactId>dmn-groovy-evaluation-provider</artifactId>
+            <version>${project.parent.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.powerflows</groupId>
+            <artifactId>dmn-mvel-evaluation-provider</artifactId>
+            <version>${project.parent.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.powerflows</groupId>
+            <artifactId>dmn-feel-evaluation-provider</artifactId>
+            <version>${project.parent.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.powerflows</groupId>
+            <artifactId>dmn-juel-evaluation-provider</artifactId>
+            <version>${project.parent.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.powerflows</groupId>
+            <artifactId>dmn-test-sample-resources</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.codehaus.groovy</groupId>
+            <artifactId>groovy-all</artifactId>
         </dependency>
         <dependency>
             <groupId>org.spockframework</groupId>
             <artifactId>spock-core</artifactId>
-            <version>${spock.version}</version>
             <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>cglib</groupId>
             <artifactId>cglib-nodep</artifactId>
-            <version>${cglib.version}</version>
             <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.objenesis</groupId>
             <artifactId>objenesis</artifactId>
-            <version>${objenesis.version}</version>
             <scope>test</scope>
         </dependency>
 
@@ -91,12 +96,10 @@
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-api</artifactId>
-            <version>${slf4j.version}</version>
         </dependency>
         <dependency>
             <groupId>org.apache.logging.log4j</groupId>
             <artifactId>log4j-slf4j-impl</artifactId>
-            <version>${log4j.version}</version>
             <scope>test</scope>
         </dependency>
     </dependencies>

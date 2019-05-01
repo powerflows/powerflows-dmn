@@ -51,7 +51,7 @@ class DefaultExpressionEvaluationProviderFactorySpec extends Specification {
         type                      | targetClazz
         ExpressionType.FEEL       | FeelExpressionEvaluationProvider
         ExpressionType.GROOVY     | GroovyExpressionEvaluationProvider
-        ExpressionType.JAVASCRIPT | JavascriptExpressionEvaluationProvider
+        ExpressionType.JAVASCRIPT | JavaScriptExpressionEvaluationProvider
         ExpressionType.JUEL       | JuelExpressionEvaluationProvider
         ExpressionType.LITERAL    | LiteralExpressionEvaluationProvider
     }

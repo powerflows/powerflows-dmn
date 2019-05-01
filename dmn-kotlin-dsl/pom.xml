@@ -14,13 +14,12 @@
         <dependency>
             <groupId>org.powerflows</groupId>
             <artifactId>dmn-model</artifactId>
-            <version>${parent.version}</version>
         </dependency>
 
         <dependency>
             <groupId>org.powerflows</groupId>
             <artifactId>dmn-engine</artifactId>
-            <version>${parent.version}</version>
+            <version>${project.parent.version}</version>
         </dependency>
 
         <dependency>
