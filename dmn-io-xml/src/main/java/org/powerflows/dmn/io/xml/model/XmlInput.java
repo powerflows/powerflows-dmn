@@ -18,23 +18,36 @@ package org.powerflows.dmn.io.xml.model;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import javax.xml.bind.JAXBElement;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlAnyAttribute;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.namespace.QName;
+import java.util.Map;
 
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlRootElement(name = "input", namespace = "http://www.omg.org/spec/DMN/20151101/dmn.xsd")
 @Data
 @NoArgsConstructor
-public class XMLInputEntry {
+public class XmlInput {
     @XmlAttribute
     private String id;
 
     @XmlAttribute
-    private String expressionLanguage;
+    private String label;
 
-    @XmlElement(name = "text")
-    private String expression;
+    @XmlAttribute(namespace = "http://camunda.org/schema/1.0/dmn")
+    private String inputVariable;
+
+    @XmlElement
+    private XmlInputValues inputValues;
+
+    @XmlElement
+    private XmlExpression inputExpression;
+
+    @XmlAnyAttribute
+    private Map<QName, JAXBElement> anyAttributes;
 }

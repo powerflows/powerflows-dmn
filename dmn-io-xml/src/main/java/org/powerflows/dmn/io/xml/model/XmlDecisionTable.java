@@ -18,7 +18,6 @@ package org.powerflows.dmn.io.xml.model;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.xml.bind.JAXBElement;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAnyAttribute;
@@ -26,28 +25,33 @@ import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.namespace.QName;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
+
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlRootElement(name = "input", namespace = "http://www.omg.org/spec/DMN/20151101/dmn.xsd")
+@XmlRootElement(name = "decisionTable", namespace = "http://www.omg.org/spec/DMN/20151101/dmn.xsd")
 @Data
 @NoArgsConstructor
-public class XMLInput {
+public class XmlDecisionTable {
+
+    @XmlAttribute
+    private String hitPolicy;
+
     @XmlAttribute
     private String id;
 
-    @XmlAttribute
-    private String label;
-
-    @XmlAttribute(namespace = "http://camunda.org/schema/1.0/dmn")
-    private String inputVariable;
-
-    @XmlElement
-    private XMLInputValues inputValues;
-
-    @XmlElement
-    private XMLExpression inputExpression;
-
     @XmlAnyAttribute
-    private Map<QName, JAXBElement> anyAttributes;
+    private Map<QName, String> anyAttributes = new HashMap<>();
+
+    @XmlElement(name = "input")
+    private List<XmlInput> inputs = new ArrayList<>();
+
+    @XmlElement(name = "output")
+    private List<XmlOutput> outputs = new ArrayList<>();
+
+    @XmlElement(name = "rule")
+    private List<XmlRule> rules = new ArrayList<>();
 }

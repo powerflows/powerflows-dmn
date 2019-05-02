@@ -20,27 +20,35 @@ import lombok.NoArgsConstructor;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlAnyAttribute;
+import javax.xml.bind.annotation.XmlAnyElement;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.namespace.QName;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlRootElement(name = "rule", namespace = "http://www.omg.org/spec/DMN/20151101/dmn.xsd")
+@XmlRootElement(name = "decision", namespace = "http://www.omg.org/spec/DMN/20151101/dmn.xsd")
 @Data
 @NoArgsConstructor
-public class XMLRule {
+public class XmlDecision {
+
+    @XmlAttribute
+    private String name;
+
     @XmlAttribute
     private String id;
 
     @XmlElement
-    private String description;
+    private XmlDecisionTable decisionTable;
 
-    @XmlElement(name = "inputEntry")
-    private List<XMLInputEntry> inputEntries = new ArrayList<>();
+    @XmlAnyAttribute
+    private Map<QName, String> anyAttributes = new HashMap<>();
 
-    @XmlElement(name = "outputEntry")
-    private List<XMLOutputEntry> outputEntries = new ArrayList<>();
-
+    @XmlAnyElement(lax = true)
+    private List<Object> anyElements = new ArrayList<>();
 }

@@ -20,21 +20,27 @@ import lombok.NoArgsConstructor;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlAnyElement;
+import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
-import java.util.ArrayList;
-import java.util.List;
 
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlRootElement(name = "definitions", namespace = "http://www.omg.org/spec/DMN/20151101/dmn.xsd")
+@XmlRootElement(name = "output", namespace = "http://www.omg.org/spec/DMN/20151101/dmn.xsd")
 @Data
 @NoArgsConstructor
-public class XMLDefinitions {
+public class XmlOutput {
+    @XmlAttribute
+    private String id;
 
-    @XmlElement(name = "decision")
-    private List<XMLDecision> decisions = new ArrayList<>();
+    @XmlAttribute
+    private String label;
 
-    @XmlAnyElement(lax = true)
-    private List<Object> anyElements = new ArrayList<>();
+    @XmlAttribute
+    private String typeRef;
+
+    @XmlAttribute
+    private String name;
+
+    @XmlElement
+    private XmlOutputValues outputValues;
 }

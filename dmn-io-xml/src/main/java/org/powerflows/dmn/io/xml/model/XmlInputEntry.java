@@ -25,14 +25,16 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlRootElement(name = "inputValues", namespace = "http://www.omg.org/spec/DMN/20151101/dmn.xsd")
+@XmlRootElement(name = "input", namespace = "http://www.omg.org/spec/DMN/20151101/dmn.xsd")
 @Data
 @NoArgsConstructor
-public class XMLInputValues {
+public class XmlInputEntry {
+    @XmlAttribute
+    private String id;
 
     @XmlAttribute
     private String expressionLanguage;
 
     @XmlElement(name = "text")
-    private String values;
+    private String expression;
 }

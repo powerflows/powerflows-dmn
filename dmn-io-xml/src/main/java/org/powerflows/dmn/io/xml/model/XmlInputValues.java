@@ -28,7 +28,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlRootElement(name = "inputValues", namespace = "http://www.omg.org/spec/DMN/20151101/dmn.xsd")
 @Data
 @NoArgsConstructor
-public class XMLOutputValues {
+public class XmlInputValues {
 
     @XmlAttribute
     private String expressionLanguage;
