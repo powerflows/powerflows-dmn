@@ -14,14 +14,11 @@
     <dependencies>
         <dependency>
             <groupId>org.powerflows</groupId>
-            <artifactId>dmn-model</artifactId>
-            <version>${parent.version}</version>
+            <artifactId>dmn-io-api</artifactId>
         </dependency>
-
         <dependency>
             <groupId>org.powerflows</groupId>
-            <artifactId>dmn-engine</artifactId>
-            <version>${parent.version}</version>
+            <artifactId>dmn-model</artifactId>
         </dependency>
 
         <!-- XML Reading -->
@@ -40,33 +37,27 @@
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
-            <version>${lombok.version}</version>
-            <scope>provided</scope>
         </dependency>
 
         <!-- Tests -->
         <dependency>
             <groupId>org.spockframework</groupId>
             <artifactId>spock-core</artifactId>
-            <version>${spock.version}</version>
             <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>cglib</groupId>
             <artifactId>cglib-nodep</artifactId>
-            <version>${cglib.version}</version>
             <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.objenesis</groupId>
             <artifactId>objenesis</artifactId>
-            <version>${objenesis.version}</version>
             <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.codehaus.groovy</groupId>
             <artifactId>groovy-all</artifactId>
-            <version>${groovy.version}</version>
             <scope>test</scope>
         </dependency>
 
@@ -74,12 +65,10 @@
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-api</artifactId>
-            <version>${slf4j.version}</version>
         </dependency>
         <dependency>
             <groupId>org.apache.logging.log4j</groupId>
             <artifactId>log4j-slf4j-impl</artifactId>
-            <version>${log4j.version}</version>
             <scope>test</scope>
         </dependency>
     </dependencies>

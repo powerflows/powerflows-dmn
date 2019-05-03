@@ -15,8 +15,6 @@
         <dependency>
             <groupId>org.powerflows</groupId>
             <artifactId>dmn-model</artifactId>
-            <version>${parent.version}</version>
-            <scope>provided</scope>
         </dependency>
     </dependencies>
 </project>
