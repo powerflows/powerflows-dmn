@@ -1,8 +1,8 @@
 [![Build Status](https://travis-ci.org/powerflows/powerflows-dmn.svg?branch=master)](https://travis-ci.org/powerflows/powerflows-dmn)
 [![Quality Gate](https://sonarcloud.io/api/project_badges/measure?project=org.powerflows%3Admn&metric=alert_status)](https://sonarcloud.io/dashboard?id=org.powerflows%3Admn)
 [![Coverage](https://sonarcloud.io/api/project_badges/measure?project=org.powerflows%3Admn&metric=coverage)](https://sonarcloud.io/component_measures?id=org.powerflows%3Admn&metric=coverage)
-[![Maven Central](https://maven-badges.herokuapp.com/maven-central/org.powerflows/dmn/badge.svg)](https://maven-badges.herokuapp.com/maven-central/org.powerflows/dmn)
-[![Java Doc](http://www.javadoc.io/badge/org.powerflows/dmn.svg?color=brightgreen)](http://www.javadoc.io/doc/org.powerflows/dmn)
+[![Maven Central](https://maven-badges.herokuapp.com/maven-central/org.powerflows/dmn-engine/badge.svg)](https://mvnrepository.com/artifact/org.powerflows)
+[![Java Doc](http://www.javadoc.io/badge/org.powerflows/dmn-engine.svg?color=brightgreen)](http://www.javadoc.io/doc/org.powerflows/dmn-engine)
 # About Power Flows DMN
 Power Flows DMN - a powerful decision engine.
 
@@ -32,7 +32,7 @@ There is a choice between:
 * Java/Groovy file (fluent and functional) - delivered with **dmn-engine** dependency. In order to use Groovy style, dependency to Groovy is required as well.
 * Kotlin DSL - requires **dmn-kotlin-dsl** dependency
 
-**Surely, Power Flows DMN supports all of them within a single application!.**
+**Surely, Power Flows DMN supports all of them within a single application.**
 
 The next step is to add dependencies of expression evaluation languages. 
 The developer can use the all of some of them:
