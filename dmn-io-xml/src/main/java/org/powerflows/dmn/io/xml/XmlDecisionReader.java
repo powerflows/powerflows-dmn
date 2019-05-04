@@ -52,6 +52,7 @@ public class XmlDecisionReader implements DecisionReader {
 
     public XmlDecisionReader(final boolean strict) {
         this.factory = XMLInputFactory.newInstance();
+        this.factory.setProperty(XMLInputFactory.SUPPORT_DTD, false);
         this.strict = strict;
 
         try {
