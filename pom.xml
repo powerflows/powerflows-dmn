@@ -1,14 +1,32 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>org.powerflows</groupId>
     <artifactId>dmn</artifactId>
-    <version>1.1.2-SNAPSHOT</version>
-    <packaging>jar</packaging>
+    <version>2.0.0-SNAPSHOT</version>
+    <packaging>pom</packaging>
     <name>DMN</name>
     <description>Power Flows DMN</description>
     <url>https://powerflows.org</url>
+
+    <modules>
+        <module>dmn-io-api</module>
+        <module>dmn-evaluation-provider-api</module>
+        <module>dmn-model</module>
+        <module>dmn-io-yaml</module>
+        <module>dmn-io-xml</module>
+        <module>dmn-engine</module>
+        <module>dmn-kotlin-dsl</module>
+        <module>dmn-javascript-evaluation-provider</module>
+        <module>dmn-groovy-evaluation-provider</module>
+        <module>dmn-mvel-evaluation-provider</module>
+        <module>dmn-feel-evaluation-provider</module>
+        <module>dmn-juel-evaluation-provider</module>
+        <module>dmn-test-sample-resources</module>
+    </modules>
+
     <licenses>
         <license>
             <name>The Apache Software License, Version 2.0</name>
@@ -58,6 +76,14 @@
         </repository>
     </distributionManagement>
 
+    <pluginRepositories>
+        <pluginRepository>
+            <id>jcenter</id>
+            <name>JCenter</name>
+            <url>https://jcenter.bintray.com/</url>
+        </pluginRepository>
+    </pluginRepositories>
+
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
@@ -65,6 +91,11 @@
         <maven.failsafe.version>2.22.0</maven.failsafe.version>
         <maven.surefire.version>2.22.0</maven.surefire.version>
         <maven.compiler.version>3.2</maven.compiler.version>
+        <maven.deploy.version>2.8.2</maven.deploy.version>
+        <maven.gpg.version>1.6</maven.gpg.version>
+        <maven.javadoc.version>3.0.1</maven.javadoc.version>
+        <maven.release.version>2.5.3</maven.release.version>
+        <maven.source.version>3.0.1</maven.source.version>
         <gmavenplus.version>1.5</gmavenplus.version>
         <gmaven.plugin.version>1.5</gmaven.plugin.version>
         <jacoco.maven.plugin>0.8.2</jacoco.maven.plugin>
@@ -78,110 +109,94 @@
         <sonar.sourceEncoding>${project.build.sourceEncoding}</sonar.sourceEncoding>
         <skipITs>false</skipITs>
         <skipUTs>false</skipUTs>
-        <spock.version>1.1-groovy-2.4</spock.version>
+        <!-- Dependency versions -->
         <cglib.version>3.2.5</cglib.version>
+        <dokka.version>0.9.17</dokka.version>
         <groovy.version>2.4.15</groovy.version>
-        <mvel.version>2.4.4.Final</mvel.version>
-        <snakeyaml.version>1.24</snakeyaml.version>
-        <lombok.version>1.18.6</lombok.version>
-        <objenesis.version>3.0.1</objenesis.version>
-        <maven.release.version>2.5.3</maven.release.version>
-        <nexus.staging.maven.version>1.6.8</nexus.staging.maven.version>
-        <maven.source.version>3.0.1</maven.source.version>
-        <maven.javadoc.version>3.0.1</maven.javadoc.version>
-        <maven.deploy.version>2.8.2</maven.deploy.version>
-        <maven.gpg.version>1.6</maven.gpg.version>
-        <slf4j.version>1.7.26</slf4j.version>
-        <log4j.version>2.11.2</log4j.version>
-        <juel.version>2.2.7</juel.version>
         <jaxb.version>2.3.1</jaxb.version>
+        <juel.version>2.2.7</juel.version>
+        <junit.version>5.4.1</junit.version>
+        <kotlin.code.style>official</kotlin.code.style>
+        <kotlin.version>1.3.21</kotlin.version>
+        <kotlintest.version>3.3.2</kotlintest.version>
+        <log4j.version>2.11.2</log4j.version>
+        <lombok.version>1.18.6</lombok.version>
+        <mockk.version>1.9</mockk.version>
+        <mvel.version>2.4.4.Final</mvel.version>
+        <nexus.staging.maven.version>1.6.8</nexus.staging.maven.version>
+        <objenesis.version>3.0.1</objenesis.version>
+        <slf4j.version>1.7.26</slf4j.version>
+        <snakeyaml.version>1.24</snakeyaml.version>
+        <sonar.language>kotlin</sonar.language>
+        <spock.version>1.1-groovy-2.4</spock.version>
     </properties>
 
-    <dependencies>
-        <!-- YAML Reading -->
-        <dependency>
-            <groupId>org.yaml</groupId>
-            <artifactId>snakeyaml</artifactId>
-            <version>${snakeyaml.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.projectlombok</groupId>
-            <artifactId>lombok</artifactId>
-            <version>${lombok.version}</version>
-            <scope>provided</scope>
-        </dependency>
+    <dependencyManagement>
+        <dependencies>
+            <!-- Power Flows -->
+            <dependency>
+                <groupId>org.powerflows</groupId>
+                <artifactId>dmn-model</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.powerflows</groupId>
+                <artifactId>dmn-evaluation-provider-api</artifactId>
+                <version>${project.parent.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.powerflows</groupId>
+                <artifactId>dmn-io-api</artifactId>
+                <version>${project.parent.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.powerflows</groupId>
+                <artifactId>dmn-test-sample-resources</artifactId>
+                <version>${project.parent.version}</version>
+            </dependency>
 
-        <!-- XML Reading -->
-        <dependency>
-            <groupId>javax.xml.bind</groupId>
-            <artifactId>jaxb-api</artifactId>
-            <version>${jaxb.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.glassfish.jaxb</groupId>
-            <artifactId>jaxb-runtime</artifactId>
-            <version>${jaxb.version}</version>
-        </dependency>
+            <dependency>
+                <groupId>org.projectlombok</groupId>
+                <artifactId>lombok</artifactId>
+                <version>${lombok.version}</version>
+            </dependency>
 
-        <!-- Groovy -->
-        <dependency>
-            <groupId>org.codehaus.groovy</groupId>
-            <artifactId>groovy-all</artifactId>
-            <version>${groovy.version}</version>
-        </dependency>
+            <!-- Tests -->
+            <dependency>
+                <groupId>org.codehaus.groovy</groupId>
+                <artifactId>groovy-all</artifactId>
+                <version>${groovy.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.spockframework</groupId>
+                <artifactId>spock-core</artifactId>
+                <version>${spock.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>cglib</groupId>
+                <artifactId>cglib-nodep</artifactId>
+                <version>${cglib.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.objenesis</groupId>
+                <artifactId>objenesis</artifactId>
+                <version>${objenesis.version}</version>
+            </dependency>
 
-        <!-- MVEL -->
-        <dependency>
-            <groupId>org.mvel</groupId>
-            <artifactId>mvel2</artifactId>
-            <version>${mvel.version}</version>
-        </dependency>
+            <!-- Logger -->
+            <dependency>
+                <groupId>org.slf4j</groupId>
+                <artifactId>slf4j-api</artifactId>
+                <version>${slf4j.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.logging.log4j</groupId>
+                <artifactId>log4j-slf4j-impl</artifactId>
+                <version>${log4j.version}</version>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
 
-        <!-- JUEL -->
-        <dependency>
-            <groupId>de.odysseus.juel</groupId>
-            <artifactId>juel-api</artifactId>
-            <version>${juel.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>de.odysseus.juel</groupId>
-            <artifactId>juel-impl</artifactId>
-            <version>${juel.version}</version>
-        </dependency>
-
-        <!-- Tests -->
-        <dependency>
-            <groupId>org.spockframework</groupId>
-            <artifactId>spock-core</artifactId>
-            <version>${spock.version}</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>cglib</groupId>
-            <artifactId>cglib-nodep</artifactId>
-            <version>${cglib.version}</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.objenesis</groupId>
-            <artifactId>objenesis</artifactId>
-            <version>${objenesis.version}</version>
-            <scope>test</scope>
-        </dependency>
-
-        <!-- Logger -->
-        <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-api</artifactId>
-            <version>${slf4j.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.logging.log4j</groupId>
-            <artifactId>log4j-slf4j-impl</artifactId>
-            <version>${log4j.version}</version>
-            <scope>test</scope>
-        </dependency>
-    </dependencies>
     <build>
         <testResources>
             <testResource>

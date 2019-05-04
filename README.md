@@ -1,16 +1,133 @@
 [![Build Status](https://travis-ci.org/powerflows/powerflows-dmn.svg?branch=master)](https://travis-ci.org/powerflows/powerflows-dmn)
 [![Quality Gate](https://sonarcloud.io/api/project_badges/measure?project=org.powerflows%3Admn&metric=alert_status)](https://sonarcloud.io/dashboard?id=org.powerflows%3Admn)
 [![Coverage](https://sonarcloud.io/api/project_badges/measure?project=org.powerflows%3Admn&metric=coverage)](https://sonarcloud.io/component_measures?id=org.powerflows%3Admn&metric=coverage)
-[![Maven Central](https://maven-badges.herokuapp.com/maven-central/org.powerflows/dmn/badge.svg)](https://maven-badges.herokuapp.com/maven-central/org.powerflows/dmn)
-[![Java Doc](http://www.javadoc.io/badge/org.powerflows/dmn.svg?color=brightgreen)](http://www.javadoc.io/doc/org.powerflows/dmn)
+[![Maven Central](https://maven-badges.herokuapp.com/maven-central/org.powerflows/dmn-engine/badge.svg)](https://mvnrepository.com/artifact/org.powerflows)
+[![Java Doc](http://www.javadoc.io/badge/org.powerflows/dmn-engine.svg?color=brightgreen)](http://www.javadoc.io/doc/org.powerflows/dmn-engine)
 # About Power Flows DMN
 Power Flows DMN - a powerful decision engine.
 
 
 # Getting Started
+Depending on you would like to use the version 2.x.x (recommended as the latest version) or 1.x.x 
+there are 2 different ways of importing dependencies.
+
+## Version 2.x.x
+
 The Power Flows DMN can be imported as a dependency via:
 
-## Maven
+### Maven
+```xml
+<dependency>
+    <groupId>org.powerflows</groupId>
+    <artifactId>dmn-engine</artifactId>
+    <version>2.0.0</version>
+</dependency>
+```
+Since in version 2.0.0 Power Flows DMN has been divided into modules,
+a developer can decide what features have to be imported to his project. 
+Therefore, the first decision will be which modeling format of decision tables to be supported. 
+There is a choice between:
+* YAML file - requires **dmn-io-yaml** dependency
+* XML file - requires **dmn-io-xml** dependency
+* Java/Groovy file (fluent and functional) - delivered with **dmn-engine** dependency. In order to use Groovy style, dependency to Groovy is required as well.
+* Kotlin DSL - requires **dmn-kotlin-dsl** dependency
+
+**Surely, Power Flows DMN supports all of them within a single application.**
+
+The next step is to add dependencies of expression evaluation languages. 
+The developer can use the all of some of them:
+* Literals - delivered with **dmn-engine** dependency
+* FEEL - requires **dmn-feel-evaluation-provider** dependency
+* JUEL - requires **dmn-juel-evaluation-provider** dependency
+* Groovy - requires **dmn-groovy-evaluation-provider** dependency
+* MVEL - requires **dmn-mvel-evaluation-provider** dependency
+* JavaScript - requires **dmn-javascript-evaluation-provider** dependency
+
+Optional dependencies:
+```xml
+<dependency>
+    <groupId>org.powerflows</groupId>
+    <artifactId>dmn-io-yaml</artifactId>
+    <version>2.0.0</version>
+</dependency>
+<dependency>
+    <groupId>org.powerflows</groupId>
+    <artifactId>dmn-io-xml</artifactId>
+    <version>2.0.0</version>
+</dependency>
+<dependency>
+    <groupId>org.powerflows</groupId>
+    <artifactId>dmn-kotlin-dsl</artifactId>
+    <version>2.0.0</version>
+</dependency>
+<dependency>
+    <groupId>org.powerflows</groupId>
+    <artifactId>dmn-feel-evaluation-provider</artifactId>
+    <version>2.0.0</version>
+</dependency>
+<dependency>
+    <groupId>org.powerflows</groupId>
+    <artifactId>dmn-juel-evaluation-provider</artifactId>
+    <version>2.0.0</version>
+</dependency>
+<dependency>
+    <groupId>org.powerflows</groupId>
+    <artifactId>dmn-groovy-evaluation-provider</artifactId>
+    <version>2.0.0</version>
+</dependency>
+<dependency>
+    <groupId>org.powerflows</groupId>
+    <artifactId>dmn-mvel-evaluation-provider</artifactId>
+    <version>2.0.0</version>
+</dependency>
+<dependency>
+    <groupId>org.powerflows</groupId>
+    <artifactId>dmn-javascript-evaluation-provider</artifactId>
+    <version>2.0.0</version>
+</dependency>
+```
+
+### Gradle
+```gradle    
+compile group: 'org.powerflows', name: 'dmn-engine', version: '2.0.0'
+```
+
+Optional dependencies:
+```gradle    
+compile group: 'org.powerflows', name: 'dmn-io-yaml', version: '2.0.0'
+compile group: 'org.powerflows', name: 'dmn-io-xml', version: '2.0.0'
+compile group: 'org.powerflows', name: 'dmn-kotlin-dsl', version: '2.0.0'
+compile group: 'org.powerflows', name: 'dmn-feel-evaluation-provider', version: '2.0.0'
+compile group: 'org.powerflows', name: 'dmn-juel-evaluation-provider', version: '2.0.0'
+compile group: 'org.powerflows', name: 'dmn-groovy-evaluation-provider', version: '2.0.0'
+compile group: 'org.powerflows', name: 'dmn-mvel-evaluation-provider', version: '2.0.0'
+compile group: 'org.powerflows', name: 'dmn-javascript-evaluation-provider', version: '2.0.0'
+```
+### Grape
+```groovy
+@Grapes(
+    @Grab(group='org.powerflows', module='dmn-engine', version='2.0.0')
+)
+```   
+Optional dependencies:
+```groovy
+@Grapes([
+    @Grab(group='org.powerflows', module='dmn-io-yaml', version='2.0.0'),
+    @Grab(group='org.powerflows', module='dmn-io-xml', version='2.0.0'),
+    @Grab(group='org.powerflows', module='dmn-kotlin-dsl', version='2.0.0'),
+    @Grab(group='org.powerflows', module='dmn-feel-evaluation-provider', version='2.0.0'),
+    @Grab(group='org.powerflows', module='dmn-juel-evaluation-provider', version='2.0.0'), 
+    @Grab(group='org.powerflows', module='dmn-groovy-evaluation-provider', version='2.0.0'),
+    @Grab(group='org.powerflows', module='dmn-mvel-evaluation-provider', version='2.0.0'),
+    @Grab(group='org.powerflows', module='dmn-javascript-evaluation-provider', version='2.0.0')   
+])
+```  
+
+## Version 1.x.x
+
+The Power Flows DMN can be imported as a dependency via:
+
+### Maven
 ```xml
 <dependency>
     <groupId>org.powerflows</groupId>
@@ -19,12 +136,12 @@ The Power Flows DMN can be imported as a dependency via:
 </dependency>
 ```
 
-## Gradle
+### Gradle
 ```gradle    
 compile group: 'org.powerflows', name: 'dmn', version: '1.1.1'
 ```
 
-## Grape
+### Grape
 ```groovy
 @Grapes(
     @Grab(group='org.powerflows', module='dmn', version='1.1.1')
@@ -35,15 +152,16 @@ Other ways to import, visit Maven Central repo [https://mvnrepository.com/artifa
 
 
 
-# Describe your DMN model
+# Define your DMN model
 Power Flows model has been designed as an easy to describe and maintain file. The file contains information about input and output data. The additional division is section with rules and their input and output entries.
 
 Power Flows supports the model in the following formats:
 * YAML file;
+* XML file;
 * Java / Groovy file.
     * Fluent
     * Functional
-
+* Kotlin DSL
 ## YAML file
 
 ```yaml
@@ -93,7 +211,7 @@ rules:
 ```
 
 ## Java / Groovy file
-#### Using fluent style
+### Using fluent style
 ```groovy
 Decision decision = Decision.fluentBuilder()
 .id("loan_qualifier")
@@ -210,7 +328,7 @@ Decision decision = Decision.fluentBuilder()
 .end()
 .build();
 ```
-#### Using functional style
+### Using functional style
 ```java
 Decision decision = Decision.builder()
 .id("loan_qualifier")
@@ -338,7 +456,81 @@ Decision decision = Decision.builder()
         .build())
 .build();
 ```
-
+## Kotlin DSL
+```kotlin
+decision {
+    id = "loan_qualifier"
+    name = "Loan qualifier"
+    hitPolicy = HitPolicy.COLLECT
+    expressionType = ExpressionType.FEEL
+    inputs {
+        input("age") {
+            type = ValueType.INTEGER
+        }
+        input("activeLoansNumber") {
+            description = "Number of active loans on user's account"
+            type = ValueType.INTEGER
+            expression(ExpressionType.LITERAL)
+        }
+        input("startDate") {
+            type = ValueType.DATE
+        }
+    }
+    outputs {
+        output("loanAmount") {
+            description = "Loan amount in Euro"
+            type = ValueType.DOUBLE
+        }
+        output("loanTerm") {
+            description = "Loan term in months"
+            type = ValueType.INTEGER
+        }
+    }
+    rules {
+        rule {
+            input("age") {
+                value = 18
+            }
+            input("activeLoansNumber")
+            input("startDate") {
+                expression("[date and time(\"2019-01-01T12:00:00\")..date and time(\"2019-12-31T12:00:00\")]")
+            }
+            output("loanAmount") {
+                value = 10000
+            }
+            output("loanTerm") {
+                value = 12
+            }
+        }
+        rule {
+            input("age") {
+                value = 18
+            }
+            input("startDate") {
+                expression("[date and time(\"2019-03-01T12:00:00\")..date and time(\"2019-03-31T12:00:00\")]")
+            }
+            output("loanAmount") {
+                value = 15000
+            }
+            output("loanTerm") {
+                value = 6
+            }
+        }
+        rule {
+            description = "Loan for older than 18 years"
+            input("age") {
+                expression(">18")
+            }
+            output("loanAmount") {
+                value = 20000
+            }
+            output("loanTerm") {
+                value = 12
+            }
+        }
+    }
+}
+```
 # Use IO to import/export your model
 Thanks to IO module there is a possibility to:
 * Read decisions from Power Flows *.yml files;
