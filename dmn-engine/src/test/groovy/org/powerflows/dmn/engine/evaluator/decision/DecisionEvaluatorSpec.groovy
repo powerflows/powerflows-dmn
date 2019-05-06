@@ -79,7 +79,7 @@ class DecisionEvaluatorSpec extends Specification {
         exception.getMessage() == "HitPolicy $hitPolicy is not supported"
 
         where:
-        hitPolicy << [HitPolicy.PRIORITY, HitPolicy.OUTPUT_ORDER, HitPolicy.RULE_ORDER]
+        hitPolicy << [HitPolicy.PRIORITY, HitPolicy.OUTPUT_ORDER]
     }
 
 
@@ -137,7 +137,7 @@ class DecisionEvaluatorSpec extends Specification {
 
     void 'should return decision result when unique result is expected and unique evaluated'() {
         given:
-        final List<Input> inputs = [];
+        final List<Input> inputs = []
         final Rule rule = [] as Rule
         final List<Rule> rules = [rule]
         final DecisionVariables decisionContextVariables = new DecisionVariables([:])
@@ -170,7 +170,7 @@ class DecisionEvaluatorSpec extends Specification {
 
     void 'should return decision result when non-unique result is expected and non-unique evaluated'() {
         given:
-        final List<Input> inputs = [];
+        final List<Input> inputs = []
         final Rule rule1 = [] as Rule
         final Rule rule2 = [] as Rule
         final List<Rule> rules = [rule1, rule2]
@@ -203,6 +203,48 @@ class DecisionEvaluatorSpec extends Specification {
 
         1 * ruleEvaluator.evaluate(rule1, [:], [:], _) >> expectedRuleResult1
         1 * ruleEvaluator.evaluate(rule2, [:], [:], _) >> expectedRuleResult2
+        0 * _
+    }
+
+    void 'should return decision result in the right order when rule order result is expected and non-unique evaluated'() {
+        given:
+        final List<Input> inputs = []
+        final Rule rule1 = [description: 'Rule 1'] as Rule
+        final Rule rule2 = [description: 'Rule 2'] as Rule
+        final Rule rule3 = [description: 'Rule 3'] as Rule
+        final List<Rule> rules = [rule1, rule3, rule2]
+        final DecisionVariables decisionContextVariables = new DecisionVariables([:])
+
+        final Decision decision = [hitPolicy     : HitPolicy.RULE_ORDER,
+                                   evaluationMode: EvaluationMode.BOOLEAN,
+                                   inputs        : inputs,
+                                   rules         : rules] as Decision
+
+        final expectedRuleResult1 = [] as RuleResult
+        final expectedRuleResult2 = [] as RuleResult
+        final expectedRuleResult3 = [] as RuleResult
+
+        when:
+        final DecisionResult decisionResult = decisionEvaluator.evaluate(decision, decisionContextVariables)
+
+        then:
+        decisionResult != null
+
+        with(decisionResult) {
+            isCollectionRulesResult()
+            !isSingleRuleResult()
+            !isSingleEntryResult()
+        }
+
+        final List<RuleResult> ruleResults = decisionResult.getCollectionRulesResult()
+        ruleResults.size() == 3
+        ruleResults[0] == expectedRuleResult1
+        ruleResults[1] == expectedRuleResult3
+        ruleResults[2] == expectedRuleResult2
+
+        1 * ruleEvaluator.evaluate(rule1, [:], [:], _) >> expectedRuleResult1
+        1 * ruleEvaluator.evaluate(rule2, [:], [:], _) >> expectedRuleResult2
+        1 * ruleEvaluator.evaluate(rule3, [:], [:], _) >> expectedRuleResult3
         0 * _
     }
 
