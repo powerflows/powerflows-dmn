@@ -47,7 +47,7 @@ import java.util.stream.Collectors;
 @Slf4j
 public class DecisionEvaluator {
 
-    private static final Set<HitPolicy> UNSUPPORTED_HIT_POLICIES = Collections.unmodifiableSet(EnumSet.of(HitPolicy.OUTPUT_ORDER, HitPolicy.RULE_ORDER, HitPolicy.PRIORITY));
+    private static final Set<HitPolicy> UNSUPPORTED_HIT_POLICIES = Collections.unmodifiableSet(EnumSet.of(HitPolicy.OUTPUT_ORDER, HitPolicy.PRIORITY));
     private final RuleEvaluator ruleEvaluator;
 
     /**
