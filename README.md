@@ -20,7 +20,7 @@ The Power Flows DMN can be imported as a dependency via:
 <dependency>
     <groupId>org.powerflows</groupId>
     <artifactId>dmn-engine</artifactId>
-    <version>2.0.0</version>
+    <version>2.1.0</version>
 </dependency>
 ```
 Since in version 2.0.0 Power Flows DMN has been divided into modules,
@@ -48,78 +48,78 @@ Optional dependencies:
 <dependency>
     <groupId>org.powerflows</groupId>
     <artifactId>dmn-io-yaml</artifactId>
-    <version>2.0.0</version>
+    <version>2.1.0</version>
 </dependency>
 <dependency>
     <groupId>org.powerflows</groupId>
     <artifactId>dmn-io-xml</artifactId>
-    <version>2.0.0</version>
+    <version>2.1.0</version>
 </dependency>
 <dependency>
     <groupId>org.powerflows</groupId>
     <artifactId>dmn-kotlin-dsl</artifactId>
-    <version>2.0.0</version>
+    <version>2.1.0</version>
 </dependency>
 <dependency>
     <groupId>org.powerflows</groupId>
     <artifactId>dmn-feel-evaluation-provider</artifactId>
-    <version>2.0.0</version>
+    <version>2.1.0</version>
 </dependency>
 <dependency>
     <groupId>org.powerflows</groupId>
     <artifactId>dmn-juel-evaluation-provider</artifactId>
-    <version>2.0.0</version>
+    <version>2.1.0</version>
 </dependency>
 <dependency>
     <groupId>org.powerflows</groupId>
     <artifactId>dmn-groovy-evaluation-provider</artifactId>
-    <version>2.0.0</version>
+    <version>2.1.0</version>
 </dependency>
 <dependency>
     <groupId>org.powerflows</groupId>
     <artifactId>dmn-mvel-evaluation-provider</artifactId>
-    <version>2.0.0</version>
+    <version>2.1.0</version>
 </dependency>
 <dependency>
     <groupId>org.powerflows</groupId>
     <artifactId>dmn-javascript-evaluation-provider</artifactId>
-    <version>2.0.0</version>
+    <version>2.1.0</version>
 </dependency>
 ```
 
 ### Gradle
 ```gradle    
-compile group: 'org.powerflows', name: 'dmn-engine', version: '2.0.0'
+compile group: 'org.powerflows', name: 'dmn-engine', version: '2.1.0'
 ```
 
 Optional dependencies:
 ```gradle    
-compile group: 'org.powerflows', name: 'dmn-io-yaml', version: '2.0.0'
-compile group: 'org.powerflows', name: 'dmn-io-xml', version: '2.0.0'
-compile group: 'org.powerflows', name: 'dmn-kotlin-dsl', version: '2.0.0'
-compile group: 'org.powerflows', name: 'dmn-feel-evaluation-provider', version: '2.0.0'
-compile group: 'org.powerflows', name: 'dmn-juel-evaluation-provider', version: '2.0.0'
-compile group: 'org.powerflows', name: 'dmn-groovy-evaluation-provider', version: '2.0.0'
-compile group: 'org.powerflows', name: 'dmn-mvel-evaluation-provider', version: '2.0.0'
-compile group: 'org.powerflows', name: 'dmn-javascript-evaluation-provider', version: '2.0.0'
+compile group: 'org.powerflows', name: 'dmn-io-yaml', version: '2.1.0'
+compile group: 'org.powerflows', name: 'dmn-io-xml', version: '2.1.0'
+compile group: 'org.powerflows', name: 'dmn-kotlin-dsl', version: '2.1.0'
+compile group: 'org.powerflows', name: 'dmn-feel-evaluation-provider', version: '2.1.0'
+compile group: 'org.powerflows', name: 'dmn-juel-evaluation-provider', version: '2.1.0'
+compile group: 'org.powerflows', name: 'dmn-groovy-evaluation-provider', version: '2.1.0'
+compile group: 'org.powerflows', name: 'dmn-mvel-evaluation-provider', version: '2.1.0'
+compile group: 'org.powerflows', name: 'dmn-javascript-evaluation-provider', version: '2.1.0'
 ```
 ### Grape
 ```groovy
 @Grapes(
-    @Grab(group='org.powerflows', module='dmn-engine', version='2.0.0')
+    @Grab(group='org.powerflows', module='dmn-engine', version='2.1.0')
 )
 ```   
 Optional dependencies:
 ```groovy
 @Grapes([
-    @Grab(group='org.powerflows', module='dmn-io-yaml', version='2.0.0'),
-    @Grab(group='org.powerflows', module='dmn-io-xml', version='2.0.0'),
-    @Grab(group='org.powerflows', module='dmn-kotlin-dsl', version='2.0.0'),
-    @Grab(group='org.powerflows', module='dmn-feel-evaluation-provider', version='2.0.0'),
-    @Grab(group='org.powerflows', module='dmn-juel-evaluation-provider', version='2.0.0'), 
-    @Grab(group='org.powerflows', module='dmn-groovy-evaluation-provider', version='2.0.0'),
-    @Grab(group='org.powerflows', module='dmn-mvel-evaluation-provider', version='2.0.0'),
-    @Grab(group='org.powerflows', module='dmn-javascript-evaluation-provider', version='2.0.0')   
+    @Grab(group='org.powerflows', module='dmn-io-yaml', version='2.1.0'),
+    @Grab(group='org.powerflows', module='dmn-io-xml', version='2.1.0'),
+    @Grab(group='org.powerflows', module='dmn-kotlin-dsl', version='2.1.0'),
+    @Grab(group='org.powerflows', module='dmn-feel-evaluation-provider', version='2.1.0'),
+    @Grab(group='org.powerflows', module='dmn-juel-evaluation-provider', version='2.1.0'), 
+    @Grab(group='org.powerflows', module='dmn-groovy-evaluation-provider', version='2.1.0'),
+    @Grab(group='org.powerflows', module='dmn-mvel-evaluation-provider', version='2.1.0'),
+    @Grab(group='org.powerflows', module='dmn-javascript-evaluation-provider', version='2.1.0')   
 ])
 ```  
 
