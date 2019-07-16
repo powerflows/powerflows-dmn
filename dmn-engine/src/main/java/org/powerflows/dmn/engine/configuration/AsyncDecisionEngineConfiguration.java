@@ -17,24 +17,20 @@
 package org.powerflows.dmn.engine.configuration;
 
 
-import org.powerflows.dmn.engine.DecisionEngine;
-import org.powerflows.dmn.engine.evaluator.expression.provider.binding.MethodBinding;
-
-import java.util.List;
+import org.powerflows.dmn.engine.AsyncDecisionEngine;
 
 /**
- * Interface for DecisionEngine configurers.
+ * Interface for AsyncDecisionEngine configurers.
  *
- * @see DefaultDecisionEngineConfiguration
+ * @see DefaultAsyncDecisionEngineConfiguration
  */
-public interface DecisionEngineConfiguration<T extends DecisionEngineConfiguration> {
+public interface AsyncDecisionEngineConfiguration {
 
     /**
      * Create ready to use decision engine.
      *
-     * @return DecisionEngine instance
+     * @return AsyncDecisionEngine instance
      */
-    DecisionEngine configure();
+    AsyncDecisionEngine configure();
 
-    T methodBindings(List<MethodBinding> methodBindings);
 }

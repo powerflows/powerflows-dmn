@@ -42,7 +42,7 @@ import java.util.List;
  * @see MethodBinding
  */
 @Accessors(chain = true, fluent = true)
-public class DefaultDecisionEngineConfiguration implements DecisionEngineConfiguration {
+public class DefaultDecisionEngineConfiguration implements DecisionEngineConfiguration<DefaultDecisionEngineConfiguration> {
 
     @Setter
     private List<MethodBinding> methodBindings = Collections.emptyList();

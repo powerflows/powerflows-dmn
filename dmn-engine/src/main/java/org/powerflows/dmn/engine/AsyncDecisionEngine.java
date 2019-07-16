@@ -14,27 +14,25 @@
  * limitations under the License.
  */
 
-package org.powerflows.dmn.engine.configuration;
+package org.powerflows.dmn.engine;
 
 
-import org.powerflows.dmn.engine.DecisionEngine;
-import org.powerflows.dmn.engine.evaluator.expression.provider.binding.MethodBinding;
+import org.powerflows.dmn.engine.model.decision.Decision;
+import org.powerflows.dmn.engine.model.evaluation.result.DecisionResult;
+import org.powerflows.dmn.engine.model.evaluation.variable.DecisionVariables;
 
-import java.util.List;
+import java.util.concurrent.CompletableFuture;
 
 /**
- * Interface for DecisionEngine configurers.
- *
- * @see DefaultDecisionEngineConfiguration
+ * AsynchronousdDecision engine contract.
  */
-public interface DecisionEngineConfiguration<T extends DecisionEngineConfiguration> {
+public interface AsyncDecisionEngine {
 
     /**
-     * Create ready to use decision engine.
-     *
-     * @return DecisionEngine instance
+     * @param decision          Definition of decision
+     * @param decisionVariables Variables used in evaluation
+     * @return a promise of evaluation result
      */
-    DecisionEngine configure();
+    CompletableFuture<DecisionResult> evaluate(Decision decision, DecisionVariables decisionVariables);
 
-    T methodBindings(List<MethodBinding> methodBindings);
 }
